@@ -1,0 +1,34 @@
+{
+    "name": "MirAiInputAction",
+    "maps": [
+        {
+            "name": "Editor",
+            "id": "14d4920f-2c5b-4efd-aa17-ea228f653a32",
+            "actions": [
+                {
+                    "name": "Wheel",
+                    "type": "PassThrough",
+                    "id": "46aa28f6-618d-4519-aedd-3f2d48e6aea5",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "6d78d455-772f-4895-a49b-0e6d57a49b10",
+                    "path": "<Mouse>/scroll",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Wheel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
