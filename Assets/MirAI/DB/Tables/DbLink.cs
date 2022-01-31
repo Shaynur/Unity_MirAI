@@ -3,32 +3,30 @@ using System.Text;
 using Assets.MirAI.DB.TableDefs;
 
 namespace Assets.MirAI.DB.Tables {
-    public class DbProgram : Program, IDbEntity {
+    public class DbLink : Link, IDbEntity {
 
         public string GetDeleteCommandSuffix() {
-            return " WHERE Id = '" + Id + "';";
+            return " WHERE FromId = '" + FromId + "' AND ToId = '" + ToId + "';";
         }
 
         public string GetInsertCommandSuffix() {
-            return " (Name) VALUES ('" + Name + "');";
+            return " (FromId, ToId) VALUES ('" + FromId + "', '" + ToId + "');";
         }
 
         public string GetUpdateCommandSuffix() {
-            return " SET Name = '" + Name + "' WHERE Id = '" + Id + "';";
+            return ";";
         }
 
         public void SetData(IDataRecord data) {
             var count = data.FieldCount;
             if (count != 2) return;
-            Id = data.GetInt32(0);
-            Name = (string)data.GetString(1);
+            FromId = data.GetInt32(0);
+            ToId = data.GetInt32(1);
         }
 
         public override string ToString() {
-            StringBuilder ret = new StringBuilder($"Id={Id,-5} Name={Name}");
+            StringBuilder ret = new StringBuilder($"FromId={FromId,-5} ToId={ToId,-5}");
             return ret.ToString();
         }
-
-        public void Accessor() { }
     }
 }

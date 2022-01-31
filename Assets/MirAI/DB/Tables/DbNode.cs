@@ -4,12 +4,29 @@ using Assets.MirAI.DB.TableDefs;
 
 namespace Assets.MirAI.DB.Tables {
 
-    public class DbNode : DbNodeDef, IDbTable {
+    public class DbNode : Node, IDbEntity {
+
+        public string GetDeleteCommandSuffix() {
+            return " WHERE Id = '" + Id + "';";
+        }
+
+        public string GetInsertCommandSuffix() {
+            return " (ProgramId, Type, Command, X, Y) VALUES ('"
+                + ProgramId + "', '" + Type + "', '" + Command + "', '" + X + "', '" + Y + "');";
+        }
+
+        public string GetUpdateCommandSuffix() {
+            return " SET ProgramId = '" + ProgramId
+                + "', Type = '" + Type
+                + "', Command = '" + Command
+                + "', X = '" + X
+                + "', Y = '" + Y
+                + "' WHERE Id = '" + Id + "';";
+        }
 
         public void SetData(IDataRecord data) {
             var count = data.FieldCount;
             if (count != 6) return;
-
             Id = data.GetInt32(0);
             ProgramId = data.GetInt32(1);
             Type = data.GetInt32(2);
