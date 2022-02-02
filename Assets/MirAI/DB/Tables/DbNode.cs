@@ -12,12 +12,12 @@ namespace Assets.MirAI.DB.Tables {
 
         public string GetInsertCommandSuffix() {
             return " (ProgramId, Type, Command, X, Y) VALUES ('"
-                + ProgramId + "', '" + Type + "', '" + Command + "', '" + X + "', '" + Y + "');";
+                + ProgramId + "', '" + (int)Type + "', '" + Command + "', '" + X + "', '" + Y + "');";
         }
 
         public string GetUpdateCommandSuffix() {
             return " SET ProgramId = '" + ProgramId
-                + "', Type = '" + Type
+                + "', Type = '" + (int)Type
                 + "', Command = '" + Command
                 + "', X = '" + X
                 + "', Y = '" + Y
@@ -29,7 +29,7 @@ namespace Assets.MirAI.DB.Tables {
             if (count != 6) return;
             Id = data.GetInt32(0);
             ProgramId = data.GetInt32(1);
-            Type = data.GetInt32(2);
+            Type = (NodeType)data.GetInt32(2);
             Command = data.GetInt32(3);
             X = data.GetInt32(4);
             Y = data.GetInt32(5);

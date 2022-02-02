@@ -28,7 +28,5 @@ namespace Assets.MirAI.DB.Tables {
             StringBuilder ret = new StringBuilder($"Id={Id,-5} Name={Name}");
             return ret.ToString();
         }
-
-        public void Accessor() { }
     }
 }

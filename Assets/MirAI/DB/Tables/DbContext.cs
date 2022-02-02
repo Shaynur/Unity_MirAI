@@ -15,6 +15,8 @@ namespace Assets.MirAI.DB.Tables {
         public DbTable<DbProgram> Programs { get; set; }
         public DbTable<DbLink> Links { get; set; }
 
+        public bool IsOpen => _connection.State == System.Data.ConnectionState.Open;
+
         public DbContext() {
             _connection = new SqliteConnection(_connectionString);
             _connection.Open();

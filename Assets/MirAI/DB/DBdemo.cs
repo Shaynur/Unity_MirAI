@@ -1,33 +1,39 @@
 ﻿using UnityEngine;
-using Assets.MirAI.DB.Tables;
+using Assets.MirAI.Models;
+using Assets.MirAI.DB.TableDefs;
 
 namespace Assets.MirAI.DB {
 
     public class DBdemo : MonoBehaviour {
 
-        private void Start() {
-            DisplayDB();
-            //DeleteNode();
-            //DisplayDB();
-        }
+        public AiModel Model { get; private set; }
 
-        private void DeleteNode() {
-            using var db = new DbContext();
-            //var node = new DbNode() { Id = 9, ProgramId = 1, Command = 666, Type = 5, X = 1000, Y = 1000 };
-            var node = db.Nodes.GetById(11);
-            db.Nodes.Remove(node);
+        private void Start() {
+            Model = new AiModel();
+            Model.LoadFromDB();
+
+            DisplayDB();
+
+            var prog = Model.AddNewProgram("NewTestProg");
+            var root = prog.Nodes[0];
+            var action = Model.AddChildNode(root);
+            action.ProgramId = prog.Id;
+            action.Type = NodeType.Action;
+            action.Command = 333;
+            action.X = 400;
+            action.Y = 400;
+            Model.UpdateNode(action);
+
+            DisplayDB();
         }
 
         private void DisplayDB() {
-            using var db = new DbContext();
 
-            //var programs = db.Programs.ToList();
-            //foreach (var program in programs) {
-            //    Debug.Log(program);
-            //}
+            foreach (var program in Model.Programs) {
+                Debug.Log(program);
+            }
 
-            var nodes = db.Nodes.ToList();//.FindAll(x => x.ProgramId == 2);
-            foreach (var node in nodes) {
+            foreach (var node in Model.Nodes) {
                 Debug.Log(node);
             }
         }

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Assets.MirAI.DB.Tables;
 
 namespace Assets.MirAI.DB.TableDefs {
 
@@ -7,12 +6,12 @@ namespace Assets.MirAI.DB.TableDefs {
 
         public int Id { get; set; }
         public int ProgramId { get; set; }
-        public int Type { get; set; }
+        public NodeType Type { get; set; }
         public int Command { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
-        public List<Node> Parents { get; set; }
-        public List<Node> Childs { get; set; }
+        public List<Node> Parents { get; set; } = new List<Node>();
+        public List<Node> Childs { get; set; } = new List<Node>();
 
         public virtual void AddChild(Node node) {
             Childs.Add(node);
@@ -30,5 +29,15 @@ namespace Assets.MirAI.DB.TableDefs {
             foreach (Node node in Parents)
                 node.RemoveChild(this);
         }
+    }
+
+    public enum NodeType {
+        Nope = 0,
+        Root = 1,
+        Action = 2,
+        Condition = 3,
+        Connector = 4,
+        SubAI = 5,
+        JustAdded = 6
     }
 }

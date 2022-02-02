@@ -2,6 +2,7 @@
 using System.Data;
 using Mono.Data.Sqlite;
 
+
 namespace Assets.MirAI.DB.TableDefs {
 
     public class DbTable<T> where T : IDbEntity, new() {
@@ -35,17 +36,14 @@ namespace Assets.MirAI.DB.TableDefs {
 
         public virtual T GetById(int id) {
             T entity = default;
-
             using var command = _connection.CreateCommand();
             command.CommandText = @"SELECT * FROM " + TableName + @" WHERE Id='" + id.ToString() + "';";
-
             using IDataReader reader = command.ExecuteReader();
             while (reader.Read()) {
                 if (entity == null) entity = new T();
                 entity.SetData((IDataRecord)reader);
             }
             reader.Close();
-
             return entity;
         }
 
