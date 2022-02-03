@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Assets.MirAI {
+namespace Assets.MirAI.Utils {
 
     public class DragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler {
 
@@ -22,7 +22,7 @@ namespace Assets.MirAI {
 
         public void OnDrag(PointerEventData eventData) {
             //_rectTransform.anchoredPosition += eventData.delta / _canvas.scaleFactor;
-            _rectTransform.anchoredPosition += eventData.delta;
+            _rectTransform.anchoredPosition += eventData.delta / _canvas.transform.localScale.x;
         }
 
         public void OnEndDrag(PointerEventData eventData) {

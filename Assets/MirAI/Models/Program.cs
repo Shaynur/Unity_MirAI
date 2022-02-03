@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Assets.MirAI.DB.TableDefs {
+namespace Assets.MirAI.Models {
 
     public class Program {
 

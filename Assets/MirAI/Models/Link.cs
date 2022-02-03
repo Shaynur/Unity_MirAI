@@ -1,6 +1,6 @@
-﻿namespace Assets.MirAI.DB.TableDefs {
+﻿namespace Assets.MirAI.Models {
 
-    public class Link  {
+    public class Link {
         public int FromId { get; set; }
         public int ToId { get; set; }
     }

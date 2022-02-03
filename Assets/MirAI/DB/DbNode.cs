@@ -1,8 +1,9 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Text;
-using Assets.MirAI.DB.TableDefs;
+using Assets.MirAI.Models;
 
-namespace Assets.MirAI.DB.Tables {
+namespace Assets.MirAI.DB {
 
     public class DbNode : Node, IDbEntity {
 
@@ -25,14 +26,17 @@ namespace Assets.MirAI.DB.Tables {
         }
 
         public void SetData(IDataRecord data) {
-            var count = data.FieldCount;
-            if (count != 6) return;
-            Id = data.GetInt32(0);
-            ProgramId = data.GetInt32(1);
-            Type = (NodeType)data.GetInt32(2);
-            Command = data.GetInt32(3);
-            X = data.GetInt32(4);
-            Y = data.GetInt32(5);
+            try {
+                Id = data.GetInt32(0);
+                ProgramId = data.GetInt32(1);
+                Type = (NodeType)data.GetInt32(2);
+                Command = data.GetInt32(3);
+                X = data.GetInt32(4);
+                Y = data.GetInt32(5);
+            }
+            catch (Exception ex) {
+                throw new DbMirAiException("Convert IDataRecord to Node error.", ex);
+            }
         }
 
         public override string ToString() {

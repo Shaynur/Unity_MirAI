@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Assets.MirAI.DB.TableDefs {
+namespace Assets.MirAI.Models {
 
     public class Node {
 
@@ -37,7 +37,6 @@ namespace Assets.MirAI.DB.TableDefs {
         Action = 2,
         Condition = 3,
         Connector = 4,
-        SubAI = 5,
-        JustAdded = 6
+        SubAI = 5
     }
 }

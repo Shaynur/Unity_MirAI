@@ -1,9 +1,12 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Text;
-using Assets.MirAI.DB.TableDefs;
+using Assets.MirAI.Models;
 
-namespace Assets.MirAI.DB.Tables {
+namespace Assets.MirAI.DB {
     public class DbLink : Link, IDbEntity {
+
+        public int Id { get; set; } // only for IDbEntity. Not used.
 
         public string GetDeleteCommandSuffix() {
             return " WHERE FromId = '" + FromId + "' AND ToId = '" + ToId + "';";
@@ -18,10 +21,13 @@ namespace Assets.MirAI.DB.Tables {
         }
 
         public void SetData(IDataRecord data) {
-            var count = data.FieldCount;
-            if (count != 2) return;
-            FromId = data.GetInt32(0);
-            ToId = data.GetInt32(1);
+            try {
+                FromId = data.GetInt32(0);
+                ToId = data.GetInt32(1);
+            }
+            catch (Exception ex) {
+                throw new DbMirAiException("Convert IDataRecord to Program error.", ex);
+            }
         }
 
         public override string ToString() {

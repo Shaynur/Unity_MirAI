@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Assets.MirAI.DB.TableDefs;
-using Assets.MirAI.DB.Tables;
+using Assets.MirAI.DB;
 
 namespace Assets.MirAI.Models {
 
@@ -18,7 +17,6 @@ namespace Assets.MirAI.Models {
         }
 
         private void LoadFromDB(DbContext db) {
-            InitLists();
             Programs = db.Programs.ToList().ToList<Program>();
             Nodes = db.Nodes.ToList().ToList<Node>();
             Links = db.Links.ToList().ToList<Link>();
@@ -26,17 +24,21 @@ namespace Assets.MirAI.Models {
         }
 
         public Program AddNewProgram(string name) {
+            if (Programs.Find(p => p.Name == name) != null) return null;
+
             using var db = new DbContext();
 
             var program = new DbProgram { Name = name };
             db.Programs.Add(program);
-            Programs = db.Programs.ToList().ToList<Program>();
-            program = (DbProgram)Programs.First(p => p.Name == name);
+            Programs.Add(program);
+
             var node = AddNode(db);
+            program.Nodes.Add(node);
+
             node.ProgramId = program.Id;
             node.Type = NodeType.Root;
             db.Nodes.Update((DbNode)node);
-            program.Nodes.Add(node);
+
             return program;
         }
 
@@ -60,12 +62,9 @@ namespace Assets.MirAI.Models {
         }
 
         private Node AddNode(DbContext db) {
-            var node = new DbNode { Type = NodeType.JustAdded };
+            var node = new DbNode();
             db.Nodes.Add(node);
-            Nodes = db.Nodes.ToList().ToList<Node>();
-            node = (DbNode)Nodes.First(n => n.Type == NodeType.JustAdded);
-            node.Type = NodeType.Nope;
-            db.Nodes.Update(node);
+            Nodes.Add(node);
             return node;
         }
 
@@ -96,12 +95,6 @@ namespace Assets.MirAI.Models {
             var link = Links.First(x => x.FromId == fromId && x.ToId == toId);
             db.Links.Remove((DbLink)link);
             Links.Remove(link);
-        }
-
-        private void InitLists() {
-            Programs = new List<Program>();
-            Nodes = new List<Node>();
-            Links = new List<Link>();
         }
 
         private void CreateModelFromDbData() {

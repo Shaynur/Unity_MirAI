@@ -1,10 +1,9 @@
 ﻿using System;
 using System.IO;
-using Assets.MirAI.DB.TableDefs;
 using Mono.Data.Sqlite;
 using UnityEngine;
 
-namespace Assets.MirAI.DB.Tables {
+namespace Assets.MirAI.DB {
 
     public class DbContext : IDisposable {
 

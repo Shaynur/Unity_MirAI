@@ -6,11 +6,11 @@ namespace Assets.MirAI {
 
     public class PlayerInputReader : MonoBehaviour {
 
-        [SerializeField] private EditorCanvasController _controller;
+        [SerializeField] private CanvasCameraController _controller;
 
         public void OnMouseWheel(InputAction.CallbackContext context) {
-            var v = context.ReadValue<Vector2>();
-            _controller.ChangeCanvasScale(v);
+            var wheelVector = context.ReadValue<Vector2>();
+            _controller.ChangeCameraSize(wheelVector);
         }
     }
 }

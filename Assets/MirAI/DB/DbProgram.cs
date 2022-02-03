@@ -1,8 +1,9 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Text;
-using Assets.MirAI.DB.TableDefs;
+using Assets.MirAI.Models;
 
-namespace Assets.MirAI.DB.Tables {
+namespace Assets.MirAI.DB {
     public class DbProgram : Program, IDbEntity {
 
         public string GetDeleteCommandSuffix() {
@@ -18,10 +19,13 @@ namespace Assets.MirAI.DB.Tables {
         }
 
         public void SetData(IDataRecord data) {
-            var count = data.FieldCount;
-            if (count != 2) return;
-            Id = data.GetInt32(0);
-            Name = (string)data.GetString(1);
+            try {
+                Id = data.GetInt32(0);
+                Name = data.GetString(1);
+            }
+            catch (Exception ex) {
+                throw new DbMirAiException("Convert IDataRecord to Program error.", ex);
+            }
         }
 
         public override string ToString() {
