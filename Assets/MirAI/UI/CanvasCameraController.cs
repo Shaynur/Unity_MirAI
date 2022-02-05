@@ -7,74 +7,67 @@ namespace Assets.MirAI.UI {
     public class CanvasCameraController : MonoBehaviour, IDragHandler {
 
         [SerializeField] private Camera _camera;
-        [SerializeField] int _scaleWhellStep = 5;
 
-        private Canvas _canvas;
         private RectTransform _canvasRectTransform;
+        private float _newCameraSize;
+        private Vector2 _cameraFlyDirection;
+        private readonly float _cameraResizeSpeed = 5f;
+        private readonly float _cameraFlyInertia = 1.05f;
+        private readonly float _deltaMoveCameraMultiplier = 219f;   // Magic value ??
 
 
         private void Start() {
-            _canvas = GetComponent<Canvas>();
             _canvasRectTransform = GetComponent<RectTransform>();
+            _newCameraSize = _canvasRectTransform.rect.height / 2;
+        }
+
+        private void Update() {
+            if (_newCameraSize != _camera.orthographicSize) {
+                _camera.orthographicSize = Mathf.Lerp(_camera.orthographicSize, _newCameraSize, Time.deltaTime * _cameraResizeSpeed);
+                ConfineCameraInCanvas();
+            }
+            if (_cameraFlyDirection != Vector2.zero) {
+                _camera.transform.position -= (Vector3)_cameraFlyDirection;
+                _cameraFlyDirection /= _cameraFlyInertia;
+                ConfineCameraInCanvas();
+            }
         }
 
         public void ChangeCameraSize(Vector2 wheelVector) {
-            if (wheelVector.y > 0)
-                CalculateCameraSize(-_scaleWhellStep);
-            else if (wheelVector.y < 0)
-                CalculateCameraSize(_scaleWhellStep);
+            if (wheelVector.y == 0) return;
+            var _scaleWhellStep = wheelVector.y > 0 ? 0.5f : 2f;
+            var newSize = _camera.orthographicSize * _scaleWhellStep;
+            newSize = Mathf.Clamp(newSize, 100, _canvasRectTransform.rect.height / 2);
+            _newCameraSize = newSize;
         }
 
         public void OnDrag(PointerEventData eventData) {
-            //FlyCamera(eventData.delta / _canvas.scaleFactor);
-            FlyCamera(eventData.delta / _canvas.transform.localScale.x);
+            var delta = eventData.delta / (_deltaMoveCameraMultiplier / _camera.orthographicSize);
+            _cameraFlyDirection = new Vector2(delta.x, delta.y);
         }
 
-        private void FlyCamera(Vector2 delta) {
-            var cameraNewPosition = _camera.transform.position - new Vector3(delta.x, delta.y, 0);
-            _camera.transform.position = cameraNewPosition;
-            CheckCameraPosition(true);
-        }
-
-        private void CalculateCameraSize(int increment) {
-            var newSize = _camera.orthographicSize + increment;
-            if (newSize < 100 || newSize > _canvasRectTransform.rect.height / 2) return;
-            _camera.orthographicSize = newSize;
-            CheckCameraPosition(true);
-        }
-
-        private bool CheckCameraPosition(bool correct) {
-            bool noChanges = true;
+        private void ConfineCameraInCanvas() {
+            bool isChanged = false;
             Rect cameraRect = GetCameraRect();
             Rect canvasRect = GetCanvasRect();
             if (cameraRect.xMin < canvasRect.xMin) {
-                if (correct) {
-                    cameraRect.xMin = canvasRect.xMin;
-                }
-                noChanges = false;
+                cameraRect.xMin = canvasRect.xMin;
+                isChanged = true;
             }
             if (cameraRect.yMin < canvasRect.yMin) {
-                if (correct) {
-                    cameraRect.yMin = canvasRect.yMin;
-                }
-                noChanges = false;
+                cameraRect.yMin = canvasRect.yMin;
+                isChanged = true;
             }
             if (cameraRect.xMax > canvasRect.xMax) {
-                if (correct) {
-                    cameraRect.xMax = canvasRect.xMax;
-                }
-                noChanges = false;
+                cameraRect.xMax = canvasRect.xMax;
+                isChanged = true;
             }
             if (cameraRect.yMax > canvasRect.yMax) {
-                if (correct) {
-                    cameraRect.yMax = canvasRect.yMax;
-                }
-                noChanges = false;
+                cameraRect.yMax = canvasRect.yMax;
+                isChanged = true;
             }
-            if (!noChanges) {
+            if (isChanged)
                 _camera.transform.position = new Vector3(cameraRect.center.x, cameraRect.center.y, _camera.transform.position.z);
-            }
-            return noChanges;
         }
 
         private Rect GetCameraRect() {
@@ -87,11 +80,10 @@ namespace Assets.MirAI.UI {
         }
 
         private Rect GetCanvasRect() {
-            var scale = _canvas.transform.localScale.x;
-            var height = _canvasRectTransform.rect.height * scale;
-            var width = _canvasRectTransform.rect.width * scale;
-            var left = _canvas.transform.position.x - width / 2;
-            var bottom = _canvas.transform.position.y - height / 2;
+            var height = _canvasRectTransform.rect.height;
+            var width = _canvasRectTransform.rect.width;
+            var left = _canvasRectTransform.position.x - width / 2;
+            var bottom = _canvasRectTransform.position.y - height / 2;
             var canvasRect = new Rect(left, bottom, width, height);
             return canvasRect;
         }

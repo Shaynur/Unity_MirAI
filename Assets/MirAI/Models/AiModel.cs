@@ -10,6 +10,9 @@ namespace Assets.MirAI.Models {
         public List<Node> Nodes { get; set; }
         public List<Link> Links { get; set; }
 
+        public AiModel() { 
+            LoadFromDB();
+        }
 
         public void LoadFromDB() {
             using var db = new DbContext();

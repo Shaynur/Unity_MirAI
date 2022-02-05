@@ -7,26 +7,17 @@ namespace Assets.MirAI {
 
     public class DBdemo : MonoBehaviour {
 
-        public AiModel Model { get; private set; }
+        //public AiModel Model { get; private set; }
+        private GameSession _session;
 
         private void Start() {
+            _session = GameSession.Instance;
             try {
-                Model = new AiModel();
-                Model.LoadFromDB();
+                //_session.AiModel.LoadFromDB();
 
                 DisplayDB();
-
-                var prog = Model.AddNewProgram("NewTestProg");
-                var root = prog.Nodes[0];
-                var action = Model.AddChildNode(root);
-                action.ProgramId = prog.Id;
-                action.Type = NodeType.Action;
-                action.Command = 333;
-                action.X = 400;
-                action.Y = 400;
-                Model.UpdateNode(action);
-
-                DisplayDB();
+                //SomeTestWork();
+                //DisplayDB();
             }
             catch (DbMirAiException ex) {
                 Debug.LogException(ex);
@@ -36,13 +27,23 @@ namespace Assets.MirAI {
             }
         }
 
-        private void DisplayDB() {
+        private void SomeTestWork() {
+            var prog = _session.AiModel.AddNewProgram("NewTestProg");
+            var root = prog.Nodes[0];
+            var action = _session.AiModel.AddChildNode(root);
+            action.ProgramId = prog.Id;
+            action.Type = NodeType.Action;
+            action.Command = 333;
+            action.X = 400;
+            action.Y = 400;
+            _session.AiModel.UpdateNode(action);
+        }
 
-            foreach (var program in Model.Programs) {
+        private void DisplayDB() {
+            foreach (var program in _session.AiModel.Programs) {
                 Debug.Log(program);
             }
-
-            foreach (var node in Model.Nodes) {
+            foreach (var node in _session.AiModel.Nodes) {
                 Debug.Log(node);
             }
         }

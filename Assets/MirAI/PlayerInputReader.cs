@@ -9,8 +9,10 @@ namespace Assets.MirAI {
         [SerializeField] private CanvasCameraController _controller;
 
         public void OnMouseWheel(InputAction.CallbackContext context) {
-            var wheelVector = context.ReadValue<Vector2>();
-            _controller.ChangeCameraSize(wheelVector);
+            if (context.performed) {
+                var wheelVector = context.ReadValue<Vector2>();
+                _controller.ChangeCameraSize(wheelVector);
+            }
         }
     }
 }

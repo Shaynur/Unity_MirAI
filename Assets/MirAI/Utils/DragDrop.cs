@@ -5,24 +5,24 @@ namespace Assets.MirAI.Utils {
 
     public class DragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler {
 
-        [SerializeField] private Canvas _canvas;
-
-        private RectTransform _rectTransform;
         private CanvasGroup _canvasGroup;
+        private Vector3 _pressPosition;
 
         private void Awake() {
-            _rectTransform = GetComponent<RectTransform>();
             _canvasGroup = GetComponent<CanvasGroup>();
         }
 
         public void OnBeginDrag(PointerEventData eventData) {
             if (_canvasGroup != null)
                 _canvasGroup.alpha = .6f;
+            _pressPosition = eventData.pointerPressRaycast.worldPosition - transform.position;
         }
 
         public void OnDrag(PointerEventData eventData) {
-            //_rectTransform.anchoredPosition += eventData.delta / _canvas.scaleFactor;
-            _rectTransform.anchoredPosition += eventData.delta / _canvas.transform.localScale.x;
+            if (eventData.pointerCurrentRaycast.screenPosition == Vector2.zero)
+                return;
+            var currentPosition = eventData.pointerCurrentRaycast.worldPosition;
+            transform.position = currentPosition - _pressPosition;
         }
 
         public void OnEndDrag(PointerEventData eventData) {
@@ -31,7 +31,6 @@ namespace Assets.MirAI.Utils {
         }
 
         public void OnPointerDown(PointerEventData eventData) {
-            //Debug.Log("OnPointerDown");
         }
     }
 }
