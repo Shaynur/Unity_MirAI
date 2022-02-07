@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Assets.MirAI.Models {
 
@@ -10,24 +11,19 @@ namespace Assets.MirAI.Models {
         public int Command { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
-        public List<Node> Parents { get; set; } = new List<Node>();
-        public List<Node> Childs { get; set; } = new List<Node>();
+        public List<ChildNode> Childs { get; set; } = new List<ChildNode>();
 
         public virtual void AddChild(Node node) {
-            Childs.Add(node);
-            node.Parents.Add(this);
+            Childs.Add(new ChildNode() { Node = node });
         }
 
         public virtual void RemoveChild(Node node) {
-            Childs.Remove(node);
-            node.Parents.Remove(this);
+            var removeItem = Childs.Find(x => x.Node == node);
+            Childs.Remove(removeItem);
         }
 
-        public virtual void ClearAllLinks() {
-            foreach (Node node in Childs)
-                RemoveChild(node);
-            foreach (Node node in Parents)
-                node.RemoveChild(this);
+        private void SortingChildsByAngle() {
+            throw new NotImplementedException();
         }
     }
 
