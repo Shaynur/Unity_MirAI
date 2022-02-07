@@ -4,6 +4,6 @@
 
         public Node Node { get; set; }
         public float Angle { get; set; }
-        public float Lenght { get; set; }
+        public float Length { get; set; }
     }
 }

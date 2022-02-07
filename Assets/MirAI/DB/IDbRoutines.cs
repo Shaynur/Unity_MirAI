@@ -2,9 +2,8 @@
 
 namespace Assets.MirAI.DB {
 
-    public interface IDbEntity {
+    public interface IDbRoutines {
 
-        public int Id { get; set; }
         public void SetData(IDataRecord data);
         public string GetInsertCommandSuffix();
         public string GetUpdateCommandSuffix();

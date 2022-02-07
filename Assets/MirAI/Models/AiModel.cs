@@ -20,9 +20,9 @@ namespace Assets.MirAI.Models {
         }
 
         private void LoadFromDB(DbContext db) {
-            Programs = db.Programs.ToList().ToList<Program>();
-            Nodes = db.Nodes.ToList().ToList<Node>();
-            Links = db.Links.ToList().ToList<Link>();
+            Programs = db.Programs.ToList();
+            Nodes = db.Nodes.ToList();
+            Links = db.Links.ToList();
             CreateModelFromDbData();
         }
 
@@ -31,7 +31,7 @@ namespace Assets.MirAI.Models {
 
             using var db = new DbContext();
 
-            var program = new DbProgram { Name = name };
+            var program = new Program { Name = name };
             db.Programs.Add(program);
             Programs.Add(program);
 
@@ -40,14 +40,14 @@ namespace Assets.MirAI.Models {
 
             node.ProgramId = program.Id;
             node.Type = NodeType.Root;
-            db.Nodes.Update((DbNode)node);
+            db.Nodes.Update(node);
 
             return program;
         }
 
         public void UpdateProgram(Program program) {
             using var db = new DbContext();
-            db.Programs.Update((DbProgram)program);
+            db.Programs.Update(program);
         }
 
         public void RemoveProgram(int id) {
@@ -65,7 +65,7 @@ namespace Assets.MirAI.Models {
         }
 
         private Node AddNode(DbContext db) {
-            var node = new DbNode();
+            var node = new Node();
             db.Nodes.Add(node);
             Nodes.Add(node);
             return node;
@@ -73,7 +73,7 @@ namespace Assets.MirAI.Models {
 
         public void UpdateNode(Node node) {
             using var db = new DbContext();
-            db.Nodes.Update((DbNode)node);
+            db.Nodes.Update(node);
         }
 
         public void RemoveNode(int id) {
@@ -88,7 +88,7 @@ namespace Assets.MirAI.Models {
         }
 
         private void AddLink(int parentNodeId, int childNodeId, DbContext db) {
-            var link = new DbLink { FromId = parentNodeId, ToId = childNodeId };
+            var link = new Link { FromId = parentNodeId, ToId = childNodeId };
             db.Links.Add(link);
             Links.Add(link);
         }
@@ -96,7 +96,7 @@ namespace Assets.MirAI.Models {
         public void RemoveLink(int fromId, int toId) {
             using var db = new DbContext();
             var link = Links.First(x => x.FromId == fromId && x.ToId == toId);
-            db.Links.Remove((DbLink)link);
+            db.Links.Remove(link);
             Links.Remove(link);
         }
 

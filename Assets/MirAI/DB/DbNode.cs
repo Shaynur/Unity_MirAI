@@ -1,47 +1,47 @@
 ﻿using System;
 using System.Data;
-using System.Text;
 using Assets.MirAI.Models;
 
 namespace Assets.MirAI.DB {
 
-    public class DbNode : Node, IDbEntity {
+    public class DbNode : IDbRoutines {
+
+        private readonly Node _node;
+
+        public DbNode(Node node) {
+            _node = node;
+        }
 
         public string GetDeleteCommandSuffix() {
-            return " WHERE Id = '" + Id + "';";
+            return " WHERE Id = '" + _node.Id + "';";
         }
 
         public string GetInsertCommandSuffix() {
             return " (ProgramId, Type, Command, X, Y) VALUES ('"
-                + ProgramId + "', '" + (int)Type + "', '" + Command + "', '" + X + "', '" + Y + "');";
+                + _node.ProgramId + "', '" + (int)_node.Type + "', '" + _node.Command + "', '" + _node.X + "', '" + _node.Y + "');";
         }
 
         public string GetUpdateCommandSuffix() {
-            return " SET ProgramId = '" + ProgramId
-                + "', Type = '" + (int)Type
-                + "', Command = '" + Command
-                + "', X = '" + X
-                + "', Y = '" + Y
-                + "' WHERE Id = '" + Id + "';";
+            return " SET ProgramId = '" + _node.ProgramId
+                + "', Type = '" + (int)_node.Type
+                + "', Command = '" + _node.Command
+                + "', X = '" + _node.X
+                + "', Y = '" + _node.Y
+                + "' WHERE Id = '" + _node.Id + "';";
         }
 
         public void SetData(IDataRecord data) {
             try {
-                Id = data.GetInt32(0);
-                ProgramId = data.GetInt32(1);
-                Type = (NodeType)data.GetInt32(2);
-                Command = data.GetInt32(3);
-                X = data.GetInt32(4);
-                Y = data.GetInt32(5);
+                _node.Id = data.GetInt32(0);
+                _node.ProgramId = data.GetInt32(1);
+                _node.Type = (NodeType)data.GetInt32(2);
+                _node.Command = data.GetInt32(3);
+                _node.X = data.GetInt32(4);
+                _node.Y = data.GetInt32(5);
             }
             catch (Exception ex) {
                 throw new DbMirAiException("Convert IDataRecord to Node error.", ex);
             }
-        }
-
-        public override string ToString() {
-            StringBuilder ret = new StringBuilder($"Id={Id,-5} ProgId={ProgramId,-5} Type={Type,-5} Command={Command,-10} ({X,4},{Y,4})");
-            return ret.ToString();
         }
     }
 }

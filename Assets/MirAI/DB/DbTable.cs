@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using Assets.MirAI.Models;
 using Mono.Data.Sqlite;
-
 
 namespace Assets.MirAI.DB {
 
-    public class DbTable<T> where T : IDbEntity, new() {
+    public class DbTable<T> where T : IAiModelElement, new() {
 
         public string TableName { get; set; }
         private readonly SqliteConnection _connection;
@@ -16,7 +16,7 @@ namespace Assets.MirAI.DB {
             _connection = connection;
         }
 
-        public virtual List<T> ToList() {
+        public List<T> ToList() {
             try {
                 var entities = new List<T>();
                 using var command = _connection.CreateCommand();
@@ -24,7 +24,7 @@ namespace Assets.MirAI.DB {
                 using IDataReader reader = command.ExecuteReader();
                 while (reader.Read()) {
                     var entity = new T();
-                    entity.SetData(reader);
+                    entity.dbRoutines.SetData(reader);
                     entities.Add(entity);
                 }
                 reader.Close();
@@ -35,15 +35,14 @@ namespace Assets.MirAI.DB {
             }
         }
 
-        public virtual T GetById(int id) {
+        public T GetById(int id) {
             try {
-                T entity = default;
+                T entity = new T();
                 using var command = _connection.CreateCommand();
                 command.CommandText = @"SELECT * FROM " + TableName + @" WHERE Id='" + id.ToString() + "';";
                 using IDataReader reader = command.ExecuteReader();
                 while (reader.Read()) {
-                    if (entity == null) entity = new T();
-                    entity.SetData(reader);
+                    entity.dbRoutines.SetData(reader);
                 }
                 reader.Close();
                 return entity;
@@ -53,26 +52,26 @@ namespace Assets.MirAI.DB {
             }
         }
 
-        public virtual void Add(T entity) {
+        public void Add(T entity) {
             var commandPrefix = "INSERT INTO " + TableName;
-            var commandValues = entity.GetInsertCommandSuffix();
+            var commandValues = entity.dbRoutines.GetInsertCommandSuffix();
             ExecuteCommand(commandPrefix + commandValues);
             entity.Id = GetLastId();
         }
 
-        public virtual void Update(T entity) {
+        public void Update(T entity) {
             var commandPrefix = "UPDATE " + TableName;
-            var commandValues = entity.GetUpdateCommandSuffix();
+            var commandValues = entity.dbRoutines.GetUpdateCommandSuffix();
             ExecuteCommand(commandPrefix + commandValues);
         }
 
-        public virtual void Remove(T entity) {
+        public void Remove(T entity) {
             var commandPrefix = "DELETE FROM " + TableName;
-            var commandValues = entity.GetDeleteCommandSuffix();
+            var commandValues = entity.dbRoutines.GetDeleteCommandSuffix();
             ExecuteCommand(commandPrefix + commandValues);
         }
 
-        public virtual void Remove(int id) {
+        public void Remove(int id) {
             var commandText = "DELETE FROM " + TableName + " WHERE Id = '" + id + "';";
             ExecuteCommand(commandText);
         }

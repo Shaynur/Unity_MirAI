@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Data;
-using System.Text;
 using Assets.MirAI.Models;
 
 namespace Assets.MirAI.DB {
-    public class DbLink : Link, IDbEntity {
+    public class DbLink : IDbRoutines {
 
-        public int Id { get; set; } // only for IDbEntity. Not used.
+        private readonly Link _link;
+
+        public DbLink(Link link) {
+            _link = link;
+        }
 
         public string GetDeleteCommandSuffix() {
-            return " WHERE FromId = '" + FromId + "' AND ToId = '" + ToId + "';";
+            return " WHERE FromId = '" + _link.FromId + "' AND ToId = '" + _link.ToId + "';";
         }
 
         public string GetInsertCommandSuffix() {
-            return " (FromId, ToId) VALUES ('" + FromId + "', '" + ToId + "');";
+            return " (FromId, ToId) VALUES ('" + _link.FromId + "', '" + _link.ToId + "');";
         }
 
         public string GetUpdateCommandSuffix() {
@@ -22,17 +25,12 @@ namespace Assets.MirAI.DB {
 
         public void SetData(IDataRecord data) {
             try {
-                FromId = data.GetInt32(0);
-                ToId = data.GetInt32(1);
+                _link.FromId = data.GetInt32(0);
+                _link.ToId = data.GetInt32(1);
             }
             catch (Exception ex) {
                 throw new DbMirAiException("Convert IDataRecord to Program error.", ex);
             }
-        }
-
-        public override string ToString() {
-            StringBuilder ret = new StringBuilder($"FromId={FromId,-5} ToId={ToId,-5}");
-            return ret.ToString();
         }
     }
 }

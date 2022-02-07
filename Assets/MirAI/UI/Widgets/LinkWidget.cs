@@ -6,7 +6,6 @@ namespace Assets.MirAI.UI.Widgets {
 
         public LinkUI LinkUI;
 
-
         private void Start() {
         }
 

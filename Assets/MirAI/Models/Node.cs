@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text;
+using Assets.MirAI.DB;
 
 namespace Assets.MirAI.Models {
 
-    public class Node {
+    public class Node : IAiModelElement {
 
         public int Id { get; set; }
         public int ProgramId { get; set; }
@@ -12,6 +13,11 @@ namespace Assets.MirAI.Models {
         public int X { get; set; }
         public int Y { get; set; }
         public List<ChildNode> Childs { get; set; } = new List<ChildNode>();
+        public IDbRoutines dbRoutines { get; set; }
+
+        public Node() {
+            dbRoutines = new DbNode(this);
+        }
 
         public virtual void AddChild(Node node) {
             Childs.Add(new ChildNode() { Node = node });
@@ -22,8 +28,9 @@ namespace Assets.MirAI.Models {
             Childs.Remove(removeItem);
         }
 
-        private void SortingChildsByAngle() {
-            throw new NotImplementedException();
+        public override string ToString() {
+            StringBuilder ret = new StringBuilder($"Id={Id,-5} ProgId={ProgramId,-5} Type={Type,-5} Command={Command,-10} ({X,4},{Y,4})");
+            return ret.ToString();
         }
     }
 

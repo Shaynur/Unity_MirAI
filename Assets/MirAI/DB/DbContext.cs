@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Assets.MirAI.Models;
 using Mono.Data.Sqlite;
 using UnityEngine;
 
@@ -10,18 +11,18 @@ namespace Assets.MirAI.DB {
         private static readonly string _connectionString = GetDatabaseConnectionString();
         private readonly SqliteConnection _connection;
 
-        public DbTable<DbNode> Nodes { get; set; }
-        public DbTable<DbProgram> Programs { get; set; }
-        public DbTable<DbLink> Links { get; set; }
+        public DbTable<Node> Nodes { get; set; }
+        public DbTable<Program> Programs { get; set; }
+        public DbTable<Link> Links { get; set; }
 
         public bool IsOpen => _connection.State == System.Data.ConnectionState.Open;
 
         public DbContext() {
             _connection = new SqliteConnection(_connectionString);
             _connection.Open();
-            Nodes = new DbTable<DbNode>("Nodes", _connection);
-            Programs = new DbTable<DbProgram>("Programs", _connection);
-            Links = new DbTable<DbLink>("Links", _connection);
+            Nodes = new DbTable<Node>("Nodes", _connection);
+            Programs = new DbTable<Program>("Programs", _connection);
+            Links = new DbTable<Link>("Links", _connection);
         }
 
         private static string GetDatabaseConnectionString() {

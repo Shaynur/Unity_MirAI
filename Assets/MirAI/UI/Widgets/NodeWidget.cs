@@ -38,6 +38,11 @@ namespace Assets.MirAI.UI.Widgets {
             OnMove?.Invoke();
         }
 
+        public void ChangePosition(Vector3 offset) {
+            _transform.position += offset;
+            OnChangePosition();
+        }
+
         public void SaveToDB() {
             _session.AiModel.UpdateNode(_node);
         }
