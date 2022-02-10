@@ -1,32 +1,33 @@
 ﻿using System;
 using System.Data;
 using Assets.MirAI.Models;
+using Mono.Data.Sqlite;
 
 namespace Assets.MirAI.DB {
-    public class DbProgram : IDbRoutines {
+    public class DbProgram : DbTable<Program> {
 
-        private readonly Program _program;
-
-        public DbProgram(Program program) {
-            _program = program;
+        public DbProgram(string tableName, SqliteConnection connection) : base(tableName, connection) {
         }
 
-        public string GetDeleteCommandSuffix() {
-            return " WHERE Id = '" + _program.Id + "';";
+        public override string GetDeleteCommandSuffix(Program program) {
+            return " WHERE Id = '" + program.Id + "';";
         }
 
-        public string GetInsertCommandSuffix() {
-            return " (Name) VALUES ('" + _program.Name + "');";
+        public override string GetInsertCommandSuffix(Program program) {
+            return " (Name) VALUES ('" + program.Name + "');";
         }
 
-        public string GetUpdateCommandSuffix() {
-            return " SET Name = '" + _program.Name + "' WHERE Id = '" + _program.Id + "';";
+        public override string GetUpdateCommandSuffix(Program program) {
+            return " SET Name = '" + program.Name + "' WHERE Id = '" + program.Id + "';";
         }
 
-        public void SetData(IDataRecord data) {
+        public override Program CreateByData(IDataRecord data) {
             try {
-                _program.Id = data.GetInt32(0);
-                _program.Name = data.GetString(1);
+                Program program = new Program {
+                    Id = data.GetInt32(0),
+                    Name = data.GetString(1)
+                };
+                return program;
             }
             catch (Exception ex) {
                 throw new DbMirAiException("Convert IDataRecord to Program error.", ex);

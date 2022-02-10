@@ -14,28 +14,49 @@ namespace Assets.MirAI {
         [SerializeField] private GameObject _linkPrefab;
 
         private GameSession _session;
-        private List<LinkUI> _linksUI = new List<LinkUI>();
+        private List<LinkUI> _linksUI;
         private readonly CompositeDisposable _trash = new CompositeDisposable();
         private static readonly string schemeContainer = "Scheme";
 
         private void Start() {
             _session = GameSession.Instance;
-            CreateScheme(); // TODO for test
+            _trash.Retain(_session.AiModel.ProgramsChanged.Subscribe(CreateScheme));
+            CreateScheme();
         }
 
         [ContextMenu("CreateScheme")]
         public void CreateScheme() {
-            var currentProgId = 1; // TODO for test
-            var program = _session.AiModel.Programs.Find(x => x.Id == currentProgId);
+            if (_session.AiModel.CurrentProgram == null) return;
+            ClearScheme();
+            CreateNodes();
+        }
+
+        private void CreateNodes() {
+            _linksUI = new List<LinkUI>();
+            var program = _session.AiModel.CurrentProgram;
             foreach (var node in program.Nodes) {
                 float nodeHeight = SpawnNode(node).GetComponent<RectTransform>().rect.height;
-                var links = _session.AiModel.Links.FindAll(x => x.FromId == node.Id);
-                foreach (var link in links) {
-                    var linkUI = new LinkUI(link, nodeHeight);
-                    linkUI.Widget = SpawnLink(linkUI);
-                    _linksUI.Add(linkUI);
-                }
+                CreateLinks(node, nodeHeight);
             }
+        }
+
+        private void CreateLinks(Node node, float nodeHeight) {
+            var links = _session.AiModel.Links.FindAll(x => x.FromId == node.Id);
+            foreach (var link in links) {
+                var linkUI = new LinkUI(link, nodeHeight);
+                linkUI.Widget = SpawnLink(linkUI);
+                _linksUI.Add(linkUI);
+            }
+        }
+
+        private void ClearScheme() {
+            var container = GameObjectSpawner.GetContainer(schemeContainer);
+            Component[] items = container.GetComponentsInChildren<LinkWidget>();
+            foreach (var item in items)
+                Destroy(item.gameObject);
+            items = container.GetComponentsInChildren<NodeWidget>();
+            foreach (var item in items)
+                Destroy(item.gameObject);
         }
 
         public void RedrawLinks() {
@@ -45,8 +66,7 @@ namespace Assets.MirAI {
         }
 
         private LinkWidget SpawnLink(LinkUI linkUI) {
-            Vector3 position = Vector3.zero;
-            var goLinkUI = GameObjectSpawner.Spawn(_linkPrefab, position, schemeContainer);
+            var goLinkUI = GameObjectSpawner.Spawn(_linkPrefab, schemeContainer);
             var linkWidget = goLinkUI.GetComponent<LinkWidget>();
             linkWidget.SetData(linkUI);
             return linkWidget;

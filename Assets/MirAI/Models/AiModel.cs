@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Assets.MirAI.DB;
+using UnityEngine.Events;
 
 namespace Assets.MirAI.Models {
 
@@ -10,7 +11,12 @@ namespace Assets.MirAI.Models {
         public List<Node> Nodes { get; set; }
         public List<Link> Links { get; set; }
 
-        public AiModel() { 
+        public UnityEvent ProgramsChanged = new UnityEvent();
+        public UnityEvent NodesChanged = new UnityEvent();
+
+        public Program CurrentProgram;
+
+        public AiModel() {
             LoadFromDB();
         }
 
@@ -24,6 +30,12 @@ namespace Assets.MirAI.Models {
             Nodes = db.Nodes.ToList();
             Links = db.Links.ToList();
             CreateModelFromDbData();
+            if(Programs != null && Programs.Count > 0)
+                CurrentProgram = Programs[0];
+            else
+                CurrentProgram = null;
+            ProgramsChanged?.Invoke();
+            NodesChanged?.Invoke();
         }
 
         public Program AddNewProgram(string name) {
@@ -42,12 +54,14 @@ namespace Assets.MirAI.Models {
             node.Type = NodeType.Root;
             db.Nodes.Update(node);
 
+            ProgramsChanged?.Invoke();
             return program;
         }
 
         public void UpdateProgram(Program program) {
             using var db = new DbContext();
             db.Programs.Update(program);
+            ProgramsChanged?.Invoke();
         }
 
         public void RemoveProgram(int id) {
@@ -61,6 +75,7 @@ namespace Assets.MirAI.Models {
             var child = AddNode(db);
             parent.AddChild(child);
             AddLink(parent.Id, child.Id, db);
+            NodesChanged?.Invoke();
             return child;
         }
 
@@ -74,6 +89,7 @@ namespace Assets.MirAI.Models {
         public void UpdateNode(Node node) {
             using var db = new DbContext();
             db.Nodes.Update(node);
+            NodesChanged?.Invoke();
         }
 
         public void RemoveNode(int id) {

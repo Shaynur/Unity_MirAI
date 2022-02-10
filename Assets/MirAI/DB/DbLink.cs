@@ -1,32 +1,33 @@
 ﻿using System;
 using System.Data;
 using Assets.MirAI.Models;
+using Mono.Data.Sqlite;
 
 namespace Assets.MirAI.DB {
-    public class DbLink : IDbRoutines {
+    public class DbLink : DbTable<Link> {
 
-        private readonly Link _link;
-
-        public DbLink(Link link) {
-            _link = link;
+        public DbLink(string tableName, SqliteConnection connection) : base(tableName, connection) {
         }
 
-        public string GetDeleteCommandSuffix() {
-            return " WHERE FromId = '" + _link.FromId + "' AND ToId = '" + _link.ToId + "';";
+        public override string GetDeleteCommandSuffix(Link link) {
+            return " WHERE FromId = '" + link.FromId + "' AND ToId = '" + link.ToId + "';";
         }
 
-        public string GetInsertCommandSuffix() {
-            return " (FromId, ToId) VALUES ('" + _link.FromId + "', '" + _link.ToId + "');";
+        public override string GetInsertCommandSuffix(Link link) {
+            return " (FromId, ToId) VALUES ('" + link.FromId + "', '" + link.ToId + "');";
         }
 
-        public string GetUpdateCommandSuffix() {
+        public override string GetUpdateCommandSuffix(Link link) {
             return ";";
         }
 
-        public void SetData(IDataRecord data) {
+        public override Link CreateByData(IDataRecord data) {
             try {
-                _link.FromId = data.GetInt32(0);
-                _link.ToId = data.GetInt32(1);
+                Link link = new Link {
+                    FromId = data.GetInt32(0),
+                    ToId = data.GetInt32(1)
+                };
+                return link;
             }
             catch (Exception ex) {
                 throw new DbMirAiException("Convert IDataRecord to Program error.", ex);

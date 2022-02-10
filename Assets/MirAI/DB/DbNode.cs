@@ -1,43 +1,44 @@
 ﻿using System;
 using System.Data;
 using Assets.MirAI.Models;
+using Mono.Data.Sqlite;
 
 namespace Assets.MirAI.DB {
 
-    public class DbNode : IDbRoutines {
+    public class DbNode : DbTable<Node> {
 
-        private readonly Node _node;
-
-        public DbNode(Node node) {
-            _node = node;
+        public DbNode(string tableName, SqliteConnection connection) : base(tableName, connection) {
         }
 
-        public string GetDeleteCommandSuffix() {
-            return " WHERE Id = '" + _node.Id + "';";
+        public override string GetDeleteCommandSuffix(Node node) {
+            return " WHERE Id = '" + node.Id + "';";
         }
 
-        public string GetInsertCommandSuffix() {
+        public override string GetInsertCommandSuffix(Node node) {
             return " (ProgramId, Type, Command, X, Y) VALUES ('"
-                + _node.ProgramId + "', '" + (int)_node.Type + "', '" + _node.Command + "', '" + _node.X + "', '" + _node.Y + "');";
+                + node.ProgramId + "', '" + (int)node.Type + "', '" + node.Command + "', '" + node.X + "', '" + node.Y + "');";
         }
 
-        public string GetUpdateCommandSuffix() {
-            return " SET ProgramId = '" + _node.ProgramId
-                + "', Type = '" + (int)_node.Type
-                + "', Command = '" + _node.Command
-                + "', X = '" + _node.X
-                + "', Y = '" + _node.Y
-                + "' WHERE Id = '" + _node.Id + "';";
+        public override string GetUpdateCommandSuffix(Node node) {
+            return " SET ProgramId = '" + node.ProgramId
+                + "', Type = '" + (int)node.Type
+                + "', Command = '" + node.Command
+                + "', X = '" + node.X
+                + "', Y = '" + node.Y
+                + "' WHERE Id = '" + node.Id + "';";
         }
 
-        public void SetData(IDataRecord data) {
+        public override Node CreateByData(IDataRecord data) {
             try {
-                _node.Id = data.GetInt32(0);
-                _node.ProgramId = data.GetInt32(1);
-                _node.Type = (NodeType)data.GetInt32(2);
-                _node.Command = data.GetInt32(3);
-                _node.X = data.GetInt32(4);
-                _node.Y = data.GetInt32(5);
+                Node node = new Node {
+                    Id = data.GetInt32(0),
+                    ProgramId = data.GetInt32(1),
+                    Type = (NodeType)data.GetInt32(2),
+                    Command = data.GetInt32(3),
+                    X = data.GetInt32(4),
+                    Y = data.GetInt32(5)
+                };
+                return node;
             }
             catch (Exception ex) {
                 throw new DbMirAiException("Convert IDataRecord to Node error.", ex);

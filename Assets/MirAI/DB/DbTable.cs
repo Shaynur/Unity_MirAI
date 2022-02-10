@@ -6,10 +6,15 @@ using Mono.Data.Sqlite;
 
 namespace Assets.MirAI.DB {
 
-    public class DbTable<T> where T : IAiModelElement, new() {
+    public abstract class DbTable<T> where T : IAiModelElement {
 
         public string TableName { get; set; }
         private readonly SqliteConnection _connection;
+
+        public abstract T CreateByData(IDataRecord data);
+        public abstract string GetInsertCommandSuffix(T t);
+        public abstract string GetDeleteCommandSuffix(T t);
+        public abstract string GetUpdateCommandSuffix(T t);
 
         public DbTable(string tableName, SqliteConnection connection) {
             TableName = tableName;
@@ -23,8 +28,7 @@ namespace Assets.MirAI.DB {
                 command.CommandText = @"SELECT * FROM " + TableName + ";";
                 using IDataReader reader = command.ExecuteReader();
                 while (reader.Read()) {
-                    var entity = new T();
-                    entity.dbRoutines.SetData(reader);
+                    var entity = CreateByData(reader);
                     entities.Add(entity);
                 }
                 reader.Close();
@@ -37,12 +41,12 @@ namespace Assets.MirAI.DB {
 
         public T GetById(int id) {
             try {
-                T entity = new T();
+                T entity = default;
                 using var command = _connection.CreateCommand();
                 command.CommandText = @"SELECT * FROM " + TableName + @" WHERE Id='" + id.ToString() + "';";
                 using IDataReader reader = command.ExecuteReader();
                 while (reader.Read()) {
-                    entity.dbRoutines.SetData(reader);
+                    entity = CreateByData(reader);
                 }
                 reader.Close();
                 return entity;
@@ -54,20 +58,20 @@ namespace Assets.MirAI.DB {
 
         public void Add(T entity) {
             var commandPrefix = "INSERT INTO " + TableName;
-            var commandValues = entity.dbRoutines.GetInsertCommandSuffix();
+            var commandValues = GetInsertCommandSuffix(entity);
             ExecuteCommand(commandPrefix + commandValues);
             entity.Id = GetLastId();
         }
 
         public void Update(T entity) {
             var commandPrefix = "UPDATE " + TableName;
-            var commandValues = entity.dbRoutines.GetUpdateCommandSuffix();
+            var commandValues = GetUpdateCommandSuffix(entity);
             ExecuteCommand(commandPrefix + commandValues);
         }
 
         public void Remove(T entity) {
             var commandPrefix = "DELETE FROM " + TableName;
-            var commandValues = entity.dbRoutines.GetDeleteCommandSuffix();
+            var commandValues = GetDeleteCommandSuffix(entity);
             ExecuteCommand(commandPrefix + commandValues);
         }
 

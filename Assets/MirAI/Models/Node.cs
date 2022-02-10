@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Text;
-using Assets.MirAI.DB;
 
 namespace Assets.MirAI.Models {
 
@@ -13,11 +12,6 @@ namespace Assets.MirAI.Models {
         public int X { get; set; }
         public int Y { get; set; }
         public List<ChildNode> Childs { get; set; } = new List<ChildNode>();
-        public IDbRoutines dbRoutines { get; set; }
-
-        public Node() {
-            dbRoutines = new DbNode(this);
-        }
 
         public virtual void AddChild(Node node) {
             Childs.Add(new ChildNode() { Node = node });
