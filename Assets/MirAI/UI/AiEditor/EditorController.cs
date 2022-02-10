@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using Assets.MirAI.Models;
-using Assets.MirAI.UI;
+﻿using Assets.MirAI.Models;
 using Assets.MirAI.UI.Widgets;
 using Assets.MirAI.Utils;
 using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
 
-namespace Assets.MirAI {
+namespace Assets.MirAI.UI.AiEditor {
 
     public class EditorController : MonoBehaviour {
 
@@ -14,7 +12,6 @@ namespace Assets.MirAI {
         [SerializeField] private GameObject _linkPrefab;
 
         private GameSession _session;
-        private List<LinkUI> _linksUI;
         private readonly CompositeDisposable _trash = new CompositeDisposable();
         private static readonly string schemeContainer = "Scheme";
 
@@ -32,7 +29,6 @@ namespace Assets.MirAI {
         }
 
         private void CreateNodes() {
-            _linksUI = new List<LinkUI>();
             var program = _session.AiModel.CurrentProgram;
             foreach (var node in program.Nodes) {
                 float nodeHeight = SpawnNode(node).GetComponent<RectTransform>().rect.height;
@@ -41,11 +37,10 @@ namespace Assets.MirAI {
         }
 
         private void CreateLinks(Node node, float nodeHeight) {
-            var links = _session.AiModel.Links.FindAll(x => x.FromId == node.Id);
+            var links = _session.AiModel.Links.FindAll(x => x.NodeFrom == node);
             foreach (var link in links) {
-                var linkUI = new LinkUI(link, nodeHeight);
-                linkUI.Widget = SpawnLink(linkUI);
-                _linksUI.Add(linkUI);
+                link.Yoffset = nodeHeight;
+                SpawnLink(link);
             }
         }
 
@@ -59,17 +54,25 @@ namespace Assets.MirAI {
                 Destroy(item.gameObject);
         }
 
-        public void RedrawLinks() {
-            foreach (var link in _linksUI) {
-                link.Widget.UpdateView();
-            }
+        public void RedrawLinks(GameObject go) {
+            var node = go.GetComponent<NodeWidget>().Node;
+
+            RedrawAllLinksIn(l => l.NodeTo == node);
+
+            foreach (var n in _session.AiModel.CurrentProgram.DFC(node))
+                RedrawAllLinksIn(l => l.NodeFrom == n);
         }
 
-        private LinkWidget SpawnLink(LinkUI linkUI) {
-            var goLinkUI = GameObjectSpawner.Spawn(_linkPrefab, schemeContainer);
-            var linkWidget = goLinkUI.GetComponent<LinkWidget>();
-            linkWidget.SetData(linkUI);
-            return linkWidget;
+        private void RedrawAllLinksIn(System.Predicate<Link> match) {
+            foreach (var link in _session.AiModel.Links.FindAll(match))
+                link.Widget.UpdateView();
+        }
+
+        private void SpawnLink(Link link) {
+            var goLink = GameObjectSpawner.Spawn(_linkPrefab, schemeContainer);
+            var linkWidget = goLink.GetComponent<LinkWidget>();
+            link.Widget = linkWidget;
+            linkWidget.SetData(link);
         }
 
         public GameObject SpawnNode(Node node) {

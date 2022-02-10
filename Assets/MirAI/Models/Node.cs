@@ -11,15 +11,16 @@ namespace Assets.MirAI.Models {
         public int Command { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
-        public List<ChildNode> Childs { get; set; } = new List<ChildNode>();
+        public List<Node> Childs { get; set; } = new List<Node>();
+
+        public bool Viewed;
 
         public virtual void AddChild(Node node) {
-            Childs.Add(new ChildNode() { Node = node });
+            Childs.Add(  node);
         }
 
         public virtual void RemoveChild(Node node) {
-            var removeItem = Childs.Find(x => x.Node == node);
-            Childs.Remove(removeItem);
+            Childs.Remove(node);
         }
 
         public override string ToString() {

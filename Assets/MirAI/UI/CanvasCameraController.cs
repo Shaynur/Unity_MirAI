@@ -13,12 +13,12 @@ namespace Assets.MirAI.UI {
         private Vector2 _cameraFlyDirection;
         private readonly float _cameraResizeSpeed = 5f;
         private readonly float _cameraFlyInertia = 1.05f;
-        private readonly float _deltaMoveCameraMultiplier = 219f;   // Magic value ??
+        private readonly float _deltaMoveCameraDivider = 300f;   // Magic value ??
 
 
         private void Start() {
             _canvasRectTransform = GetComponent<RectTransform>();
-            _newCameraSize = _canvasRectTransform.rect.height / 2;
+            _newCameraSize = _camera.orthographicSize;
         }
 
         private void Update() {
@@ -42,7 +42,7 @@ namespace Assets.MirAI.UI {
         }
 
         public void OnDrag(PointerEventData eventData) {
-            var delta = eventData.delta / (_deltaMoveCameraMultiplier / _camera.orthographicSize);
+            var delta = eventData.delta * _camera.orthographicSize / _deltaMoveCameraDivider;
             _cameraFlyDirection = new Vector2(delta.x, delta.y);
         }
 

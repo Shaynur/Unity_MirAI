@@ -30,7 +30,7 @@ namespace Assets.MirAI.Models {
             Nodes = db.Nodes.ToList();
             Links = db.Links.ToList();
             CreateModelFromDbData();
-            if(Programs != null && Programs.Count > 0)
+            if (Programs != null && Programs.Count > 0)
                 CurrentProgram = Programs[0];
             else
                 CurrentProgram = null;
@@ -105,6 +105,7 @@ namespace Assets.MirAI.Models {
 
         private void AddLink(int parentNodeId, int childNodeId, DbContext db) {
             var link = new Link { FromId = parentNodeId, ToId = childNodeId };
+            FillLinkNodes(link);
             db.Links.Add(link);
             Links.Add(link);
         }
@@ -118,10 +119,10 @@ namespace Assets.MirAI.Models {
 
         private void CreateModelFromDbData() {
             CreateNodesLinks();
-            CreateProgramsLinks();
+            CreateProgramsNodeLists();
         }
 
-        private void CreateProgramsLinks() {
+        private void CreateProgramsNodeLists() {
             foreach (var node in Nodes) {
                 var progId = node.ProgramId;
                 var prog = Programs.First(p => p.Id == progId);
@@ -131,12 +132,16 @@ namespace Assets.MirAI.Models {
 
         private void CreateNodesLinks() {
             foreach (var link in Links) {
-                var from = link.FromId;
-                var to = link.ToId;
-                var nodeFrom = Nodes.First(n => n.Id == from);
-                var nodeTo = Nodes.First(n => n.Id == to);
-                nodeFrom.AddChild(nodeTo);
+                FillLinkNodes(link);
+                link.NodeFrom.AddChild(link.NodeTo);
             }
+        }
+
+        private void FillLinkNodes(Link link) {
+            var nodeFrom = Nodes.First(n => n.Id == link.FromId);
+            var nodeTo = Nodes.First(n => n.Id == link.ToId);
+            link.NodeFrom = nodeFrom;
+            link.NodeTo = nodeTo;
         }
     }
 }

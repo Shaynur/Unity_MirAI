@@ -10,9 +10,9 @@ namespace Assets.MirAI.UI.Widgets {
         [SerializeField] Text _idText;
         [SerializeField] Text _positionText;
 
-        public UnityEvent OnMove;
+        public EventFromGO OnMove = new EventFromGO();
+        public Node Node;
         private GameSession _session;
-        private Node _node;
         private Transform _transform;
 
         private void Start() {
@@ -22,20 +22,20 @@ namespace Assets.MirAI.UI.Widgets {
         }
 
         public void SetData(Node node) {
-            _node = node;
+            Node = node;
             UpdateView();
         }
 
         public void UpdateView() {
-            _idText.text = "Id = " + _node.Id;
-            _positionText.text = "(x,y) = " + _node.X + ", " + _node.Y;
+            _idText.text = "Id = " + Node.Id;
+            _positionText.text = "(x,y) = " + Node.X + ", " + Node.Y;
         }
 
         public void OnChangePosition() {
-            _node.X = (int)_transform.position.x;
-            _node.Y = (int)_transform.position.y;
+            Node.X = (int)_transform.position.x;
+            Node.Y = (int)_transform.position.y;
             UpdateView();
-            OnMove?.Invoke();
+            OnMove?.Invoke(gameObject);
         }
 
         public void ChangePosition(Vector3 offset) {
@@ -44,7 +44,9 @@ namespace Assets.MirAI.UI.Widgets {
         }
 
         public void SaveToDB() {
-            _session.AiModel.UpdateNode(_node);
+            _session.AiModel.UpdateNode(Node);
         }
     }
+
+    public class EventFromGO : UnityEvent<GameObject> { }
 }

@@ -12,8 +12,8 @@ TagManager:
   - 
   - Water
   - UI
-  - Nodes
-  - Links
+  - Editor
+  - 
   - 
   - 
   - 
@@ -42,9 +42,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Links
-    uniqueID: 1569987087
+  - name: Editor
+    uniqueID: 320406897
     locked: 0
-  - name: Nodes
-    uniqueID: 373475409
+  - name: UI
+    uniqueID: 3589010729
     locked: 0
