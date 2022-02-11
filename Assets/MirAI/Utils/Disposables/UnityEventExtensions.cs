@@ -11,5 +11,10 @@ namespace Assets.MirAI.Utils.Disposables {
             unityEvent.AddListener(call);
             return new ActionDisposable(() => unityEvent.RemoveListener(call));
         }
+
+        public static IDisposable Subscribe<T0, T1>(this UnityEvent<T0, T1> unityEvent, UnityAction<T0, T1> call) {
+            unityEvent.AddListener(call);
+            return new ActionDisposable(() => unityEvent.RemoveListener(call));
+        }
     }
 }

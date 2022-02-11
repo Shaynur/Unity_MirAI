@@ -88,8 +88,19 @@ namespace Assets.MirAI.Models {
 
         public void UpdateNode(Node node) {
             using var db = new DbContext();
-            db.Nodes.Update(node);
+            UpdateNode(node, db);
             NodesChanged?.Invoke();
+        }
+
+        public void UpdateNodes(Node[] nodes) {
+            using var db = new DbContext();
+            foreach (var node in nodes)
+                UpdateNode(node, db);
+            NodesChanged?.Invoke();
+        }
+
+        private void UpdateNode(Node node, DbContext db) {
+            db.Nodes.Update(node);
         }
 
         public void RemoveNode(int id) {

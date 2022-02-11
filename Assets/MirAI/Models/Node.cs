@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using Assets.MirAI.UI.Widgets;
 
 namespace Assets.MirAI.Models {
 
@@ -9,9 +10,11 @@ namespace Assets.MirAI.Models {
         public int ProgramId { get; set; }
         public NodeType Type { get; set; }
         public int Command { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
+        public float X { get; set; }
+        public float Y { get; set; }
         public List<Node> Childs { get; set; } = new List<Node>();
+
+        public NodeWidget Widget { get; set; }
 
         public bool Viewed;
 

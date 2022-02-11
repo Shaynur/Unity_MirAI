@@ -1,4 +1,5 @@
-﻿using Assets.MirAI.Models;
+﻿using System.Linq;
+using Assets.MirAI.Models;
 using Assets.MirAI.UI.Widgets;
 using Assets.MirAI.Utils;
 using Assets.MirAI.Utils.Disposables;
@@ -31,7 +32,8 @@ namespace Assets.MirAI.UI.AiEditor {
         private void CreateNodes() {
             var program = _session.AiModel.CurrentProgram;
             foreach (var node in program.Nodes) {
-                float nodeHeight = SpawnNode(node).GetComponent<RectTransform>().rect.height;
+                node.Widget = SpawnNode(node);
+                float nodeHeight = node.Widget.GetComponent<RectTransform>().rect.height; // ?????? gameObject ?
                 CreateLinks(node, nodeHeight);
             }
         }
@@ -54,18 +56,25 @@ namespace Assets.MirAI.UI.AiEditor {
                 Destroy(item.gameObject);
         }
 
-        public void RedrawLinks(GameObject go) {
-            var node = go.GetComponent<NodeWidget>().Node;
-
-            RedrawAllLinksIn(l => l.NodeTo == node);
-
-            foreach (var n in _session.AiModel.CurrentProgram.DFC(node))
-                RedrawAllLinksIn(l => l.NodeFrom == n);
+        public void MoveNodes(Node fromNode, Vector3 offset) {
+            var program = _session.AiModel.CurrentProgram;
+            foreach (var n in program.DFC(fromNode)) {
+                if (n != fromNode)
+                    n.Widget.ChangePosition(offset);
+            }
+            RedrawAllLinks(program);
         }
 
-        private void RedrawAllLinksIn(System.Predicate<Link> match) {
-            foreach (var link in _session.AiModel.Links.FindAll(match))
-                link.Widget.UpdateView();
+        private void RedrawAllLinks(Program program) {
+            foreach (var node in program.Nodes)
+                foreach (var link in _session.AiModel.Links.FindAll(x => x.FromId == node.Id))
+                    link.Widget.UpdateView();
+        }
+
+        public void SaveNodesToDB(Node fromNode) {
+            var program = _session.AiModel.CurrentProgram;
+            var nodes = program.DFC(fromNode).ToArray<Node>();
+            _session.AiModel.UpdateNodes(nodes);
         }
 
         private void SpawnLink(Link link) {
@@ -75,13 +84,14 @@ namespace Assets.MirAI.UI.AiEditor {
             linkWidget.SetData(link);
         }
 
-        public GameObject SpawnNode(Node node) {
+        public NodeWidget SpawnNode(Node node) {
             Vector3 position = new Vector3(node.X, node.Y, 0);
             var nodeUI = GameObjectSpawner.Spawn(_nodePrefab, position, schemeContainer);
             var nodeWidget = nodeUI.GetComponent<NodeWidget>();
             nodeWidget.SetData(node);
-            _trash.Retain(nodeWidget.OnMove.Subscribe(RedrawLinks));
-            return nodeUI;
+            _trash.Retain(nodeWidget.OnMove.Subscribe(MoveNodes));
+            _trash.Retain(nodeWidget.OnEndMove.Subscribe(SaveNodesToDB));
+            return nodeWidget;
         }
 
         private void OnDestroy() {

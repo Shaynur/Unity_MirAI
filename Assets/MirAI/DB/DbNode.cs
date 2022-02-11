@@ -16,15 +16,15 @@ namespace Assets.MirAI.DB {
 
         public override string GetInsertCommandSuffix(Node node) {
             return " (ProgramId, Type, Command, X, Y) VALUES ('"
-                + node.ProgramId + "', '" + (int)node.Type + "', '" + node.Command + "', '" + node.X + "', '" + node.Y + "');";
+                + node.ProgramId + "', '" + (int)node.Type + "', '" + node.Command + "', '" + (int)node.X + "', '" + (int)node.Y + "');";
         }
 
         public override string GetUpdateCommandSuffix(Node node) {
             return " SET ProgramId = '" + node.ProgramId
                 + "', Type = '" + (int)node.Type
                 + "', Command = '" + node.Command
-                + "', X = '" + node.X
-                + "', Y = '" + node.Y
+                + "', X = '" + (int)node.X
+                + "', Y = '" + (int)node.Y
                 + "' WHERE Id = '" + node.Id + "';";
         }
 
