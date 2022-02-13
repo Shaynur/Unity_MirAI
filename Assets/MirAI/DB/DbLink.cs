@@ -23,10 +23,7 @@ namespace Assets.MirAI.DB {
 
         public override Link CreateByData(IDataRecord data) {
             try {
-                Link link = new Link {
-                    FromId = data.GetInt32(0),
-                    ToId = data.GetInt32(1)
-                };
+                Link link = new Link(data.GetInt32(0), data.GetInt32(1));
                 return link;
             }
             catch (Exception ex) {

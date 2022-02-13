@@ -1,39 +1,34 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Assets.MirAI.Models;
-using Assets.MirAI.UI.Widgets;
-using Assets.MirAI.Utils;
 using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Assets.MirAI.UI.AiEditor {
 
     public class EditorController : MonoBehaviour {
 
-        [SerializeField] private GameObject _nodePrefab;
-        [SerializeField] private GameObject _linkPrefab;
-
         private GameSession _session;
-        private readonly CompositeDisposable _trash = new CompositeDisposable();
-        private static readonly string schemeContainer = "Scheme";
+        public readonly CompositeDisposable _trash = new CompositeDisposable();
 
         private void Start() {
             _session = GameSession.Instance;
-            _trash.Retain(_session.AiModel.ProgramsChanged.Subscribe(CreateScheme));
             CreateScheme();
         }
 
         [ContextMenu("CreateScheme")]
         public void CreateScheme() {
             if (_session.AiModel.CurrentProgram == null) return;
-            ClearScheme();
+            EditorPartsFactory.I.ClearScheme();
             CreateNodes();
         }
 
         private void CreateNodes() {
             var program = _session.AiModel.CurrentProgram;
             foreach (var node in program.Nodes) {
-                node.Widget = SpawnNode(node);
-                float nodeHeight = node.Widget.GetComponent<RectTransform>().rect.height; // ?????? gameObject ?
+                node.Widget = EditorPartsFactory.I.SpawnNode(node);
+                float nodeHeight = node.Widget.GetComponent<RectTransform>().rect.height;
                 CreateLinks(node, nodeHeight);
             }
         }
@@ -42,18 +37,8 @@ namespace Assets.MirAI.UI.AiEditor {
             var links = _session.AiModel.Links.FindAll(x => x.NodeFrom == node);
             foreach (var link in links) {
                 link.Yoffset = nodeHeight;
-                SpawnLink(link);
+                EditorPartsFactory.I.SpawnLink(link);
             }
-        }
-
-        private void ClearScheme() {
-            var container = GameObjectSpawner.GetContainer(schemeContainer);
-            Component[] items = container.GetComponentsInChildren<LinkWidget>();
-            foreach (var item in items)
-                Destroy(item.gameObject);
-            items = container.GetComponentsInChildren<NodeWidget>();
-            foreach (var item in items)
-                Destroy(item.gameObject);
         }
 
         public void MoveNodes(Node fromNode, Vector3 offset) {
@@ -67,7 +52,7 @@ namespace Assets.MirAI.UI.AiEditor {
 
         private void RedrawAllLinks(Program program) {
             foreach (var node in program.Nodes)
-                foreach (var link in _session.AiModel.Links.FindAll(x => x.FromId == node.Id))
+                foreach (var link in _session.AiModel.Links.FindAll(x => x.NodeFrom == node))
                     link.Widget.UpdateView();
         }
 
@@ -77,21 +62,15 @@ namespace Assets.MirAI.UI.AiEditor {
             _session.AiModel.UpdateNodes(nodes);
         }
 
-        private void SpawnLink(Link link) {
-            var goLink = GameObjectSpawner.Spawn(_linkPrefab, schemeContainer);
-            var linkWidget = goLink.GetComponent<LinkWidget>();
-            link.Widget = linkWidget;
-            linkWidget.SetData(link);
+        public void UpdateSelectors(Node excludingNode) {
+            var program = _session.AiModel.CurrentProgram;
+            foreach (var node in program.Nodes)
+                if (node != excludingNode)
+                    node.Widget.selector.SetState(false);
         }
 
-        public NodeWidget SpawnNode(Node node) {
-            Vector3 position = new Vector3(node.X, node.Y, 0);
-            var nodeUI = GameObjectSpawner.Spawn(_nodePrefab, position, schemeContainer);
-            var nodeWidget = nodeUI.GetComponent<NodeWidget>();
-            nodeWidget.SetData(node);
-            _trash.Retain(nodeWidget.OnMove.Subscribe(MoveNodes));
-            _trash.Retain(nodeWidget.OnEndMove.Subscribe(SaveNodesToDB));
-            return nodeWidget;
+        public void UnselectAll() {
+            UpdateSelectors(null);
         }
 
         private void OnDestroy() {

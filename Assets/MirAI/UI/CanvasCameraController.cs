@@ -1,12 +1,15 @@
-﻿using UnityEngine;
+﻿using Assets.MirAI.UI.Widgets;
+using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 namespace Assets.MirAI.UI {
 
     [RequireComponent(typeof(Canvas))]
-    public class CanvasCameraController : MonoBehaviour, IDragHandler {
+    public class CanvasCameraController : MonoBehaviour, IBeginDragHandler, IDragHandler, IPointerDownHandler, IPointerUpHandler {
 
         [SerializeField] private Camera _camera;
+        [SerializeField] private UnityEvent _onClick;
 
         private RectTransform _canvasRectTransform;
         private float _newCameraSize;
@@ -14,11 +17,13 @@ namespace Assets.MirAI.UI {
         private readonly float _cameraResizeSpeed = 5f;
         private readonly float _cameraFlyInertia = 1.05f;
         private readonly float _deltaMoveCameraDivider = 300f;   // Magic value ??
+        private bool _isDragging;
 
 
         private void Start() {
             _canvasRectTransform = GetComponent<RectTransform>();
             _newCameraSize = _camera.orthographicSize;
+            _isDragging = false;
         }
 
         private void Update() {
@@ -86,6 +91,19 @@ namespace Assets.MirAI.UI {
             var bottom = _canvasRectTransform.position.y - height / 2;
             var canvasRect = new Rect(left, bottom, width, height);
             return canvasRect;
+        }
+
+        public void OnPointerDown(PointerEventData eventData) {
+        }
+
+        public void OnPointerUp(PointerEventData eventData) {
+            if (!_isDragging)
+                _onClick?.Invoke();
+            _isDragging = false;
+        }
+
+        public void OnBeginDrag(PointerEventData eventData) {
+            _isDragging = true;
         }
     }
 }

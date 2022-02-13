@@ -17,18 +17,37 @@ namespace Assets.MirAI.Models {
         public float Lenght { get; set; }
         public float Yoffset { get; set; }
 
-        public override string ToString() {
-            StringBuilder ret = new StringBuilder($"FromId={FromId,-5} ToId={ToId,-5}");
-            return ret.ToString();
+        public Link(int fromId, int toId) {
+            FromId = fromId;
+            ToId = toId;
         }
 
-        internal void CalculateGraphdata() {
+        public Link(Node nodeFrom, Node nodeTo) {
+            NodeFrom = nodeFrom;
+            NodeTo = nodeTo;
+            FromId = nodeFrom.Id;
+            ToId = nodeTo.Id;
+            if (NodeFrom.Widget != null) {
+                Yoffset = NodeFrom.Widget.GetComponent<RectTransform>().rect.height;
+                CalculateGraphdata();
+            }
+        }
+
+        public void CalculateGraphdata() {
             var dx = NodeFrom.X - NodeTo.X;
             var dy = NodeFrom.Y - Yoffset - NodeTo.Y;
             Center = new Vector3(NodeTo.X + dx / 2, NodeTo.Y + dy / 2, 0);
             Lenght = Mathf.Sqrt(dx * dx + dy * dy);
-            Angle = Mathf.Acos(dy / Lenght) * 180 / Mathf.PI;
-            Angle = dx > 0 ? 360 - Angle : Angle;
+            if (Lenght != 0) {
+                Angle = Mathf.Acos(dy / Lenght) * 180 / Mathf.PI;
+                Angle = dx > 0 ? 360 - Angle : Angle;
+                Lenght = Mathf.Max(Lenght - 16, 0);
+            }
+        }
+
+        public override string ToString() {
+            StringBuilder ret = new StringBuilder($"FromId={FromId,-5} ToId={ToId,-5}");
+            return ret.ToString();
         }
     }
 }

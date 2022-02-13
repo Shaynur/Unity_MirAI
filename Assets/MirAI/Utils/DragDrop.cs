@@ -4,20 +4,24 @@ using UnityEngine.EventSystems;
 
 namespace Assets.MirAI.Utils {
 
-    public class DragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler {
+    public class DragDrop : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IEndDragHandler, IDragHandler {
 
+        [SerializeField] UnityEvent _onClick;
         [SerializeField] UnityEvent _onDrag;
         [SerializeField] UnityEvent _onEndDrag;
-        
+
         private CanvasGroup _canvasGroup;
         private Vector3 _pressPosition;
-        
+        public bool IsDragging;
+
 
         private void Awake() {
             _canvasGroup = GetComponent<CanvasGroup>();
+            IsDragging = false;
         }
 
         public void OnBeginDrag(PointerEventData eventData) {
+            IsDragging = true;
             if (_canvasGroup != null)
                 _canvasGroup.alpha = .6f;
             _pressPosition = eventData.pointerPressRaycast.worldPosition - transform.position;
@@ -35,6 +39,12 @@ namespace Assets.MirAI.Utils {
             if (_canvasGroup != null)
                 _canvasGroup.alpha = 1f;
             _onEndDrag?.Invoke();
+        }
+
+        public void OnPointerUp(PointerEventData eventData) {
+            if (!IsDragging)
+                _onClick?.Invoke();
+            IsDragging = false;
         }
 
         public void OnPointerDown(PointerEventData eventData) {

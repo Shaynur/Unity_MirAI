@@ -14,31 +14,30 @@ namespace Assets.MirAI.UI.HUD {
         [SerializeField] private EditorController _editorController;
 
         private GameSession _session;
-        private ProgramItemWidget _current;
+        private ProgramItemWidget _currentItem;
         private readonly CompositeDisposable _trash = new CompositeDisposable();
 
 
         private void Start() {
             _session = GameSession.Instance;
-            _trash.Retain(_session.AiModel.ProgramsChanged.Subscribe(RedrawList));
             RedrawList();
         }
 
-        public void OnItemClickW(ProgramItemWidget piw) {
-            if (_current == piw) return;
-            ChangeSelection(piw);
-            _session.AiModel.CurrentProgram = piw.Program;
+        public void OnItemClickW(ProgramItemWidget item) {
+            if (_currentItem == item) return;
+            ChangeSelection(item);
+            _session.AiModel.CurrentProgram = item.Program;
             _editorController.CreateScheme();
         }
 
-        private void ChangeSelection(ProgramItemWidget piw) {
-            if (_current != null)
-                _current.Select(false);
-            piw.Select(true);
-            _current = piw;
+        private void ChangeSelection(ProgramItemWidget item) {
+            if (_currentItem != null)
+                _currentItem.Select(false);
+            item.Select(true);
+            _currentItem = item;
         }
 
-        private void RedrawList() {
+        public void RedrawList() {
             ClearList();
             CreateList();
         }
@@ -51,14 +50,14 @@ namespace Assets.MirAI.UI.HUD {
                 widget.Set(program);
                 _trash.Retain(widget.ItemClicked.Subscribe(OnItemClickW));
                 if (program == _session.AiModel.CurrentProgram) {
-                    _current = widget;
-                    _current.Select(true);
+                    _currentItem = widget;
+                    _currentItem.Select(true);
                 }
             }
         }
 
         private void ClearList() {
-            _current = null;
+            _currentItem = null;
             var items = GetComponentsInChildren<Text>();
             foreach (var item in items) {
                 Destroy(item.gameObject);

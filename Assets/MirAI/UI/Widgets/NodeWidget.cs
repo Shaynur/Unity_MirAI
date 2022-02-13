@@ -1,4 +1,5 @@
 ﻿using Assets.MirAI.Models;
+using Assets.MirAI.UI.AiEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -12,13 +13,14 @@ namespace Assets.MirAI.UI.Widgets {
 
         public EventNodeMove OnMove = new EventNodeMove();
         public EventFromNode OnEndMove = new EventFromNode();
+        public EventFromNode OnSelect = new EventFromNode();
         public Node Node;
-        private GameSession _session;
         private Transform _transform;
+        public SelectorController selector;
 
         private void Start() {
-            _session = GameSession.Instance;
             _transform = GetComponent<Transform>();
+            selector = GetComponentInChildren<SelectorController>(true);
             UpdateView();
         }
 
@@ -40,7 +42,7 @@ namespace Assets.MirAI.UI.Widgets {
             OnMove?.Invoke(Node, offset);
         }
 
-        public void WriteNewPosition() {
+        private void WriteNewPosition() {
             Node.X = _transform.position.x;
             Node.Y = _transform.position.y;
             UpdateView();
@@ -53,6 +55,12 @@ namespace Assets.MirAI.UI.Widgets {
 
         public void SaveToDB() {
             OnEndMove?.Invoke(Node);
+        }
+
+        public void SwitchSelector() {
+            selector.Toggle();
+            if (selector.IsActiv)
+                OnSelect?.Invoke(Node);
         }
     }
 

@@ -18,7 +18,7 @@ namespace Assets.MirAI.Utils {
 
         public static GameObject GetContainer(string containerName) {
             var container = GameObject.Find(containerName);
-            return container ?? new GameObject(containerName);
+            return container != null ? container : new GameObject(containerName);
         }
     }
 }
