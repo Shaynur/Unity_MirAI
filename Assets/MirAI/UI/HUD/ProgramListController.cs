@@ -1,5 +1,4 @@
 ﻿using Assets.MirAI.Models;
-using Assets.MirAI.UI.AiEditor;
 using Assets.MirAI.UI.Widgets;
 using Assets.MirAI.Utils;
 using Assets.MirAI.Utils.Disposables;
@@ -11,23 +10,26 @@ namespace Assets.MirAI.UI.HUD {
     public class ProgramListController : MonoBehaviour {
 
         [SerializeField] private GameObject _itemPrefab;
-        [SerializeField] private EditorController _editorController;
 
         private GameSession _session;
+        private HudController _hudController;
         private ProgramItemWidget _currentItem;
         private readonly CompositeDisposable _trash = new CompositeDisposable();
 
 
         private void Start() {
             _session = GameSession.Instance;
+            _hudController = GetComponentInParent<HudController>();
             RedrawList();
         }
 
         public void OnItemClickW(ProgramItemWidget item) {
-            if (_currentItem == item) return;
+            if (_currentItem == item) {
+                _hudController.HideProgramList();
+            }
             ChangeSelection(item);
             _session.AiModel.CurrentProgram = item.Program;
-            _editorController.CreateScheme();
+            _hudController.OnSelectProgram();
         }
 
         private void ChangeSelection(ProgramItemWidget item) {

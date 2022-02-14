@@ -1,9 +1,8 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Assets.MirAI.Models;
 using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Assets.MirAI.UI.AiEditor {
 
@@ -19,6 +18,7 @@ namespace Assets.MirAI.UI.AiEditor {
 
         [ContextMenu("CreateScheme")]
         public void CreateScheme() {
+            _session.AiModel.LoadFromDB();
             if (_session.AiModel.CurrentProgram == null) return;
             EditorPartsFactory.I.ClearScheme();
             CreateNodes();
@@ -71,6 +71,18 @@ namespace Assets.MirAI.UI.AiEditor {
 
         public void UnselectAll() {
             UpdateSelectors(null);
+        }
+
+        public void DeleteNodes() {
+            var program = _session.AiModel.CurrentProgram;
+            List<Node> nodesToDelete = new List<Node> ();
+            foreach (var node in program.Nodes)
+                if(node.Widget.selector.IsActiv && node.Type != NodeType.Root)
+                    nodesToDelete.Add(node);
+            if (nodesToDelete.Count > 0) {
+                _session.AiModel.RemoveNodes(nodesToDelete.ToArray());
+                CreateScheme();
+            }
         }
 
         private void OnDestroy() {

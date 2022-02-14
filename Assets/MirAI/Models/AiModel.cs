@@ -9,11 +9,10 @@ namespace Assets.MirAI.Models {
         public List<Program> Programs { get; set; }
         public List<Node> Nodes { get; set; }
         public List<Link> Links { get; set; }
-
-        public Program CurrentProgram;
+        public Program CurrentProgram { get; set; }
 
         public AiModel() {
-            LoadFromDB();
+            //LoadFromDB();
         }
 
         public void LoadFromDB() {
@@ -22,15 +21,19 @@ namespace Assets.MirAI.Models {
         }
 
         private void LoadFromDB(DbContext db) {
+            int currProgId = (CurrentProgram == null) ? -1 : CurrentProgram.Id;
             Programs = db.Programs.ToList();
             Nodes = db.Nodes.ToList();
             Links = db.Links.ToList();
             BuildModelFromDbData();
 
-            if (Programs != null && Programs.Count > 0)
-                CurrentProgram = Programs[0];
-            else
-                CurrentProgram = null;
+            CurrentProgram = null;
+            if (Programs != null && Programs.Count > 0) {
+                if (currProgId == -1)
+                    CurrentProgram = Programs[0];
+                else
+                    CurrentProgram = Programs.Find(x => x.Id == currProgId);
+            }
         }
 
         public Program AddNewProgram(string name) {
@@ -59,7 +62,7 @@ namespace Assets.MirAI.Models {
         public void RemoveProgram(int id) {
             using var db = new DbContext();
             db.Programs.Remove(id);
-            LoadFromDB(db);
+            LoadFromDB();
         }
 
         public bool AddLinkAndChildNode(Link link) {
@@ -115,7 +118,14 @@ namespace Assets.MirAI.Models {
         public void RemoveNode(int id) {
             using var db = new DbContext();
             db.Nodes.Remove(id);
-            LoadFromDB(db);
+            LoadFromDB();
+        }
+
+        public void RemoveNodes(Node[] nodes) {
+            using var db = new DbContext();
+            foreach (var node in nodes)
+                db.Nodes.Remove(node.Id);
+            LoadFromDB();
         }
 
         public bool AddNewLink(Node parentNode, Node childNode) {

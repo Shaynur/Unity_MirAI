@@ -19,6 +19,7 @@ namespace Assets.MirAI.DB {
         public DbContext() {
             _connection = new SqliteConnection(_connectionString);
             _connection.Open();
+            ExecuteCommand("PRAGMA foreign_keys = ON;");
             Nodes = new DbNode("Nodes", _connection);
             Programs = new DbProgram("Programs", _connection);
             Links = new DbLink("Links", _connection);
@@ -34,6 +35,17 @@ namespace Assets.MirAI.DB {
 
         public void Dispose() {
             _connection.Close();
+        }
+
+        private void ExecuteCommand(string commandText) {
+            try {
+                using var command = _connection.CreateCommand();
+                command.CommandText = commandText;
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex) {
+                throw new DbMirAiException("Error execute some NonQuery command in DbContect.", ex);
+            }
         }
     }
 }
