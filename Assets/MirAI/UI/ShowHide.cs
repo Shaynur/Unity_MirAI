@@ -15,6 +15,7 @@ namespace Assets.MirAI.UI {
         private readonly bool _opening = false;
         private float _slider;
         private bool _isHidden;
+        public bool IsHidden => _isHidden;
 
         private void Start() {
             _rt = GetComponent<RectTransform>();

@@ -13,12 +13,12 @@ namespace Assets.MirAI.UI.AiEditor {
 
         private void Start() {
             _session = GameSession.Instance;
+            _trash.Retain(_session.AiModel.OnLoaded.Subscribe(CreateScheme));
             CreateScheme();
         }
 
         [ContextMenu("CreateScheme")]
         public void CreateScheme() {
-            _session.AiModel.LoadFromDB();
             if (_session.AiModel.CurrentProgram == null) return;
             EditorPartsFactory.I.ClearScheme();
             CreateNodes();
@@ -75,13 +75,12 @@ namespace Assets.MirAI.UI.AiEditor {
 
         public void DeleteNodes() {
             var program = _session.AiModel.CurrentProgram;
-            List<Node> nodesToDelete = new List<Node> ();
+            List<Node> nodesToDelete = new List<Node>();
             foreach (var node in program.Nodes)
-                if(node.Widget.selector.IsActiv && node.Type != NodeType.Root)
+                if (node.Widget.selector.IsActiv && node.Type != NodeType.Root)
                     nodesToDelete.Add(node);
             if (nodesToDelete.Count > 0) {
                 _session.AiModel.RemoveNodes(nodesToDelete.ToArray());
-                CreateScheme();
             }
         }
 

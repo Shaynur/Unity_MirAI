@@ -3,7 +3,6 @@ using Assets.MirAI.UI.Widgets;
 using Assets.MirAI.Utils;
 using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Assets.MirAI.UI.HUD {
 
@@ -14,12 +13,13 @@ namespace Assets.MirAI.UI.HUD {
         private GameSession _session;
         private HudController _hudController;
         private ProgramItemWidget _currentItem;
-        private readonly CompositeDisposable _trash = new CompositeDisposable();
+        public readonly CompositeDisposable _trash = new CompositeDisposable();
 
 
         private void Start() {
             _session = GameSession.Instance;
             _hudController = GetComponentInParent<HudController>();
+            _trash.Retain(_session.AiModel.OnLoaded.Subscribe(RedrawList));
             RedrawList();
         }
 
@@ -60,9 +60,15 @@ namespace Assets.MirAI.UI.HUD {
 
         private void ClearList() {
             _currentItem = null;
-            var items = GetComponentsInChildren<Text>();
+            var items = GetComponentsInChildren<ProgramItemWidget>();
             foreach (var item in items) {
                 Destroy(item.gameObject);
+            }
+        }
+
+        public void DeleteCurrentProgram() {
+            if (_currentItem != null) {
+                _session.AiModel.RemoveProgram(_currentItem.Program.Id);
             }
         }
 

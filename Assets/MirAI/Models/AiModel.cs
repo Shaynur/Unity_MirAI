@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Assets.MirAI.DB;
+using UnityEngine.Events;
 
 namespace Assets.MirAI.Models {
 
@@ -11,13 +12,16 @@ namespace Assets.MirAI.Models {
         public List<Link> Links { get; set; }
         public Program CurrentProgram { get; set; }
 
+        public UnityEvent OnLoaded = new UnityEvent();
+
         public AiModel() {
-            //LoadFromDB();
+            LoadFromDB();
         }
 
         public void LoadFromDB() {
             using var db = new DbContext();
             LoadFromDB(db);
+            OnLoaded?.Invoke();
         }
 
         private void LoadFromDB(DbContext db) {
@@ -29,10 +33,9 @@ namespace Assets.MirAI.Models {
 
             CurrentProgram = null;
             if (Programs != null && Programs.Count > 0) {
-                if (currProgId == -1)
+                CurrentProgram = Programs.Find(x => x.Id == currProgId);
+                if (CurrentProgram == null)
                     CurrentProgram = Programs[0];
-                else
-                    CurrentProgram = Programs.Find(x => x.Id == currProgId);
             }
         }
 
@@ -51,6 +54,8 @@ namespace Assets.MirAI.Models {
             /*node = */
             AddNode(node, db);  // нужно ли лишнее присвоение ?
             program.Nodes.Add(node);
+            CurrentProgram = program;
+            LoadFromDB();
             return program;
         }
 
@@ -113,12 +118,6 @@ namespace Assets.MirAI.Models {
 
         private void UpdateNode(Node node, DbContext db) {
             db.Nodes.Update(node);
-        }
-
-        public void RemoveNode(int id) {
-            using var db = new DbContext();
-            db.Nodes.Remove(id);
-            LoadFromDB();
         }
 
         public void RemoveNodes(Node[] nodes) {

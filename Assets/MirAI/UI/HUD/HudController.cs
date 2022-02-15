@@ -1,4 +1,6 @@
 ﻿using Assets.MirAI.UI.AiEditor;
+using Assets.MirAI.Utils;
+using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
 
 namespace Assets.MirAI.UI.HUD {
@@ -10,16 +12,20 @@ namespace Assets.MirAI.UI.HUD {
         [SerializeField] private GameObject _programList;
         [SerializeField] private EditorController _editorController;
 
+        private ShowHide _progListSH;
+
         private void Start() {
+            _progListSH = _programList.GetComponent<ShowHide>();
         }
 
         public void ShowProgramList() {
-            _programList.GetComponent<ShowHide>().Show();
+            _editorController.UnselectAll();
+            _progListSH.Show();
             _clickBlocker.SetActive(true);
         }
 
         public void HideProgramList() {
-            _programList.GetComponent<ShowHide>().Hide();
+            _progListSH.Hide();
             _clickBlocker.SetActive(false);
         }
 
@@ -30,12 +36,23 @@ namespace Assets.MirAI.UI.HUD {
                 ShowProgramList();
         }
 
+        public void ShowNewProgramMenu() {
+            WindowUtils.CreateWindow("AddProgramMenu", "HUD");
+        }
+
         public void OnSelectProgram() {
             _editorController.CreateScheme();
         }
 
         public void OnDeleteButton() {
-            _editorController.DeleteNodes();
+            if (_progListSH.IsHidden)
+                _editorController.DeleteNodes();
+            else {
+                var menu = WindowUtils.CreateWindow("DeleteProgramMenu", "HUD");
+                var deleteController = menu.GetComponent<DeleteProgramMenu>();
+                var listController = _programList.GetComponentInChildren<ProgramListController>();
+                deleteController.OnOkButton.Subscribe(listController.DeleteCurrentProgram);
+            }
         }
     }
 }

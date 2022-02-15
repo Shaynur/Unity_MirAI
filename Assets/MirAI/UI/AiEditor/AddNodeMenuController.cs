@@ -8,17 +8,12 @@ namespace Assets.MirAI.UI.AiEditor {
 
     public class AddNodeMenuController : MonoBehaviour, IPointerDownHandler {
 
+        [HideInInspector]
         public UnityEvent OnCancel;
         public SelectNewNodeEvent OnSelect = new SelectNewNodeEvent();
 
         public void OnPointerDown(PointerEventData eventData) {
             var go = eventData.pointerCurrentRaycast.gameObject;
-            if (go.name == "Cancel") {
-                OnCancel?.Invoke();
-                Close();
-                return;
-            }
-
             try {
                 var type = (NodeType)Enum.Parse(typeof(NodeType), go.name);
                 OnSelect?.Invoke(type);
@@ -27,6 +22,11 @@ namespace Assets.MirAI.UI.AiEditor {
             catch {
                 return;
             }
+        }
+
+        public void OnPressCancel() {
+            OnCancel?.Invoke();
+            Close();
         }
 
         private void Close() {
