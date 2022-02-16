@@ -33,15 +33,15 @@ namespace Assets.MirAI.UI {
 
         [ContextMenu("Show")]
         public void Show() {
-            if(!_isHidden) return;
+            if (!_isHidden) return;
             StartCoroutine(SetState(_opening));
             _isHidden = false;
         }
 
         [ContextMenu("Toggle")]
         public void Toggle() {
-            StartCoroutine(SetState(!_isHidden));
-            _isHidden = !_isHidden;
+            if (_isHidden) Show();
+            else Hide();
         }
 
         private IEnumerator SetState(bool state) {

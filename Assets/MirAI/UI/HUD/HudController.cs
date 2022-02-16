@@ -1,4 +1,5 @@
-﻿using Assets.MirAI.UI.AiEditor;
+﻿using Assets.MirAI.Models;
+using Assets.MirAI.UI.AiEditor;
 using Assets.MirAI.Utils;
 using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
@@ -37,7 +38,9 @@ namespace Assets.MirAI.UI.HUD {
         }
 
         public void ShowNewProgramMenu() {
-            WindowUtils.CreateWindow("AddProgramMenu", "HUD");
+            var menu = WindowUtils.CreateWindow("AddProgramMenu", "HUD");
+            var controller = menu.GetComponent<AddProgramMenu>();
+            controller.EnterNameEvent.Subscribe(GameSession.Instance.AiModel.AddNewProgram);
         }
 
         public void OnSelectProgram() {
@@ -49,9 +52,9 @@ namespace Assets.MirAI.UI.HUD {
                 _editorController.DeleteNodes();
             else {
                 var menu = WindowUtils.CreateWindow("DeleteProgramMenu", "HUD");
-                var deleteController = menu.GetComponent<DeleteProgramMenu>();
+                var deleteController = menu.GetComponent<MenuController>();
                 var listController = _programList.GetComponentInChildren<ProgramListController>();
-                deleteController.OnOkButton.Subscribe(listController.DeleteCurrentProgram);
+                deleteController.OnOk.Subscribe(listController.DeleteCurrentProgram);
             }
         }
     }

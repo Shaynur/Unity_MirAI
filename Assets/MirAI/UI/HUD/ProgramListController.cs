@@ -1,4 +1,5 @@
-﻿using Assets.MirAI.Models;
+﻿using System.Linq;
+using Assets.MirAI.Models;
 using Assets.MirAI.UI.Widgets;
 using Assets.MirAI.Utils;
 using Assets.MirAI.Utils.Disposables;
@@ -45,7 +46,7 @@ namespace Assets.MirAI.UI.HUD {
         }
 
         private void CreateList() {
-            var list = _session.AiModel.Programs;
+            var list = _session.AiModel.Programs.OrderBy(x=>x.Name);
             foreach (var program in list) {
                 var item = GameObjectSpawner.Spawn(_itemPrefab, "ProgramListContent");
                 var widget = item.GetComponent<ProgramItemWidget>();

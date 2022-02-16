@@ -126,7 +126,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e100ff09092c2e143bb69a3d3a71e8ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _okButton: {fileID: 0}
+  _cancelButton: {fileID: 2275173547719434969}
+  OnOk:
+    m_PersistentCalls:
+      m_Calls: []
   OnCancel:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSelect:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &2303787526114594596

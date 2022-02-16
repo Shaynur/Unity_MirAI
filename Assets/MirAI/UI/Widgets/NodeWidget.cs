@@ -1,7 +1,7 @@
 ﻿using Assets.MirAI.Models;
 using Assets.MirAI.UI.AiEditor;
+using Assets.MirAI.Utils;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Assets.MirAI.UI.Widgets {
@@ -63,7 +63,4 @@ namespace Assets.MirAI.UI.Widgets {
                 OnSelect?.Invoke(Node);
         }
     }
-
-    public class EventNodeMove : UnityEvent<Node, Vector3> { }
-    public class EventFromNode : UnityEvent<Node> { }
 }

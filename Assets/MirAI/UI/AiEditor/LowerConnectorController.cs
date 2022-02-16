@@ -72,7 +72,7 @@ namespace Assets.MirAI.UI.AiEditor {
             _tempLink.NodeTo = child;
             _tempLink.ToId = child.Id;
             if (_session.AiModel.AddLink(_tempLink)) {
-                _parentNode.AddChild(child);
+                _parentNode.AddChild(_tempLink,child);
                 _tempLink.Widget.UpdateView();
             }
             else

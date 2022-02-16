@@ -2,6 +2,7 @@
 using System.Linq;
 using Assets.MirAI.DB;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
 
 namespace Assets.MirAI.Models {
 
@@ -39,8 +40,8 @@ namespace Assets.MirAI.Models {
             }
         }
 
-        public Program AddNewProgram(string name) {
-            if (Programs.Find(p => p.Name == name) != null) return null;
+        public void AddNewProgram(string name) {
+            if (Programs.Find(p => p.Name == name) != null) return;
 
             using var db = new DbContext();
             var program = new Program { Name = name };
@@ -56,7 +57,6 @@ namespace Assets.MirAI.Models {
             program.Nodes.Add(node);
             CurrentProgram = program;
             LoadFromDB();
-            return program;
         }
 
         public void UpdateProgram(Program program) {
@@ -76,7 +76,7 @@ namespace Assets.MirAI.Models {
             if (!IsCanBeLinked(parent, child))
                 return false;
             Programs.Find(x => x.Id == parent.ProgramId).Nodes.Add(child);
-            parent.AddChild(child);
+            parent.AddChild(link,child);
             child.ProgramId = parent.ProgramId;
 
             using var db = new DbContext();
@@ -175,7 +175,7 @@ namespace Assets.MirAI.Models {
         private void CreateNodesLinks() {
             foreach (var link in Links) {
                 FillLinkNodes(link);
-                link.NodeFrom.AddChild(link.NodeTo);
+                link.NodeFrom.AddChild(link, link.NodeTo);
             }
         }
 
@@ -184,6 +184,12 @@ namespace Assets.MirAI.Models {
             var nodeTo = Nodes.First(n => n.Id == link.ToId);
             link.NodeFrom = nodeFrom;
             link.NodeTo = nodeTo;
+        }
+
+        public void SortNodesByAngle(Program program) {
+            foreach (var node in program.Nodes) {
+                node.LinkedChilds.Sort();
+            }
         }
     }
 }

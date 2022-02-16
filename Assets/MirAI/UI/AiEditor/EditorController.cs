@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Assets.MirAI.Models;
 using Assets.MirAI.Utils.Disposables;
@@ -8,11 +9,15 @@ namespace Assets.MirAI.UI.AiEditor {
 
     public class EditorController : MonoBehaviour {
 
+        private CanvasCameraController _camController;
+
         private GameSession _session;
         public readonly CompositeDisposable _trash = new CompositeDisposable();
+        private Rect _viewPort = new Rect();
 
         private void Start() {
             _session = GameSession.Instance;
+            _camController = gameObject.GetComponent<CanvasCameraController>();
             _trash.Retain(_session.AiModel.OnLoaded.Subscribe(CreateScheme));
             CreateScheme();
         }
@@ -21,7 +26,22 @@ namespace Assets.MirAI.UI.AiEditor {
         public void CreateScheme() {
             if (_session.AiModel.CurrentProgram == null) return;
             EditorPartsFactory.I.ClearScheme();
+            InitViewport();
             CreateNodes();
+            _camController.SetCameraViewport(_viewPort);
+        }
+
+        private void InitViewport() {
+            var rootNode = _session.AiModel.CurrentProgram?.Nodes.Find(x=>x.Type ==NodeType.Root);
+            var indent = 400f;
+            _viewPort = new Rect(rootNode.X - indent, rootNode.Y - indent, 2 * indent, indent);
+        }
+
+        private void ChangeViewportSize(float x, float y) {
+            if (_viewPort.xMin > x) _viewPort.xMin = x;
+            if (_viewPort.yMin > y) _viewPort.yMin = y;
+            if (_viewPort.xMax < x) _viewPort.xMax = x;
+            if (_viewPort.yMax < y) _viewPort.yMax = y;
         }
 
         private void CreateNodes() {
@@ -30,6 +50,8 @@ namespace Assets.MirAI.UI.AiEditor {
                 node.Widget = EditorPartsFactory.I.SpawnNode(node);
                 float nodeHeight = node.Widget.GetComponent<RectTransform>().rect.height;
                 CreateLinks(node, nodeHeight);
+                ChangeViewportSize(node.X, node.Y);
+                ChangeViewportSize(node.X, node.Y - nodeHeight);
             }
         }
 

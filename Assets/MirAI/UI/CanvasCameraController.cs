@@ -1,5 +1,4 @@
-﻿using Assets.MirAI.UI.Widgets;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
@@ -36,6 +35,15 @@ namespace Assets.MirAI.UI {
                 _cameraFlyDirection /= _cameraFlyInertia;
                 ConfineCameraInCanvas();
             }
+        }
+
+        public void SetCameraViewport(Rect rect) {
+            _camera.transform.position = new Vector3(rect.center.x, rect.center.y, _camera.transform.position.z);
+
+            var h1 = rect.height;
+            var h2 = rect.width / _camera.aspect;
+
+            _newCameraSize = Mathf.Max(h1, h2) / 1.9f;
         }
 
         public void ChangeCameraSize(Vector2 wheelVector) {

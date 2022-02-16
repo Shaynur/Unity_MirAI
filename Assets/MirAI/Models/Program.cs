@@ -19,8 +19,8 @@ namespace Assets.MirAI.Models {
                 yield return fromNode;
             if (!fromNode.Viewed) {
                 fromNode.Viewed = true;
-                foreach (var child in fromNode.Childs)
-                    foreach (var node in InternalDFC(child))
+                foreach (var child in fromNode.LinkedChilds)
+                    foreach (var node in InternalDFC(child.Node))
                         yield return node;
             }
         }

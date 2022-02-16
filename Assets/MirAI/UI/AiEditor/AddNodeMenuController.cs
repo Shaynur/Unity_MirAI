@@ -1,15 +1,12 @@
 ﻿using System;
 using Assets.MirAI.Models;
-using UnityEngine;
-using UnityEngine.Events;
+using Assets.MirAI.Utils;
 using UnityEngine.EventSystems;
 
 namespace Assets.MirAI.UI.AiEditor {
 
-    public class AddNodeMenuController : MonoBehaviour, IPointerDownHandler {
+    public class AddNodeMenuController : MenuController, IPointerDownHandler {
 
-        [HideInInspector]
-        public UnityEvent OnCancel;
         public SelectNewNodeEvent OnSelect = new SelectNewNodeEvent();
 
         public void OnPointerDown(PointerEventData eventData) {
@@ -23,18 +20,5 @@ namespace Assets.MirAI.UI.AiEditor {
                 return;
             }
         }
-
-        public void OnPressCancel() {
-            OnCancel?.Invoke();
-            Close();
-        }
-
-        private void Close() {
-            OnCancel.RemoveAllListeners();
-            OnSelect.RemoveAllListeners();
-            Destroy(gameObject);
-        }
     }
-
-    public class SelectNewNodeEvent : UnityEvent<NodeType> { }
 }

@@ -31,7 +31,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6854857926508861687}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -119,19 +119,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1684873400407393962}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6854857927716496907}
-        m_TargetAssemblyTypeName: Assets.MirAI.UI.AiEditor.AddProgramMenu, Assembly-CSharp
-        m_MethodName: Close
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &3497578291038723694
 GameObject:
   m_ObjectHideFlags: 0
@@ -265,7 +253,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 0, a: 1}
+  m_Color: {r: 0.75903004, g: 0.8018868, b: 0.13919543, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -364,7 +352,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ' *The program name must be unique and no longer than 40 characters'
+  m_Text: ' *The program name must be unique and no empty.'
 --- !u!1 &5645972570924592532
 GameObject:
   m_ObjectHideFlags: 0
@@ -475,7 +463,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6854857926508861687}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -563,19 +551,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5645972570953503420}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6854857927716496907}
-        m_TargetAssemblyTypeName: Assets.MirAI.UI.AiEditor.AddProgramMenu, Assembly-CSharp
-        m_MethodName: OkPressed
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &5645972571632982112
 GameObject:
   m_ObjectHideFlags: 0
@@ -609,7 +585,7 @@ RectTransform:
   - {fileID: 5645972570583984695}
   - {fileID: 5645972570924592539}
   m_Father: {fileID: 6854857926508861687}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
@@ -710,8 +686,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6854857927716496907}
         m_TargetAssemblyTypeName: Assets.MirAI.UI.AiEditor.AddProgramMenu, Assembly-CSharp
-        m_MethodName: OkPressed
-        m_Mode: 1
+        m_MethodName: CheckText
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -740,7 +716,7 @@ MonoBehaviour:
   m_SelectionColor: {r: 0.14377002, g: 0.17035304, b: 0.38679248, a: 0.7529412}
   m_Text: 
   m_CaretBlinkRate: 0.85
-  m_CaretWidth: 1
+  m_CaretWidth: 4
   m_ReadOnly: 0
   m_ShouldActivateOnSelect: 1
 --- !u!1 &6854857926364457168
@@ -852,9 +828,9 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6854857926364457169}
+  - {fileID: 5645972570953503422}
   - {fileID: 7924468339204361014}
   - {fileID: 5645972571632982119}
-  - {fileID: 5645972570953503422}
   - {fileID: 5645972570838108265}
   m_Father: {fileID: 6854857927716496901}
   m_RootOrder: 1
@@ -973,6 +949,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82f83cd6ec6049c47b132d3e65670061, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enteredText: {fileID: 5645972570924592538}
   _okButton: {fileID: 5645972570953503421}
-  _hintText: {fileID: 5645972570838108264}
+  _cancelButton: {fileID: 1959673428537577081}
+  OnOk:
+    m_PersistentCalls:
+      m_Calls: []
+  OnCancel:
+    m_PersistentCalls:
+      m_Calls: []
+  _field: {fileID: 5645972571632982118}
+  _enteredText: {fileID: 5645972570924592538}

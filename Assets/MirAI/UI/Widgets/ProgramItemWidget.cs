@@ -1,7 +1,7 @@
 ﻿using Assets.MirAI.Models;
+using Assets.MirAI.Utils;
 using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Assets.MirAI.UI.Widgets {
@@ -14,7 +14,7 @@ namespace Assets.MirAI.UI.Widgets {
         [SerializeField] private Color _selectColor = Color.yellow;
 
         public Program Program;
-        public ItemClick ItemClicked = new ItemClick();
+        public ItemClickEvent ItemClicked = new ItemClickEvent();
         private Button _button;
 
         private void Start() {
@@ -41,6 +41,4 @@ namespace Assets.MirAI.UI.Widgets {
             _button.onClick.RemoveListener(OnClick);
         }
     }
-
-    public class ItemClick : UnityEvent<ProgramItemWidget> { }
 }

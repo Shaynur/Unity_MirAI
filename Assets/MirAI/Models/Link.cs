@@ -40,7 +40,7 @@ namespace Assets.MirAI.Models {
             Lenght = Mathf.Sqrt(dx * dx + dy * dy);
             if (Lenght != 0) {
                 Angle = Mathf.Acos(dy / Lenght) * 180 / Mathf.PI;
-                Angle = dx > 0 ? 360 - Angle : Angle;
+                Angle = dx > 0 ? 180 - Angle : 180 + Angle;
                 Lenght = Mathf.Max(Lenght - 16, 0);
             }
         }

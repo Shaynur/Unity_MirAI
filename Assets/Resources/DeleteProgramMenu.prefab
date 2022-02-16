@@ -31,11 +31,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5509555452474755435}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -40, y: 40}
+  m_AnchoredPosition: {x: -29.5, y: 170.4}
   m_SizeDelta: {x: 48, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2071929090212131169
@@ -119,19 +119,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 303246300597344054}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5509555453145134998}
-        m_TargetAssemblyTypeName: Assets.MirAI.UI.AiEditor.DeleteProgramMenu, Assembly-CSharp
-        m_MethodName: Close
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &2584331049496268786
 GameObject:
   m_ObjectHideFlags: 0
@@ -317,8 +305,8 @@ RectTransform:
   m_Children:
   - {fileID: 5509555452339206477}
   - {fileID: 6705298727678007797}
-  - {fileID: 9128192199024761514}
   - {fileID: 6705298727794344738}
+  - {fileID: 9128192199024761514}
   m_Father: {fileID: 5509555453145135001}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -375,7 +363,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5509555453145135001}
   - component: {fileID: 6661492641377887856}
-  - component: {fileID: 5509555453145134998}
+  - component: {fileID: 8773354408350427428}
   m_Layer: 5
   m_Name: DeleteProgramMenu
   m_TagString: Untagged
@@ -424,7 +412,7 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &5509555453145134998
+--- !u!114 &8773354408350427428
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -433,10 +421,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 5509555453145135000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e29b3f32eed9d5a488afe61029ff4295, type: 3}
+  m_Script: {fileID: 11500000, guid: 18a300857a0b5e949a6800e3aee8d66b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnOkButton:
+  _okButton: {fileID: 6705298727794344737}
+  _cancelButton: {fileID: 605363685992882149}
+  OnOk:
+    m_PersistentCalls:
+      m_Calls: []
+  OnCancel:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &6705298727678007798
@@ -549,11 +542,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5509555452474755435}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 40, y: 40}
+  m_AnchoredPosition: {x: 196, y: 40}
   m_SizeDelta: {x: 48, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6705298727794344735
@@ -637,16 +630,4 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6705298727794344736}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5509555453145134998}
-        m_TargetAssemblyTypeName: Assets.MirAI.UI.AiEditor.DeleteProgramMenu, Assembly-CSharp
-        m_MethodName: OkButtonPressed
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
