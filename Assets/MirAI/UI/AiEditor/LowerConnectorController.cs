@@ -40,6 +40,8 @@ namespace Assets.MirAI.UI.AiEditor {
             }
             else if (go.name == "Grid")
                 CreateSelectNodeWindow();
+            else
+                ClearTemplates();
         }
 
         private void CreateTemplates(Vector3 position) {

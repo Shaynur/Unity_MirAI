@@ -16,7 +16,6 @@ namespace Assets.MirAI.UI.HUD {
         private ProgramItemWidget _currentItem;
         public readonly CompositeDisposable _trash = new CompositeDisposable();
 
-
         private void Start() {
             _session = GameSession.Instance;
             _hudController = GetComponentInParent<HudController>();
@@ -24,7 +23,7 @@ namespace Assets.MirAI.UI.HUD {
             RedrawList();
         }
 
-        public void OnItemClickW(ProgramItemWidget item) {
+        public void OnItemClick(ProgramItemWidget item) {
             if (_currentItem == item) {
                 _hudController.HideProgramList();
             }
@@ -46,12 +45,12 @@ namespace Assets.MirAI.UI.HUD {
         }
 
         private void CreateList() {
-            var list = _session.AiModel.Programs.OrderBy(x=>x.Name);
+            var list = _session.AiModel.Programs.OrderBy(x => x.Name);
             foreach (var program in list) {
                 var item = GameObjectSpawner.Spawn(_itemPrefab, "ProgramListContent");
                 var widget = item.GetComponent<ProgramItemWidget>();
                 widget.Set(program);
-                _trash.Retain(widget.ItemClicked.Subscribe(OnItemClickW));
+                _trash.Retain(widget.ItemClicked.Subscribe(OnItemClick));
                 if (program == _session.AiModel.CurrentProgram) {
                     _currentItem = widget;
                     _currentItem.Select(true);
@@ -69,7 +68,7 @@ namespace Assets.MirAI.UI.HUD {
 
         public void DeleteCurrentProgram() {
             if (_currentItem != null) {
-                _session.AiModel.RemoveProgram(_currentItem.Program.Id);
+                _session.AiModel.RemoveProgram(_session.AiModel.CurrentProgram.Id);
             }
         }
 

@@ -2,7 +2,6 @@
 using System.Linq;
 using Assets.MirAI.DB;
 using UnityEngine.Events;
-using UnityEngine.Rendering;
 
 namespace Assets.MirAI.Models {
 
@@ -184,12 +183,6 @@ namespace Assets.MirAI.Models {
             var nodeTo = Nodes.First(n => n.Id == link.ToId);
             link.NodeFrom = nodeFrom;
             link.NodeTo = nodeTo;
-        }
-
-        public void SortNodesByAngle(Program program) {
-            foreach (var node in program.Nodes) {
-                node.LinkedChilds.Sort();
-            }
         }
     }
 }

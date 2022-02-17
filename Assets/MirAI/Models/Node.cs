@@ -12,20 +12,19 @@ namespace Assets.MirAI.Models {
         public int Command { get; set; }
         public float X { get; set; }
         public float Y { get; set; }
-        //public List<Node> Childs { get; set; } = new List<Node>();
-        public List<LinkedChild> LinkedChilds { get; set; } = new List<LinkedChild>();
+        public List<LinkedChild> Childs { get; set; } = new List<LinkedChild>();
 
         public NodeWidget Widget { get; set; }
 
         public bool Viewed;
 
         public virtual void AddChild(Link link, Node node) {
-            LinkedChilds.Add(new LinkedChild { Link = link, Node = node });
+            Childs.Add(new LinkedChild { Link = link, Node = node });
         }
 
         public virtual void RemoveChild(Node node) {
-            var lc = LinkedChilds.Find(x => x.Node == node);
-            LinkedChilds.Remove(lc);
+            var lc = Childs.Find(x => x.Node == node);
+            Childs.Remove(lc);
         }
 
         public override string ToString() {

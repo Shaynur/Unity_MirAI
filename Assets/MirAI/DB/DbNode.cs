@@ -10,6 +10,16 @@ namespace Assets.MirAI.DB {
         public DbNode(string tableName, SqliteConnection connection) : base(tableName, connection) {
         }
 
+        public override string GetCreateTableCommandSuffix() {
+            return "  ( Id INTEGER NOT NULL CONSTRAINT PK_Nodes PRIMARY KEY AUTOINCREMENT, "
+                    + "ProgramId INTEGER NOT NULL, "
+                    + "Type INTEGER NOT NULL, "
+                    + "Command INTEGER NOT NULL, "
+                    + "X INTEGER NOT NULL, "
+                    + "Y INTEGER NOT NULL, "
+                    + "CONSTRAINT FK_Nodes_Programs_ProgramId FOREIGN KEY(ProgramId) REFERENCES Programs(Id) ON DELETE CASCADE)";
+        }
+
         public override string GetDeleteCommandSuffix(Node node) {
             return " WHERE Id = '" + node.Id + "';";
         }

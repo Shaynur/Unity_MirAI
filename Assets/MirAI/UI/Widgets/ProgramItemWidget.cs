@@ -7,6 +7,7 @@ using UnityEngine.UI;
 namespace Assets.MirAI.UI.Widgets {
 
     [RequireComponent(typeof(Text))]
+    [RequireComponent(typeof(Button))]
     public class ProgramItemWidget : MonoBehaviour {
 
         [SerializeField] Text _text;

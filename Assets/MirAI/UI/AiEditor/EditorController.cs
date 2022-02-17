@@ -1,6 +1,7 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.MirAI.Utils;
 using Assets.MirAI.Models;
 using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
@@ -11,8 +12,8 @@ namespace Assets.MirAI.UI.AiEditor {
 
         private CanvasCameraController _camController;
 
-        private GameSession _session;
         public readonly CompositeDisposable _trash = new CompositeDisposable();
+        private GameSession _session;
         private Rect _viewPort = new Rect();
 
         private void Start() {
@@ -22,7 +23,6 @@ namespace Assets.MirAI.UI.AiEditor {
             CreateScheme();
         }
 
-        [ContextMenu("CreateScheme")]
         public void CreateScheme() {
             if (_session.AiModel.CurrentProgram == null) return;
             EditorPartsFactory.I.ClearScheme();
@@ -32,7 +32,7 @@ namespace Assets.MirAI.UI.AiEditor {
         }
 
         private void InitViewport() {
-            var rootNode = _session.AiModel.CurrentProgram?.Nodes.Find(x=>x.Type ==NodeType.Root);
+            var rootNode = _session.AiModel.CurrentProgram?.Nodes.Find(x => x.Type == NodeType.Root);
             var indent = 400f;
             _viewPort = new Rect(rootNode.X - indent, rootNode.Y - indent, 2 * indent, indent);
         }
@@ -106,8 +106,38 @@ namespace Assets.MirAI.UI.AiEditor {
             }
         }
 
+        public void ToggleSelectionMode() {
+            _camController.SelectionMode(true);
+        }
+
         private void OnDestroy() {
             _trash.Dispose();
+        }
+
+        //TODO Debug Only
+        public void RunProgram() {
+            if (_session.AiModel.CurrentProgram == null) return;
+            StartCoroutine(LighthNodes(_session.AiModel.CurrentProgram));
+        }
+        //TODO Debug Only
+        private IEnumerator LighthNodes(Program program) {
+            program.SortNodesByAngle();
+            foreach (var node in program.DFC()) {
+                var widget = node.Widget;
+                widget.selector.SetState(true);
+                yield return new WaitForSeconds(0.5f);
+                widget.selector.SetState(false);
+            }
+        }
+
+        public void OnSelection(Rect rect) {
+            UnselectAll();
+            var program = _session.AiModel.CurrentProgram;
+            foreach (var node in program.Nodes) {
+                var curRect = node.Widget.gameObject.GetComponent<RectTransform>().GetWorldRect();
+                if (rect.Overlaps(curRect))
+                    node.Widget.selector.SetState(true);
+            }
         }
     }
 }

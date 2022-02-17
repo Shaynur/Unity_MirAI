@@ -7,12 +7,12 @@ namespace Assets.MirAI.DB {
 
     public class DbContext : IDisposable {
 
+        public DbProgram Programs { get; set; }
+        public DbNode Nodes { get; set; }
+        public DbLink Links { get; set; }
+
         private static readonly string _connectionString = GetDatabaseConnectionString();
         private readonly SqliteConnection _connection;
-
-        public DbNode Nodes { get; set; }
-        public DbProgram Programs { get; set; }
-        public DbLink Links { get; set; }
 
         public bool IsOpen => _connection.State == System.Data.ConnectionState.Open;
 
@@ -20,8 +20,8 @@ namespace Assets.MirAI.DB {
             _connection = new SqliteConnection(_connectionString);
             _connection.Open();
             ExecuteCommand("PRAGMA foreign_keys = ON;");
-            Nodes = new DbNode("Nodes", _connection);
             Programs = new DbProgram("Programs", _connection);
+            Nodes = new DbNode("Nodes", _connection);
             Links = new DbLink("Links", _connection);
         }
 

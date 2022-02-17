@@ -1,6 +1,9 @@
-﻿using UnityEngine;
+﻿using Assets.MirAI.UI.AiEditor;
+using Assets.MirAI.Utils;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Assets.MirAI.UI {
 
@@ -9,25 +12,30 @@ namespace Assets.MirAI.UI {
 
         [SerializeField] private Camera _camera;
         [SerializeField] private UnityEvent _onClick;
+        [Header("Selection tool")]
+        [SerializeField] private RectTransform _selection;
+        [SerializeField] private Image _selectionButtonImage;
 
         private RectTransform _canvasRectTransform;
         private float _newCameraSize;
         private Vector2 _cameraFlyDirection;
-        private readonly float _cameraResizeSpeed = 5f;
         private readonly float _cameraFlyInertia = 1.05f;
+        private readonly float _cameraResizeInertia = 30f;
         private readonly float _deltaMoveCameraDivider = 300f;   // Magic value ??
         private bool _isDragging;
+        private bool _selectionMode = false;
 
 
         private void Start() {
             _canvasRectTransform = GetComponent<RectTransform>();
-            _newCameraSize = _camera.orthographicSize;
+            _newCameraSize = (int)_camera.orthographicSize;
             _isDragging = false;
         }
 
         private void Update() {
-            if (_newCameraSize != _camera.orthographicSize) {
-                _camera.orthographicSize = Mathf.Lerp(_camera.orthographicSize, _newCameraSize, Time.deltaTime * _cameraResizeSpeed);
+            if ((int)_newCameraSize != (int)_camera.orthographicSize) {
+                var dSize = (_newCameraSize - _camera.orthographicSize) / _cameraResizeInertia;
+                _camera.orthographicSize += dSize;
                 ConfineCameraInCanvas();
             }
             if (_cameraFlyDirection != Vector2.zero) {
@@ -39,11 +47,9 @@ namespace Assets.MirAI.UI {
 
         public void SetCameraViewport(Rect rect) {
             _camera.transform.position = new Vector3(rect.center.x, rect.center.y, _camera.transform.position.z);
-
             var h1 = rect.height;
             var h2 = rect.width / _camera.aspect;
-
-            _newCameraSize = Mathf.Max(h1, h2) / 1.9f;
+            _newCameraSize = (Mathf.Max(h1, h2) / 1.6f);
         }
 
         public void ChangeCameraSize(Vector2 wheelVector) {
@@ -55,14 +61,20 @@ namespace Assets.MirAI.UI {
         }
 
         public void OnDrag(PointerEventData eventData) {
-            var delta = eventData.delta * _camera.orthographicSize / _deltaMoveCameraDivider;
-            _cameraFlyDirection = new Vector2(delta.x, delta.y);
+            if (_selectionMode) {
+                _currentPoint = eventData.pointerCurrentRaycast.worldPosition / _selection.localScale.x;
+                SetSelectorRect();
+            }
+            else {
+                var delta = eventData.delta * _camera.orthographicSize / _deltaMoveCameraDivider;
+                _cameraFlyDirection = new Vector2(delta.x, delta.y);
+            }
         }
 
         private void ConfineCameraInCanvas() {
             bool isChanged = false;
             Rect cameraRect = GetCameraRect();
-            Rect canvasRect = GetCanvasRect();
+            var canvasRect = _canvasRectTransform.GetWorldRect();
             if (cameraRect.xMin < canvasRect.xMin) {
                 cameraRect.xMin = canvasRect.xMin;
                 isChanged = true;
@@ -88,30 +100,48 @@ namespace Assets.MirAI.UI {
             var width = height * _camera.aspect;
             var left = _camera.transform.position.x - width / 2;
             var bottom = _camera.transform.position.y - height / 2;
-            var cameraRect = new Rect(left, bottom, width, height);
-            return cameraRect;
+            return new Rect(left, bottom, width, height);
         }
 
-        private Rect GetCanvasRect() {
-            var height = _canvasRectTransform.rect.height;
-            var width = _canvasRectTransform.rect.width;
-            var left = _canvasRectTransform.position.x - width / 2;
-            var bottom = _canvasRectTransform.position.y - height / 2;
-            var canvasRect = new Rect(left, bottom, width, height);
-            return canvasRect;
-        }
+        private Vector3 _beginPoint;
+        private Vector3 _currentPoint;
 
         public void OnPointerDown(PointerEventData eventData) {
+            if (!_selectionMode) return;
+            _beginPoint = eventData.pointerCurrentRaycast.worldPosition;
+            _currentPoint = _beginPoint;
+            SetSelectorRect();
+            _selection.gameObject.SetActive(true);
+        }
+
+        public void SetSelectorRect() {
+            var xMin = Mathf.Min(_beginPoint.x, _currentPoint.x);
+            var xMax = Mathf.Max(_beginPoint.x, _currentPoint.x);
+            var yMin = Mathf.Min(_beginPoint.y, _currentPoint.y);
+            var yMax = Mathf.Max(_beginPoint.y, _currentPoint.y);
+            _selection.position = new Vector3(xMin, yMin, 0);
+            _selection.sizeDelta = new Vector2(xMax - xMin, yMax - yMin);
         }
 
         public void OnPointerUp(PointerEventData eventData) {
-            if (!_isDragging)
+            if (_selectionMode) {
+                gameObject.GetComponent<EditorController>().OnSelection(_selection.GetWorldRect());
+                _selection.gameObject.SetActive(false);
+                SelectionMode(false);
+            }
+            else if (!_isDragging)
                 _onClick?.Invoke();
+
             _isDragging = false;
         }
 
         public void OnBeginDrag(PointerEventData eventData) {
             _isDragging = true;
+        }
+
+        public void SelectionMode(bool state) {
+            _selectionMode = state;
+            _selectionButtonImage.color = state ? Color.green : Color.white;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Assets.MirAI.Utils {
         [SerializeField] UnityEvent _onEndDrag;
 
         private CanvasGroup _canvasGroup;
-        private Vector3 _pressPosition;
+        private Vector3 _lokalPressPosition;
         public bool IsDragging;
 
 
@@ -24,14 +24,13 @@ namespace Assets.MirAI.Utils {
             IsDragging = true;
             if (_canvasGroup != null)
                 _canvasGroup.alpha = .6f;
-            _pressPosition = eventData.pointerPressRaycast.worldPosition - transform.position;
+            _lokalPressPosition = eventData.pointerPressRaycast.worldPosition - transform.position;
         }
 
         public void OnDrag(PointerEventData eventData) {
             if (eventData.pointerCurrentRaycast.screenPosition == Vector2.zero)
                 return;
-            var currentPosition = eventData.pointerCurrentRaycast.worldPosition;
-            transform.position = currentPosition - _pressPosition;
+            transform.position = eventData.pointerCurrentRaycast.worldPosition - _lokalPressPosition;
             _onDrag?.Invoke();
         }
 

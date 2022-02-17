@@ -12,6 +12,7 @@ namespace Assets.MirAI.DB {
         private readonly SqliteConnection _connection;
 
         public abstract T CreateByData(IDataRecord data);
+        public abstract string GetCreateTableCommandSuffix();
         public abstract string GetInsertCommandSuffix(T t);
         public abstract string GetDeleteCommandSuffix(T t);
         public abstract string GetUpdateCommandSuffix(T t);
@@ -19,6 +20,13 @@ namespace Assets.MirAI.DB {
         public DbTable(string tableName, SqliteConnection connection) {
             TableName = tableName;
             _connection = connection;
+            CreateTableIfNotExist();
+        }
+
+        public void CreateTableIfNotExist() {
+            var commandPrefix = "CREATE TABLE IF NOT EXISTS " + TableName;
+            var commandValues = GetCreateTableCommandSuffix();
+            ExecuteCommand(commandPrefix + commandValues);
         }
 
         public List<T> ToList() {

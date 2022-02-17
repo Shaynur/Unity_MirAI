@@ -9,6 +9,14 @@ namespace Assets.MirAI.DB {
         public DbLink(string tableName, SqliteConnection connection) : base(tableName, connection) {
         }
 
+        public override string GetCreateTableCommandSuffix() {
+            return "  ( FromId INTEGER NOT NULL, "
+                    + "ToId INTEGER NOT NULL, "
+                    + "CONSTRAINT PK_Links PRIMARY KEY (FromId, ToId), "
+                    + "CONSTRAINT FK_Links_Nodes_FromId FOREIGN KEY(FromId) REFERENCES Nodes(Id) ON DELETE CASCADE, "
+                    + "CONSTRAINT FK_Links_Nodes_ToId FOREIGN KEY(ToId) REFERENCES Nodes(Id) ON DELETE CASCADE);";
+        }
+
         public override string GetDeleteCommandSuffix(Link link) {
             return " WHERE FromId = '" + link.FromId + "' AND ToId = '" + link.ToId + "';";
         }

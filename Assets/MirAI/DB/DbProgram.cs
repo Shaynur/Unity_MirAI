@@ -9,6 +9,10 @@ namespace Assets.MirAI.DB {
         public DbProgram(string tableName, SqliteConnection connection) : base(tableName, connection) {
         }
 
+        public override string GetCreateTableCommandSuffix() {
+            return " ( Id INTEGER NOT NULL CONSTRAINT PK_Programs PRIMARY KEY AUTOINCREMENT, Name VARCHAR(30));";
+        }
+
         public override string GetDeleteCommandSuffix(Program program) {
             return " WHERE Id = '" + program.Id + "';";
         }

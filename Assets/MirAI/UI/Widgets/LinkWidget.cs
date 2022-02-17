@@ -6,7 +6,7 @@ namespace Assets.MirAI.UI.Widgets {
 
     public class LinkWidget : MonoBehaviour {
 
-        [SerializeField] private Text _angleLabel; //TODO Debug
+        [SerializeField] private Text _angleLabel; //TODO Debug Only
 
         public Link Link;
         private GameSession _session;
@@ -28,7 +28,7 @@ namespace Assets.MirAI.UI.Widgets {
             transform.localScale = new Vector3(transform.localScale.x, Link.Lenght, 1f);
             transform.rotation = Quaternion.AngleAxis(Link.Angle, Vector3.forward);
 
-            _angleLabel.text = Link.Angle.ToString();  //TODO Debug
+            _angleLabel.text = Link.Angle.ToString();  //TODO Debug Only
         }
 
         public void DeleteLink() {

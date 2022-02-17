@@ -1,45 +1,55 @@
 ﻿using Assets.MirAI.Models;
-using Assets.MirAI.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.MirAI.UI.AiEditor {
 
-    public class AddProgramMenu : MenuController {
+    public class EditProgramName : MenuController {
 
-        [SerializeField] private UnityEventString _enterNameEvent;
         [SerializeField] private InputField _field;
-        [SerializeField] private Text _enteredText;
-
-        public UnityEventString EnterNameEvent => _enterNameEvent;
 
         private GameSession _session;
         private Color _normalColor;
         private Color _warningColor = Color.red;
+        private Program _program = null;
+
+        private void Awake() {
+            _session = GameSession.Instance;
+            _normalColor = _field.textComponent.color;
+        }
 
         public override void Start() {
             base.Start();
-            _session = GameSession.Instance;
-            _normalColor = _enteredText.color;
-            CheckText(_enteredText.text);
+            if(_program != null)
+                _field.text = _program.Name;
             _field.Select();
         }
 
+        public void SetEditProgram(Program program) {
+            _program = program;
+            _field.text = program.Name;
+        }
+
         public override void OnOkPressed() {
-            CheckText(_enteredText.text);
+            CheckText(_field.text);
             if (_okButton.interactable == false) return;
-            _enterNameEvent?.Invoke(_enteredText.text);
+            if(_program == null) {
+                _session.AiModel.AddNewProgram(_field.text);
+            } else {
+                _program.Name = _field.text;
+                _session.AiModel.UpdateProgram(_program);
+            }
             base.OnOkPressed();
         }
 
         public void CheckText(string text) {
             if (IsExist(text)) {
                 _okButton.interactable = false;
-                _enteredText.color = _warningColor;
+                _field.textComponent.color = _warningColor;
             }
             else {
                 _okButton.interactable = true;
-                _enteredText.color = _normalColor;
+                _field.textComponent.color = _normalColor;
             }
         }
 

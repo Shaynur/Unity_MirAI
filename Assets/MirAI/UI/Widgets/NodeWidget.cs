@@ -12,8 +12,8 @@ namespace Assets.MirAI.UI.Widgets {
         [SerializeField] Text _positionText;
 
         public EventNodeMove OnMove = new EventNodeMove();
-        public EventFromNode OnEndMove = new EventFromNode();
-        public EventFromNode OnSelect = new EventFromNode();
+        public EventWithNode OnEndMove = new EventWithNode();
+        public EventWithNode OnSelect = new EventWithNode();
         public Node Node;
         private Transform _transform;
         public SelectorController selector;

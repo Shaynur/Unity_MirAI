@@ -13,7 +13,9 @@ namespace Assets.MirAI.Utils {
     [Serializable]
     public class EventNodeMove : UnityEvent<Node, Vector3> { }
     [Serializable]
-    public class EventFromNode : UnityEvent<Node> { }
+    public class EventWithNode : UnityEvent<Node> { }
+    [Serializable]
+    public class EventWithProgram : UnityEvent<Program> { }
     [Serializable]
     public class ItemClickEvent : UnityEvent<ProgramItemWidget> { }
 }

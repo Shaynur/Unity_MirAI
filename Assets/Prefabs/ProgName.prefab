@@ -138,5 +138,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _text: {fileID: 1365697950773526564}
-  _defaultColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  _defaultColor: {r: 0.0020655978, g: 0.6226415, b: 0, a: 1}
   _selectColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  ItemClicked:
+    m_PersistentCalls:
+      m_Calls: []

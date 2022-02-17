@@ -9,6 +9,18 @@ namespace Assets.MirAI.Models {
         public string Name { get; set; }
         public List<Node> Nodes { get; set; } = new List<Node>();
 
+        private Node _rootNode = null;
+        public Node RootNode => _rootNode == null ? GetRootNode() : _rootNode;
+
+        public void SortNodesByAngle() {
+            foreach (var node in Nodes)
+                node.Childs.Sort();
+        }
+
+        public IEnumerable<Node> DFC() {
+            return DFC(RootNode);
+        }
+
         public IEnumerable<Node> DFC(Node fromNode) {
             AllUnViewed();
             return InternalDFC(fromNode);
@@ -19,16 +31,20 @@ namespace Assets.MirAI.Models {
                 yield return fromNode;
             if (!fromNode.Viewed) {
                 fromNode.Viewed = true;
-                foreach (var child in fromNode.LinkedChilds)
+                foreach (var child in fromNode.Childs)
                     foreach (var node in InternalDFC(child.Node))
                         yield return node;
             }
         }
 
-        public void AllUnViewed() {
-            foreach (Node node in Nodes) {
+        private void AllUnViewed() {
+            foreach (Node node in Nodes)
                 node.Viewed = false;
-            }
+        }
+
+        private Node GetRootNode() {
+            _rootNode = Nodes.Find(x => x.Type == NodeType.Root);
+            return _rootNode;
         }
 
         public override string ToString() {
