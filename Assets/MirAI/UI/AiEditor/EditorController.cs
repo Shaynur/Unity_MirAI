@@ -5,16 +5,19 @@ using Assets.MirAI.Utils;
 using Assets.MirAI.Models;
 using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.MirAI.UI.AiEditor {
 
     public class EditorController : MonoBehaviour {
 
-        private CanvasCameraController _camController;
+        [SerializeField] private Button _subAiUpButton;
 
         public readonly CompositeDisposable _trash = new CompositeDisposable();
         private GameSession _session;
+        private CanvasCameraController _camController;
         private Rect _viewPort = new Rect();
+        private Stack<Program> _subAiStack = new Stack<Program>();
 
         private void Start() {
             _session = GameSession.Instance;
@@ -32,7 +35,7 @@ namespace Assets.MirAI.UI.AiEditor {
         }
 
         private void InitViewport() {
-            var rootNode = _session.AiModel.CurrentProgram?.Nodes.Find(x => x.Type == NodeType.Root);
+            var rootNode = _session.AiModel.CurrentProgram.RootNode;
             var indent = 400f;
             _viewPort = new Rect(rootNode.X - indent, rootNode.Y - indent, 2 * indent, indent);
         }
@@ -53,6 +56,25 @@ namespace Assets.MirAI.UI.AiEditor {
                 ChangeViewportSize(node.X, node.Y);
                 ChangeViewportSize(node.X, node.Y - nodeHeight);
             }
+        }
+
+        public void GotoSubAi(Node node) {
+            var program = _session.AiModel.Programs.Find(x => x.Id == node.Command);
+            if (program != null) {
+                SubAiDown();
+                _session.AiModel.CurrentProgram = program;
+            }
+        }
+
+        private void SubAiDown() {
+            _subAiStack.Push(_session.AiModel.CurrentProgram);
+            _subAiUpButton.gameObject.SetActive(true);
+        }
+
+        public void SubAiUp() {
+            _session.AiModel.CurrentProgram = _subAiStack.Pop();
+            if (_subAiStack.Count == 0)
+                _subAiUpButton.gameObject.SetActive(false);
         }
 
         private void CreateLinks(Node node, float nodeHeight) {

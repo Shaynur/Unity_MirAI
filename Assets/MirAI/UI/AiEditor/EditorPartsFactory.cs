@@ -40,6 +40,7 @@ namespace Assets.MirAI.UI.AiEditor {
             editorController._trash.Retain(node.Widget.OnMove.Subscribe(editorController.MoveNodes));
             editorController._trash.Retain(node.Widget.OnEndMove.Subscribe(editorController.SaveNodesToDB));
             editorController._trash.Retain(node.Widget.OnSelect.Subscribe(editorController.UpdateSelectors));
+            editorController._trash.Retain(node.Widget.OnSubAi.Subscribe(editorController.GotoSubAi));
             return nodeWidget;
         }
 

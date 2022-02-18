@@ -9,9 +9,8 @@ namespace Assets.MirAI.UI.AiEditor {
 
     public class LowerConnectorController : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler {
 
+        public static Link TempConnectorLink { get; private set; }
         private Node _parentNode;
-        private Node _tempNode;
-        private Link _tempLink;
         private GameSession _session;
 
         private void Start() {
@@ -20,7 +19,7 @@ namespace Assets.MirAI.UI.AiEditor {
         }
 
         public void OnBeginDrag(PointerEventData eventData) {
-            _parentNode.Widget.gameObject.GetComponent<DragDrop>().IsDragging = true; // ***
+            _parentNode.Widget.gameObject.GetComponent<DragDrop>().IsDragging = true;
             var currentPosition = eventData.pointerCurrentRaycast.worldPosition;
             CreateTemplates(currentPosition);
         }
@@ -45,37 +44,35 @@ namespace Assets.MirAI.UI.AiEditor {
         }
 
         private void CreateTemplates(Vector3 position) {
-            _tempNode = new Node { X = position.x, Y = position.y };
-            _tempLink = new Link(_parentNode, _tempNode);
-            EditorPartsFactory.I.SpawnLink(_tempLink);
+            TempConnectorLink = new Link(_parentNode, new Node { X = position.x, Y = position.y });
+            EditorPartsFactory.I.SpawnLink(TempConnectorLink);
         }
 
         private void UpdateTemplates(Vector3 position) {
-            _tempNode.X = position.x;
-            _tempNode.Y = position.y;
-            _tempLink.Widget.UpdateView();
+            TempConnectorLink.NodeTo.X = position.x;
+            TempConnectorLink.NodeTo.Y = position.y;
+            TempConnectorLink.Widget.UpdateView();
         }
 
-        private void SaveDbTemplates(NodeType type) {
-            _tempNode.Type = type;
-            if (_session.AiModel.AddLinkAndChildNode(_tempLink))
-                EditorPartsFactory.I.SpawnNode(_tempNode);
+        private void SaveDbTemplates() {
+            if (_session.AiModel.AddLinkAndChildNode(TempConnectorLink))
+                EditorPartsFactory.I.SpawnNode(TempConnectorLink.NodeTo);
             else
                 ClearTemplates();
         }
 
         private void ClearTemplates() {
-            Destroy(_tempLink.Widget.gameObject);
-            _tempLink = null;
-            _tempNode = null;
+            Destroy(TempConnectorLink.Widget.gameObject);
+            TempConnectorLink = null;
+            //TempConnectorLink.NodeTo = null;
         }
 
         private void ConnectNodes(Node child) {
-            _tempLink.NodeTo = child;
-            _tempLink.ToId = child.Id;
-            if (_session.AiModel.AddLink(_tempLink)) {
-                _parentNode.AddChild(_tempLink,child);
-                _tempLink.Widget.UpdateView();
+            TempConnectorLink.NodeTo = child;
+            TempConnectorLink.ToId = child.Id;
+            if (_session.AiModel.AddLink(TempConnectorLink)) {
+                _parentNode.AddChild(TempConnectorLink, child);
+                TempConnectorLink.Widget.UpdateView();
             }
             else
                 ClearTemplates();
@@ -85,7 +82,7 @@ namespace Assets.MirAI.UI.AiEditor {
             var menu = WindowUtils.CreateWindow("AddNodeMenu", "HUD");
             var addMenuController = menu.GetComponent<AddNodeMenuController>();
             addMenuController.OnCancel.Subscribe(ClearTemplates);
-            addMenuController.OnSelect.Subscribe(SaveDbTemplates);
+            addMenuController.OnOk.Subscribe(SaveDbTemplates);
         }
     }
 }

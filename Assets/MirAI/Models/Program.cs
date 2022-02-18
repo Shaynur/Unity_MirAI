@@ -10,7 +10,7 @@ namespace Assets.MirAI.Models {
         public List<Node> Nodes { get; set; } = new List<Node>();
 
         private Node _rootNode = null;
-        public Node RootNode => _rootNode == null ? GetRootNode() : _rootNode;
+        public Node RootNode => _rootNode ?? GetRootNode();
 
         public void SortNodesByAngle() {
             foreach (var node in Nodes)

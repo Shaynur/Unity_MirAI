@@ -30,8 +30,10 @@ namespace Assets.MirAI.UI {
         }
 
         public virtual void Close() {
-            _okButton?.onClick.RemoveListener(OnOkPressed);
-            _cancelButton?.onClick.RemoveListener(OnCancelPressed);
+            if (_okButton != null)
+                _okButton.onClick.RemoveListener(OnOkPressed);
+            if (_cancelButton != null)
+                _cancelButton.onClick.RemoveListener(OnCancelPressed);
             OnCancel?.RemoveAllListeners();
             OnOk?.RemoveAllListeners();
             Destroy(gameObject);

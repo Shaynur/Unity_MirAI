@@ -28,6 +28,7 @@ namespace Assets.MirAI.UI.AiEditor {
             _currentItem = item;
             item.Select(true);
             _okButton.interactable = true;
+            LowerConnectorController.TempConnectorLink.NodeTo.Command = item.Program.Id;
         }
 
         private void CreateList() {

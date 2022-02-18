@@ -11,12 +11,14 @@ namespace Assets.MirAI.UI.Widgets {
         [SerializeField] Text _idText;
         [SerializeField] Text _positionText;
 
-        public EventNodeMove OnMove = new EventNodeMove();
-        public EventWithNode OnEndMove = new EventWithNode();
-        public EventWithNode OnSelect = new EventWithNode();
+        public EventNodeMove OnMove;// = new EventNodeMove();
+        public EventWithNode OnEndMove;// = new EventWithNode();
+        public EventWithNode OnSelect;// = new EventWithNode();
+        public EventWithNode OnSubAi;// = new EventWithNode();
         public Node Node;
-        private Transform _transform;
+        [HideInInspector]
         public SelectorController selector;
+        private Transform _transform;
 
         private void Start() {
             _transform = GetComponent<Transform>();
@@ -30,8 +32,33 @@ namespace Assets.MirAI.UI.Widgets {
         }
 
         public void UpdateView() {
+            switch (Node.Type) {
+                case NodeType.Nope:
+                    break;
+                case NodeType.Root:
+                    UpdateRootView();
+                    return;
+                case NodeType.Action:
+                    break;
+                case NodeType.Condition:
+                    break;
+                case NodeType.Connector:
+                    break;
+                case NodeType.SubAI:
+                    UpdateSubAiView();
+                    return;
+            }
             _idText.text = "Id = " + Node.Id;
             _positionText.text = "(x,y) = " + Node.X + ", " + Node.Y;
+        }
+
+        public void UpdateRootView() {
+            _idText.text = GameSession.Instance.AiModel.Programs.Find(x => x.Id == Node.ProgramId).Name;
+        }
+
+        public void UpdateSubAiView() {
+            var program = GameSession.Instance.AiModel.Programs.Find(x => x.Id == Node.Command);
+            _idText.text = program == null ? "?" : program.Name;
         }
 
         public void OnChangePosition() {
@@ -61,6 +88,10 @@ namespace Assets.MirAI.UI.Widgets {
             selector.Toggle();
             if (selector.IsActiv)
                 OnSelect?.Invoke(Node);
+        }
+
+        public void OnPressSubAi() {
+            OnSubAi?.Invoke(Node);
         }
     }
 }

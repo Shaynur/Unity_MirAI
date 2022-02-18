@@ -10,9 +10,14 @@ namespace Assets.MirAI.Models {
         public List<Program> Programs { get; set; }
         public List<Node> Nodes { get; set; }
         public List<Link> Links { get; set; }
-        public Program CurrentProgram { get; set; }
+        public Program CurrentProgram {
+            get { return _currentProgram; }
+            set { _currentProgram = value; OnCurrentChanged?.Invoke(); }
+        }
 
         public UnityEvent OnLoaded = new UnityEvent();
+        public UnityEvent OnCurrentChanged = new UnityEvent();
+        private Program _currentProgram;
 
         public AiModel() {
             LoadFromDB();
@@ -25,17 +30,17 @@ namespace Assets.MirAI.Models {
         }
 
         private void LoadFromDB(DbContext db) {
-            int currProgId = (CurrentProgram == null) ? -1 : CurrentProgram.Id;
+            int currProgId = (_currentProgram == null) ? -1 : _currentProgram.Id;
             Programs = db.Programs.ToList();
             Nodes = db.Nodes.ToList();
             Links = db.Links.ToList();
             BuildModelFromDbData();
 
-            CurrentProgram = null;
+            _currentProgram = null;
             if (Programs != null && Programs.Count > 0) {
-                CurrentProgram = Programs.Find(x => x.Id == currProgId);
-                if (CurrentProgram == null)
-                    CurrentProgram = Programs[0];
+                _currentProgram = Programs.Find(x => x.Id == currProgId);
+                if (_currentProgram == null)
+                    _currentProgram = Programs[0];
             }
         }
 
@@ -51,10 +56,9 @@ namespace Assets.MirAI.Models {
                 ProgramId = program.Id,
                 Type = NodeType.Root
             };
-            /*node = */
-            AddNode(node, db);  // нужно ли лишнее присвоение ?
+            AddNode(node, db);
             program.Nodes.Add(node);
-            CurrentProgram = program;
+            _currentProgram = program;
             LoadFromDB();
         }
 
@@ -75,7 +79,7 @@ namespace Assets.MirAI.Models {
             if (!IsCanBeLinked(parent, child))
                 return false;
             Programs.Find(x => x.Id == parent.ProgramId).Nodes.Add(child);
-            parent.AddChild(link,child);
+            parent.AddChild(link, child);
             child.ProgramId = parent.ProgramId;
 
             using var db = new DbContext();
