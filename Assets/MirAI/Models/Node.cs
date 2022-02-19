@@ -4,7 +4,7 @@ using Assets.MirAI.UI.Widgets;
 
 namespace Assets.MirAI.Models {
 
-    public class Node : IAiModelElement {
+    public class Node : IHaveId {
 
         public int Id { get; set; }
         public int ProgramId { get; set; }
@@ -13,10 +13,8 @@ namespace Assets.MirAI.Models {
         public float X { get; set; }
         public float Y { get; set; }
         public List<LinkedChild> Childs { get; set; } = new List<LinkedChild>();
-
         public NodeWidget Widget { get; set; }
-
-        public bool Viewed;
+        public bool Viewed { get; set; }
 
         public virtual void AddChild(Link link, Node node) {
             Childs.Add(new LinkedChild { Link = link, Node = node });

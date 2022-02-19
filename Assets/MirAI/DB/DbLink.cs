@@ -18,18 +18,18 @@ namespace Assets.MirAI.DB {
         }
 
         public override string GetDeleteCommandSuffix(Link link) {
-            return " WHERE FromId = '" + link.FromId + "' AND ToId = '" + link.ToId + "';";
+            return " WHERE FromId = " + link.FromId + " AND ToId = " + link.ToId + ";";
         }
 
         public override string GetInsertCommandSuffix(Link link) {
-            return " (FromId, ToId) VALUES ('" + link.FromId + "', '" + link.ToId + "');";
+            return " (FromId, ToId) VALUES (" + link.FromId + ", " + link.ToId + ");";
         }
 
         public override string GetUpdateCommandSuffix(Link link) {
             return ";";
         }
 
-        public override Link CreateByData(IDataRecord data) {
+        public override Link GetFromReader(IDataRecord data) {
             try {
                 Link link = new Link(data.GetInt32(0), data.GetInt32(1));
                 return link;

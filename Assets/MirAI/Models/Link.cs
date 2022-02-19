@@ -4,11 +4,10 @@ using UnityEngine;
 
 namespace Assets.MirAI.Models {
 
-    public class Link : IAiModelElement {
+    public class Link : IHaveId {
         public int Id { get; set; }
         public int FromId { get; set; }
         public int ToId { get; set; }
-
         public Node NodeFrom { get; set; }
         public Node NodeTo { get; set; }
         public LinkWidget Widget { get; set; }

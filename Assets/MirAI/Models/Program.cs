@@ -3,14 +3,13 @@ using System.Text;
 
 namespace Assets.MirAI.Models {
 
-    public class Program : IAiModelElement {
+    public class Program : IHaveId {
 
         public int Id { get; set; }
         public string Name { get; set; }
         public List<Node> Nodes { get; set; } = new List<Node>();
-
-        private Node _rootNode = null;
         public Node RootNode => _rootNode ?? GetRootNode();
+        private Node _rootNode = null;
 
         public void SortNodesByAngle() {
             foreach (var node in Nodes)

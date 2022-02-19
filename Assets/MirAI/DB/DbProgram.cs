@@ -14,7 +14,7 @@ namespace Assets.MirAI.DB {
         }
 
         public override string GetDeleteCommandSuffix(Program program) {
-            return " WHERE Id = '" + program.Id + "';";
+            return " WHERE Id = " + program.Id + ";";
         }
 
         public override string GetInsertCommandSuffix(Program program) {
@@ -22,10 +22,10 @@ namespace Assets.MirAI.DB {
         }
 
         public override string GetUpdateCommandSuffix(Program program) {
-            return " SET Name = '" + program.Name + "' WHERE Id = '" + program.Id + "';";
+            return " SET Name = '" + program.Name + "' WHERE Id = " + program.Id + ";";
         }
 
-        public override Program CreateByData(IDataRecord data) {
+        public override Program GetFromReader(IDataRecord data) {
             try {
                 Program program = new Program {
                     Id = data.GetInt32(0),

@@ -12,11 +12,11 @@ namespace Assets.MirAI.UI.AiEditor {
             var go = eventData.pointerCurrentRaycast.gameObject;
             try {
                 var type = (NodeType)Enum.Parse(typeof(NodeType), go.name);
-                LowerConnectorController.TempConnectorLink.NodeTo.Type = type;
+                LowerConnector.TempConnectorLink.NodeTo.Type = type;
                 switch (type) {
                     case NodeType.SubAI:
                         var menu = WindowUtils.CreateWindow("SelectSubAi", "HUD");
-                        var controller = menu.GetComponent<SelectSubAi>();
+                        var controller = menu.GetComponent<SelectSubAiMenu>();
                         controller.OnCancel.Subscribe(OnCancelPressed);
                         controller.OnOk.Subscribe(OnOkPressed);
                         return;

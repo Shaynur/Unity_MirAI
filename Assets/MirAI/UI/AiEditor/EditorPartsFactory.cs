@@ -14,25 +14,25 @@ namespace Assets.MirAI.UI.AiEditor {
 
         public static EditorPartsFactory I => _instance == null ? Load() : _instance;
         private static EditorPartsFactory _instance;
-        private static readonly string schemeNodesContainer = "EditorNodes";
-        private static readonly string schemeLinksContainer = "EditorLinks";
+        private const string schemeNodesContainer = "EditorCanvas_Nodes";
+        private const string schemeLinksContainer = "EditorCanvas_Links";
 
         private static EditorPartsFactory Load() {
             return _instance = Resources.Load<EditorPartsFactory>("EditorPartsFactory");
         }
 
-        public LinkWidget SpawnLink(Link link) {
-            var goLink = GameObjectSpawner.Spawn(_linkPrefab, schemeLinksContainer);
+        public LinkWidget SpawnLink(Link link, string containerName = schemeLinksContainer) {
+            var goLink = GameObjectSpawner.Spawn(_linkPrefab, containerName);
             var linkWidget = goLink.GetComponent<LinkWidget>();
             link.Widget = linkWidget;
             linkWidget.SetData(link);
             return linkWidget;
         }
 
-        public NodeWidget SpawnNode(Node node) {
+        public NodeWidget SpawnNode(Node node, string containerName = schemeNodesContainer) {
             Vector3 position = new Vector3(node.X, node.Y, 0);
             var prefab = _nodePrefabs[(int)node.Type];
-            var nodeUI = GameObjectSpawner.Spawn(prefab, position, schemeNodesContainer);
+            var nodeUI = GameObjectSpawner.Spawn(prefab, position, containerName);
             var nodeWidget = nodeUI.GetComponent<NodeWidget>();
             node.Widget = nodeWidget;
             nodeWidget.SetData(node);

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Assets.MirAI.UI.AiEditor {
 
-    public class EditProgramName : MenuController {
+    public class EditProgramNameMenu : MenuController {
 
         [SerializeField] private InputField _field;
 

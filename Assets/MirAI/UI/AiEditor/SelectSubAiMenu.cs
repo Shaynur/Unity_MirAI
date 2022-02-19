@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Assets.MirAI.UI.AiEditor {
 
-    public class SelectSubAi : MenuController {
+    public class SelectSubAiMenu : MenuController {
 
         [SerializeField] private EventWithProgram _SelectProgramEvent;
         [SerializeField] private GameObject _itemPrefab;
@@ -28,13 +28,14 @@ namespace Assets.MirAI.UI.AiEditor {
             _currentItem = item;
             item.Select(true);
             _okButton.interactable = true;
-            LowerConnectorController.TempConnectorLink.NodeTo.Command = item.Program.Id;
+            LowerConnector.TempConnectorLink.NodeTo.Command = item.Program.Id;
         }
 
         private void CreateList() {
+            var curProg = _model.Programs.Find(x => x.Id == LowerConnector.TempConnectorLink.NodeTo.ProgramId);
             var list = _model.Programs.OrderBy(x => x.Name);
             foreach (var program in list) {
-                if (program == _model.CurrentProgram) continue;
+                if (program == curProg) continue;
                 var item = GameObjectSpawner.Spawn(_itemPrefab, "SubAiList");
                 var widget = item.GetComponent<ProgramItemWidget>();
                 widget.Set(program);

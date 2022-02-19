@@ -6,6 +6,7 @@ using Assets.MirAI.Models;
 using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 namespace Assets.MirAI.UI.AiEditor {
 
@@ -19,6 +20,13 @@ namespace Assets.MirAI.UI.AiEditor {
         private readonly Stack<Program> _subAiStack = new Stack<Program>();
         private AiModel _model;
 
+        public Program CurrentProgram {
+            get { return _currentProgram; }
+            set { _currentProgram = value; OnCurrentChanged?.Invoke(); }
+        }
+        private Program _currentProgram;
+        public UnityEvent OnCurrentChanged = new UnityEvent();
+
         private void Start() {
             _model = AiModel.Instance;
             _camController = gameObject.GetComponent<CanvasCameraController>();
@@ -27,7 +35,15 @@ namespace Assets.MirAI.UI.AiEditor {
         }
 
         public void CreateScheme() {
-            if (_model.CurrentProgram == null) return;
+            int currProgId = (_currentProgram == null) ? -1 : _currentProgram.Id;
+            _currentProgram = null;
+            if (_model.Programs != null && _model.Programs.Count > 0) {
+                if (currProgId > 0)
+                    _currentProgram = _model.Programs.Find(x => x.Id == currProgId);
+                if (_currentProgram == null)
+                    _currentProgram = _model.Programs.OrderBy(x => x.Name).ElementAt(0);
+            }
+
             EditorPartsFactory.I.ClearScheme();
             InitViewport();
             CreateNodes();
@@ -35,9 +51,14 @@ namespace Assets.MirAI.UI.AiEditor {
         }
 
         private void InitViewport() {
-            var rootNode = _model.CurrentProgram.RootNode;
             var indent = 400f;
-            _viewPort = new Rect(rootNode.X - indent, rootNode.Y - indent, 2 * indent, indent);
+            var x = 0f;
+            var y = 0f;
+            if (_currentProgram != null) {
+                x = _currentProgram.RootNode.X;
+                y = _currentProgram.RootNode.Y;
+            }
+            _viewPort = new Rect(x - indent, y - indent, 2 * indent, indent);
         }
 
         private void ChangeViewportSize(float x, float y) {
@@ -48,7 +69,8 @@ namespace Assets.MirAI.UI.AiEditor {
         }
 
         private void CreateNodes() {
-            var program = _model.CurrentProgram;
+            if (_currentProgram == null) return;
+            var program = _currentProgram;
             foreach (var node in program.Nodes) {
                 node.Widget = EditorPartsFactory.I.SpawnNode(node);
                 float nodeHeight = node.Widget.GetComponent<RectTransform>().rect.height;
@@ -62,17 +84,17 @@ namespace Assets.MirAI.UI.AiEditor {
             var program = _model.Programs.Find(x => x.Id == node.Command);
             if (program != null) {
                 SubAiDown();
-                _model.CurrentProgram = program;
+                CurrentProgram = program;
             }
         }
 
         private void SubAiDown() {
-            _subAiStack.Push(_model.CurrentProgram);
+            _subAiStack.Push(_currentProgram);
             _subAiUpButton.gameObject.SetActive(true);
         }
 
         public void SubAiUp() {
-            _model.CurrentProgram = _subAiStack.Pop();
+            CurrentProgram = _subAiStack.Pop();
             if (_subAiStack.Count == 0)
                 _subAiUpButton.gameObject.SetActive(false);
         }
@@ -91,7 +113,8 @@ namespace Assets.MirAI.UI.AiEditor {
         }
 
         public void MoveNodes(Node fromNode, Vector3 offset) {
-            var program = _model.CurrentProgram;
+            if (_currentProgram == null) return;
+            var program = _currentProgram;
             foreach (var n in program.DFC(fromNode)) {
                 if (n != fromNode)
                     n.Widget.ChangePosition(offset);
@@ -106,13 +129,15 @@ namespace Assets.MirAI.UI.AiEditor {
         }
 
         public void SaveNodesToDB(Node fromNode) {
-            var program = _model.CurrentProgram;
+            if (_currentProgram == null) return;
+            var program = _currentProgram;
             var nodes = program.DFC(fromNode).ToArray<Node>();
             _model.UpdateNodes(nodes);
         }
 
         public void UpdateSelectors(Node excludingNode) {
-            var program = _model.CurrentProgram;
+            if (_currentProgram == null) return;
+            var program = _currentProgram;
             foreach (var node in program.Nodes)
                 if (node != excludingNode)
                     node.Widget.selector.SetState(false);
@@ -123,7 +148,8 @@ namespace Assets.MirAI.UI.AiEditor {
         }
 
         public void DeleteNodes() {
-            var program = _model.CurrentProgram;
+            if (_currentProgram == null) return;
+            var program = _currentProgram;
             List<Node> nodesToDelete = new List<Node>();
             foreach (var node in program.Nodes)
                 if (node.Widget.selector.IsActiv && node.Type != NodeType.Root)
@@ -137,14 +163,25 @@ namespace Assets.MirAI.UI.AiEditor {
             _camController.SelectionMode(true);
         }
 
+        public void OnSelection(Rect rect) {
+            UnselectAll();
+            if (_currentProgram == null) return;
+            var program = _currentProgram;
+            foreach (var node in program.Nodes) {
+                var curRect = node.Widget.gameObject.GetComponent<RectTransform>().GetWorldRect();
+                if (rect.Overlaps(curRect))
+                    node.Widget.selector.SetState(true);
+            }
+        }
+
         private void OnDestroy() {
             _trash.Dispose();
         }
 
         //TODO Debug Only
         public void RunProgram() {
-            if (_model.CurrentProgram == null) return;
-            StartCoroutine(LighthNodes(_model.CurrentProgram));
+            if (_currentProgram == null) return;
+            StartCoroutine(LighthNodes(_currentProgram));
         }
         //TODO Debug Only
         private IEnumerator LighthNodes(Program program) {
@@ -154,16 +191,6 @@ namespace Assets.MirAI.UI.AiEditor {
                 widget.selector.SetState(true);
                 yield return new WaitForSeconds(0.5f);
                 widget.selector.SetState(false);
-            }
-        }
-
-        public void OnSelection(Rect rect) {
-            UnselectAll();
-            var program = _model.CurrentProgram;
-            foreach (var node in program.Nodes) {
-                var curRect = node.Widget.gameObject.GetComponent<RectTransform>().GetWorldRect();
-                if (rect.Overlaps(curRect))
-                    node.Widget.selector.SetState(true);
             }
         }
     }

@@ -24,7 +24,7 @@ namespace Assets.MirAI.UI.HUD {
             _model = AiModel.Instance;
             _hudController = GetComponentInParent<HudController>();
             _trash.Retain(_model.OnLoaded.Subscribe(RedrawList));
-            _trash.Retain(_model.OnCurrentChanged.Subscribe(ChangeCurrentProgram));
+            _trash.Retain(_editorController.OnCurrentChanged.Subscribe(ChangeCurrentProgram));
             RedrawList();
         }
 
@@ -33,12 +33,12 @@ namespace Assets.MirAI.UI.HUD {
                 _hudController.HideProgramList();
             else
                 _editorController.ClearSubAiStack();
-            _model.CurrentProgram = item.Program;
+            _editorController.CurrentProgram = item.Program;
         }
 
         public void ChangeCurrentProgram() {
-            var currentProgram = _model.CurrentProgram;
-            var newCurrent = _itemList.Find(x => x.Program == currentProgram);
+            var curProg = _editorController.CurrentProgram;
+            var newCurrent = _itemList.Find(x => x.Program == curProg);
             ChangeSelection(newCurrent);
         }
 
@@ -63,7 +63,7 @@ namespace Assets.MirAI.UI.HUD {
                 widget.Set(program);
                 _trash.Retain(widget.ItemClicked.Subscribe(OnItemClick));
                 _itemList.Add(widget);
-                if (program == _model.CurrentProgram) {
+                if (program == _editorController.CurrentProgram) {
                     _currentItem = widget;
                     _currentItem.Select(true);
                 }
@@ -79,7 +79,7 @@ namespace Assets.MirAI.UI.HUD {
 
         public void DeleteCurrentProgram() {
             if (_currentItem != null) {
-                _model.RemoveProgram(_model.CurrentProgram.Id);
+                _model.RemoveProgram(_editorController.CurrentProgram.Id);
             }
         }
 

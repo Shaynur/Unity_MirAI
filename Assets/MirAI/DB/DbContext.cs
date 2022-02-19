@@ -26,15 +26,11 @@ namespace Assets.MirAI.DB {
         }
 
         private static string GetDatabaseConnectionString() {
-            string dbNamePrefix = @"URI=file:";
-            string dbFileName = @"MirAI.db";
-            string dbFullPath = Path.Combine(Application.dataPath, @"DB", dbFileName);
+            string dbNamePrefix = "URI=file:";
+            string dbFileName = "MirAI.db";
+            string dbFullPath = Path.Combine(Application.dataPath, "DB", dbFileName);
             string dbConnectionString = dbNamePrefix + dbFullPath;
             return dbConnectionString;
-        }
-
-        public void Dispose() {
-            _connection.Close();
         }
 
         private void ExecuteCommand(string commandText) {
@@ -46,6 +42,10 @@ namespace Assets.MirAI.DB {
             catch (Exception ex) {
                 throw new DbMirAiException("Error execute some NonQuery command in DbContect.", ex);
             }
+        }
+
+        public void Dispose() {
+            _connection.Close();
         }
     }
 }

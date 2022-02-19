@@ -21,24 +21,24 @@ namespace Assets.MirAI.DB {
         }
 
         public override string GetDeleteCommandSuffix(Node node) {
-            return " WHERE Id = '" + node.Id + "';";
+            return " WHERE Id = " + node.Id + ";";
         }
 
         public override string GetInsertCommandSuffix(Node node) {
-            return " (ProgramId, Type, Command, X, Y) VALUES ('"
-                + node.ProgramId + "', '" + (int)node.Type + "', '" + node.Command + "', '" + (int)node.X + "', '" + (int)node.Y + "');";
+            return " (ProgramId, Type, Command, X, Y) VALUES ("
+                + node.ProgramId + ", " + (int)node.Type + ", " + node.Command + ", " + (int)node.X + ", " + (int)node.Y + ");";
         }
 
         public override string GetUpdateCommandSuffix(Node node) {
-            return " SET ProgramId = '" + node.ProgramId
-                + "', Type = '" + (int)node.Type
-                + "', Command = '" + node.Command
-                + "', X = '" + (int)node.X
-                + "', Y = '" + (int)node.Y
-                + "' WHERE Id = '" + node.Id + "';";
+            return " SET ProgramId = " + node.ProgramId
+                + ", Type = " + (int)node.Type
+                + ", Command = " + node.Command
+                + ", X = " + (int)node.X
+                + ", Y = " + (int)node.Y
+                + " WHERE Id = " + node.Id + ";";
         }
 
-        public override Node CreateByData(IDataRecord data) {
+        public override Node GetFromReader(IDataRecord data) {
             try {
                 Node node = new Node {
                     Id = data.GetInt32(0),

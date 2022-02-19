@@ -10,14 +10,8 @@ namespace Assets.MirAI.Models {
         public List<Program> Programs { get; set; }
         public List<Node> Nodes { get; set; }
         public List<Link> Links { get; set; }
-        public Program CurrentProgram {
-            get { return _currentProgram; }
-            set { _currentProgram = value; OnCurrentChanged?.Invoke(); }
-        }
 
         public UnityEvent OnLoaded = new UnityEvent();
-        public UnityEvent OnCurrentChanged = new UnityEvent();
-        private Program _currentProgram;
 
         private static readonly AiModel _instance = new AiModel();
         public static AiModel Instance => _instance;
@@ -32,18 +26,10 @@ namespace Assets.MirAI.Models {
         }
 
         private void LoadFromDB(DbContext db) {
-            int currProgId = (_currentProgram == null) ? -1 : _currentProgram.Id;
             Programs = db.Programs.ToList();
             Nodes = db.Nodes.ToList();
             Links = db.Links.ToList();
             BuildModelFromDbData();
-
-            _currentProgram = null;
-            if (Programs != null && Programs.Count > 0) {
-                _currentProgram = Programs.Find(x => x.Id == currProgId);
-                if (_currentProgram == null)
-                    _currentProgram = Programs[0];
-            }
         }
 
         public void AddNewProgram(string name) {
@@ -60,7 +46,7 @@ namespace Assets.MirAI.Models {
             };
             AddNode(node, db);
             program.Nodes.Add(node);
-            _currentProgram = program;
+            //_currentProgram = program;
             LoadFromDB();
         }
 

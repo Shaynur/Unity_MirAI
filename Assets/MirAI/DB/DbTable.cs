@@ -6,16 +6,16 @@ using Mono.Data.Sqlite;
 
 namespace Assets.MirAI.DB {
 
-    public abstract class DbTable<T> where T : IAiModelElement {
+    public abstract class DbTable<T> where T : IHaveId {
 
         public string TableName { get; set; }
-        private readonly SqliteConnection _connection;
-
-        public abstract T CreateByData(IDataRecord data);
+        public abstract T GetFromReader(IDataRecord data);
         public abstract string GetCreateTableCommandSuffix();
         public abstract string GetInsertCommandSuffix(T t);
         public abstract string GetDeleteCommandSuffix(T t);
         public abstract string GetUpdateCommandSuffix(T t);
+
+        private readonly SqliteConnection _connection;
 
         public DbTable(string tableName, SqliteConnection connection) {
             TableName = tableName;
@@ -36,7 +36,7 @@ namespace Assets.MirAI.DB {
                 command.CommandText = @"SELECT * FROM " + TableName + ";";
                 using IDataReader reader = command.ExecuteReader();
                 while (reader.Read()) {
-                    var entity = CreateByData(reader);
+                    var entity = GetFromReader(reader);
                     entities.Add(entity);
                 }
                 reader.Close();
@@ -54,7 +54,7 @@ namespace Assets.MirAI.DB {
                 command.CommandText = @"SELECT * FROM " + TableName + @" WHERE Id='" + id.ToString() + "';";
                 using IDataReader reader = command.ExecuteReader();
                 while (reader.Read()) {
-                    entity = CreateByData(reader);
+                    entity = GetFromReader(reader);
                 }
                 reader.Close();
                 return entity;
@@ -84,7 +84,7 @@ namespace Assets.MirAI.DB {
         }
 
         public void Remove(int id) {
-            var commandText = "DELETE FROM " + TableName + " WHERE Id = '" + id + "';";
+            var commandText = "DELETE FROM " + TableName + " WHERE Id = " + id + ";";
             ExecuteCommand(commandText);
         }
 

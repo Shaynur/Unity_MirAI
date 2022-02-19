@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 
 namespace Assets.MirAI.UI.AiEditor {
 
-    public class LowerConnectorController : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler {
+    public class LowerConnector : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler {
 
         public static Link TempConnectorLink { get; private set; }
         private Node _parentNode;
@@ -44,7 +44,12 @@ namespace Assets.MirAI.UI.AiEditor {
         }
 
         private void CreateTemplates(Vector3 position) {
-            TempConnectorLink = new Link(_parentNode, new Node { X = position.x, Y = position.y });
+            var nodeTo = new Node {
+                X = position.x,
+                Y = position.y,
+                ProgramId = _parentNode.ProgramId
+            };
+            TempConnectorLink = new Link(_parentNode, nodeTo);
             EditorPartsFactory.I.SpawnLink(TempConnectorLink);
         }
 
