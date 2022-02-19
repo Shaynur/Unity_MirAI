@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Assets.MirAI.Models;
+using Assets.MirAI.UI.AiEditor;
 using Assets.MirAI.UI.Widgets;
 using Assets.MirAI.Utils;
 using Assets.MirAI.Utils.Disposables;
@@ -11,30 +12,32 @@ namespace Assets.MirAI.UI.HUD {
     public class ProgramListController : MonoBehaviour {
 
         [SerializeField] private GameObject _itemPrefab;
+        [SerializeField] private EditorController _editorController;
 
         public readonly CompositeDisposable _trash = new CompositeDisposable();
-        private GameSession _session;
+        private AiModel _model;
         private HudController _hudController;
         private ProgramItemWidget _currentItem;
-        private List<ProgramItemWidget> _itemList = new List<ProgramItemWidget>();
+        private readonly List<ProgramItemWidget> _itemList = new List<ProgramItemWidget>();
 
         private void Start() {
-            _session = GameSession.Instance;
+            _model = AiModel.Instance;
             _hudController = GetComponentInParent<HudController>();
-            _trash.Retain(_session.AiModel.OnLoaded.Subscribe(RedrawList));
-            _trash.Retain(_session.AiModel.OnCurrentChanged.Subscribe(ChangeCurrentProgram));
+            _trash.Retain(_model.OnLoaded.Subscribe(RedrawList));
+            _trash.Retain(_model.OnCurrentChanged.Subscribe(ChangeCurrentProgram));
             RedrawList();
         }
 
         public void OnItemClick(ProgramItemWidget item) {
-            if (_currentItem == item) {
+            if (_currentItem == item)
                 _hudController.HideProgramList();
-            }
-            _session.AiModel.CurrentProgram = item.Program;
+            else
+                _editorController.ClearSubAiStack();
+            _model.CurrentProgram = item.Program;
         }
 
         public void ChangeCurrentProgram() {
-            var currentProgram = _session.AiModel.CurrentProgram;
+            var currentProgram = _model.CurrentProgram;
             var newCurrent = _itemList.Find(x => x.Program == currentProgram);
             ChangeSelection(newCurrent);
         }
@@ -53,14 +56,14 @@ namespace Assets.MirAI.UI.HUD {
         }
 
         private void CreateList() {
-            var list = _session.AiModel.Programs.OrderBy(x => x.Name);
+            var list = _model.Programs.OrderBy(x => x.Name);
             foreach (var program in list) {
                 var item = GameObjectSpawner.Spawn(_itemPrefab, "ProgramListContent");
                 var widget = item.GetComponent<ProgramItemWidget>();
                 widget.Set(program);
                 _trash.Retain(widget.ItemClicked.Subscribe(OnItemClick));
                 _itemList.Add(widget);
-                if (program == _session.AiModel.CurrentProgram) {
+                if (program == _model.CurrentProgram) {
                     _currentItem = widget;
                     _currentItem.Select(true);
                 }
@@ -76,7 +79,7 @@ namespace Assets.MirAI.UI.HUD {
 
         public void DeleteCurrentProgram() {
             if (_currentItem != null) {
-                _session.AiModel.RemoveProgram(_session.AiModel.CurrentProgram.Id);
+                _model.RemoveProgram(_model.CurrentProgram.Id);
             }
         }
 

@@ -53,11 +53,11 @@ namespace Assets.MirAI.UI.Widgets {
         }
 
         public void UpdateRootView() {
-            _idText.text = GameSession.Instance.AiModel.Programs.Find(x => x.Id == Node.ProgramId).Name;
+            _idText.text = AiModel.Instance.Programs.Find(x => x.Id == Node.ProgramId).Name;
         }
 
         public void UpdateSubAiView() {
-            var program = GameSession.Instance.AiModel.Programs.Find(x => x.Id == Node.Command);
+            var program = AiModel.Instance.Programs.Find(x => x.Id == Node.Command);
             _idText.text = program == null ? "?" : program.Name;
         }
 

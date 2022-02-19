@@ -18,7 +18,7 @@ namespace Assets.MirAI.UI.AiEditor {
 
         public override void Start() {
             base.Start();
-            _model = GameSession.Instance.AiModel;
+            _model = AiModel.Instance;
             _okButton.interactable = false;
             CreateList();
         }

@@ -11,11 +11,11 @@ namespace Assets.MirAI.UI.AiEditor {
 
         public static Link TempConnectorLink { get; private set; }
         private Node _parentNode;
-        private GameSession _session;
+        private AiModel _model;
 
         private void Start() {
+            _model= AiModel.Instance;
             _parentNode = GetComponentInParent<NodeWidget>().Node;
-            _session = GameSession.Instance;
         }
 
         public void OnBeginDrag(PointerEventData eventData) {
@@ -55,7 +55,7 @@ namespace Assets.MirAI.UI.AiEditor {
         }
 
         private void SaveDbTemplates() {
-            if (_session.AiModel.AddLinkAndChildNode(TempConnectorLink))
+            if (_model.AddLinkAndChildNode(TempConnectorLink))
                 EditorPartsFactory.I.SpawnNode(TempConnectorLink.NodeTo);
             else
                 ClearTemplates();
@@ -63,14 +63,14 @@ namespace Assets.MirAI.UI.AiEditor {
 
         private void ClearTemplates() {
             Destroy(TempConnectorLink.Widget.gameObject);
+            TempConnectorLink.NodeTo = null;
             TempConnectorLink = null;
-            //TempConnectorLink.NodeTo = null;
         }
 
         private void ConnectNodes(Node child) {
             TempConnectorLink.NodeTo = child;
             TempConnectorLink.ToId = child.Id;
-            if (_session.AiModel.AddLink(TempConnectorLink)) {
+            if (_model.AddLink(TempConnectorLink)) {
                 _parentNode.AddChild(TempConnectorLink, child);
                 TempConnectorLink.Widget.UpdateView();
             }

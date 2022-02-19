@@ -19,7 +19,9 @@ namespace Assets.MirAI.Models {
         public UnityEvent OnCurrentChanged = new UnityEvent();
         private Program _currentProgram;
 
-        public AiModel() {
+        private static readonly AiModel _instance = new AiModel();
+        public static AiModel Instance => _instance;
+        private AiModel() {
             LoadFromDB();
         }
 

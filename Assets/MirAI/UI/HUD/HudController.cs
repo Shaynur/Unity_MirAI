@@ -14,10 +14,10 @@ namespace Assets.MirAI.UI.HUD {
         [SerializeField] private EditorController _editorController;
 
         private ShowHide _progListSH;
-        private GameSession _session;
+        private AiModel _model;
 
         private void Start() {
-            _session = GameSession.Instance;
+            _model = AiModel.Instance;
             _progListSH = _programList.GetComponent<ShowHide>();
         }
 
@@ -44,11 +44,11 @@ namespace Assets.MirAI.UI.HUD {
         }
 
         public void ShowEditProgramNameMenu() {
-            if (_progListSH.IsHidden || _session.AiModel.CurrentProgram == null) return;
+            if (_progListSH.IsHidden || _model.CurrentProgram == null) return;
             var menu = WindowUtils.CreateWindow("EditProgramName", "HUD");
             var controller = menu.GetComponent<EditProgramName>();
             var listController = _programList.GetComponentInChildren<ProgramListController>();
-            controller.SetEditProgram(_session.AiModel.CurrentProgram);
+            controller.SetEditProgram(_model.CurrentProgram);
             controller.OnOk.Subscribe(listController.RedrawList);
         }
 
@@ -61,7 +61,7 @@ namespace Assets.MirAI.UI.HUD {
             if (_progListSH.IsHidden)
                 _editorController.DeleteNodes();
             else {
-                if (_session.AiModel.CurrentProgram == null) return;
+                if (_model.CurrentProgram == null) return;
                 var menu = WindowUtils.CreateWindow("DeleteProgramMenu", "HUD");
                 var deleteController = menu.GetComponent<MenuController>();
                 var listController = _programList.GetComponentInChildren<ProgramListController>();

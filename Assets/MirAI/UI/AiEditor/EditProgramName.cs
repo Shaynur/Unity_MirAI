@@ -8,13 +8,13 @@ namespace Assets.MirAI.UI.AiEditor {
 
         [SerializeField] private InputField _field;
 
-        private GameSession _session;
+        private AiModel _model;
         private Color _normalColor;
         private Color _warningColor = Color.red;
         private Program _program = null;
 
         private void Awake() {
-            _session = GameSession.Instance;
+            _model = AiModel.Instance;
             _normalColor = _field.textComponent.color;
         }
 
@@ -34,10 +34,10 @@ namespace Assets.MirAI.UI.AiEditor {
             CheckText(_field.text);
             if (_okButton.interactable == false) return;
             if(_program == null) {
-                _session.AiModel.AddNewProgram(_field.text);
+                _model.AddNewProgram(_field.text);
             } else {
                 _program.Name = _field.text;
-                _session.AiModel.UpdateProgram(_program);
+                _model.UpdateProgram(_program);
             }
             base.OnOkPressed();
         }
@@ -55,7 +55,7 @@ namespace Assets.MirAI.UI.AiEditor {
 
         private bool IsExist(string name) {
             if (string.IsNullOrEmpty(name)) return true;
-            var programs = _session.AiModel.Programs;
+            var programs = _model.Programs;
             foreach (var program in programs)
                 if (program.Name == name)
                     return true;
