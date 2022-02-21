@@ -46,7 +46,6 @@ namespace Assets.MirAI.Models {
             };
             AddNode(node, db);
             program.Nodes.Add(node);
-            //_currentProgram = program;
             LoadFromDB();
         }
 
@@ -115,6 +114,7 @@ namespace Assets.MirAI.Models {
             using var db = new DbContext();
             foreach (var node in nodes)
                 db.Nodes.Remove(node.Id);
+            db.Dispose();
             LoadFromDB();
         }
 

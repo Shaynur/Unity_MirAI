@@ -437,7 +437,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 388a38fa154c05b4fb833884b4e4136c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _camera: {fileID: 1428336942}
   _onClick:
     m_PersistentCalls:
       m_Calls:
@@ -527,6 +526,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _subAiUpButton: {fileID: 1966923423}
+  OnCurrentChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &382314925
 GameObject:
   m_ObjectHideFlags: 0
@@ -1238,7 +1240,7 @@ GameObject:
   m_Component:
   - component: {fileID: 520713209}
   m_Layer: 6
-  m_Name: EditorLinks
+  m_Name: EditorCanvas_Links
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1857,7 +1859,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1832119408}
         m_TargetAssemblyTypeName: Assets.MirAI.UI.HUD.HudController, Assembly-CSharp
-        m_MethodName: Toggle
+        m_MethodName: ToggleProgramListVisible
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1959,7 +1961,7 @@ Camera:
   field of view: 60
   orthographic: 1
   orthographic size: 360
-  m_Depth: -1
+  m_Depth: 1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -1998,7 +2000,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1525032176}
   m_Layer: 6
-  m_Name: EditorNodes
+  m_Name: EditorCanvas_Nodes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2186,7 +2188,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1832119408}
         m_TargetAssemblyTypeName: Assets.MirAI.UI.HUD.HudController, Assembly-CSharp
-        m_MethodName: ShowEditProgramNameMenu
+        m_MethodName: OnEditButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2393,7 +2395,6 @@ GameObject:
   - component: {fileID: 1855431672}
   - component: {fileID: 1855431673}
   - component: {fileID: 1855431674}
-  - component: {fileID: 1855431675}
   m_Layer: 5
   m_Name: ProgramListContent
   m_TagString: Untagged
@@ -2460,20 +2461,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 2
---- !u!114 &1855431675
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1855431671}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 815e494d3ac69f042908d1812d57903c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _itemPrefab: {fileID: 1365697950773526586, guid: 594b2cc462e46c74383c2d05d94b38ac, type: 3}
-  _editorController: {fileID: 261821044}
 --- !u!1 &1896166077
 GameObject:
   m_ObjectHideFlags: 0
@@ -2641,6 +2628,7 @@ GameObject:
   - component: {fileID: 1921515395}
   - component: {fileID: 1921515394}
   - component: {fileID: 1921515393}
+  - component: {fileID: 1921515397}
   m_Layer: 5
   m_Name: ProgramList
   m_TagString: Untagged
@@ -2751,6 +2739,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _scaleByX: 1
   _scaleByY: 0
+--- !u!114 &1921515397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921515391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 815e494d3ac69f042908d1812d57903c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemPrefab: {fileID: 1365697950773526586, guid: 594b2cc462e46c74383c2d05d94b38ac, type: 3}
+  _content: {fileID: 1855431671}
+  _editorController: {fileID: 261821044}
 --- !u!1 &1966923418
 GameObject:
   m_ObjectHideFlags: 0

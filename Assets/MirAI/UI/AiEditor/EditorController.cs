@@ -17,12 +17,17 @@ namespace Assets.MirAI.UI.AiEditor {
         public readonly CompositeDisposable _trash = new CompositeDisposable();
         private CanvasCameraController _camController;
         private Rect _viewPort = new Rect();
-        private readonly Stack<Program> _subAiStack = new Stack<Program>();
+        //private readonly Stack<Program> _subAiStack = new Stack<Program>();
+        private readonly Stack<int> _subAiStack = new Stack<int>();
         private AiModel _model;
 
         public Program CurrentProgram {
             get { return _currentProgram; }
-            set { _currentProgram = value; OnCurrentChanged?.Invoke(); }
+            set {
+                _currentProgram = value;
+                CreateScheme();
+                OnCurrentChanged?.Invoke();
+            }
         }
         private Program _currentProgram;
         public UnityEvent OnCurrentChanged = new UnityEvent();
@@ -30,20 +35,24 @@ namespace Assets.MirAI.UI.AiEditor {
         private void Start() {
             _model = AiModel.Instance;
             _camController = gameObject.GetComponent<CanvasCameraController>();
-            _trash.Retain(_model.OnLoaded.Subscribe(CreateScheme));
+            _trash.Retain(_model.OnLoaded.Subscribe(AiModelLoaded));
+            AiModelLoaded();
+        }
+
+        public void AiModelLoaded() {
+            if (_model.Programs != null && _model.Programs.Count > 0) {
+                if (_currentProgram != null)
+                    _currentProgram = _model.Programs.Find(x => x.Id == _currentProgram.Id);
+                if (_currentProgram == null) {
+                    _currentProgram = _model.Programs.OrderBy(x => x.Name).ElementAt(0);
+                    //ClearSubAiStack();
+                }
+            }
+            else _currentProgram = null;
             CreateScheme();
         }
 
         public void CreateScheme() {
-            int currProgId = (_currentProgram == null) ? -1 : _currentProgram.Id;
-            _currentProgram = null;
-            if (_model.Programs != null && _model.Programs.Count > 0) {
-                if (currProgId > 0)
-                    _currentProgram = _model.Programs.Find(x => x.Id == currProgId);
-                if (_currentProgram == null)
-                    _currentProgram = _model.Programs.OrderBy(x => x.Name).ElementAt(0);
-            }
-
             EditorPartsFactory.I.ClearScheme();
             InitViewport();
             CreateNodes();
@@ -89,12 +98,13 @@ namespace Assets.MirAI.UI.AiEditor {
         }
 
         private void SubAiDown() {
-            _subAiStack.Push(_currentProgram);
+            _subAiStack.Push(_currentProgram.Id);
             _subAiUpButton.gameObject.SetActive(true);
         }
 
         public void SubAiUp() {
-            CurrentProgram = _subAiStack.Pop();
+            var curProgId = _subAiStack.Pop();
+            CurrentProgram = _model.Programs.Find(x => x.Id == curProgId) ?? CurrentProgram;
             if (_subAiStack.Count == 0)
                 _subAiUpButton.gameObject.SetActive(false);
         }
@@ -135,6 +145,24 @@ namespace Assets.MirAI.UI.AiEditor {
             _model.UpdateNodes(nodes);
         }
 
+        public void DeleteNodes() {
+            var nodesToDelete = GetSelectedNodes();
+            nodesToDelete.RemoveAll(x => x.Type == NodeType.Root);
+            if (nodesToDelete.Count > 0)
+                _model.RemoveNodes(nodesToDelete.ToArray());
+        }
+
+        public List<Node> GetSelectedNodes() {
+            List<Node> selectedNodes = new List<Node>();
+            if (_currentProgram != null) {
+                var program = _currentProgram;
+                foreach (var node in program.Nodes)
+                    if (node.Widget.selector.IsActiv)
+                        selectedNodes.Add(node);
+            }
+            return selectedNodes;
+        }
+
         public void UpdateSelectors(Node excludingNode) {
             if (_currentProgram == null) return;
             var program = _currentProgram;
@@ -145,18 +173,6 @@ namespace Assets.MirAI.UI.AiEditor {
 
         public void UnselectAll() {
             UpdateSelectors(null);
-        }
-
-        public void DeleteNodes() {
-            if (_currentProgram == null) return;
-            var program = _currentProgram;
-            List<Node> nodesToDelete = new List<Node>();
-            foreach (var node in program.Nodes)
-                if (node.Widget.selector.IsActiv && node.Type != NodeType.Root)
-                    nodesToDelete.Add(node);
-            if (nodesToDelete.Count > 0) {
-                _model.RemoveNodes(nodesToDelete.ToArray());
-            }
         }
 
         public void ToggleSelectionMode() {

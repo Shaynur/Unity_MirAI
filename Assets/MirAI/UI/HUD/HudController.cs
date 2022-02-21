@@ -1,4 +1,5 @@
-﻿using Assets.MirAI.UI.AiEditor;
+﻿using Assets.MirAI.Models;
+using Assets.MirAI.UI.AiEditor;
 using Assets.MirAI.Utils;
 using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
@@ -29,29 +30,11 @@ namespace Assets.MirAI.UI.HUD {
             _clickBlocker.SetActive(false);
         }
 
-        public void Toggle() {
+        public void ToggleProgramListVisible() {
             if (_clickBlocker.activeSelf)
                 HideProgramList();
             else
                 ShowProgramList();
-        }
-
-        public void ShowNewProgramMenu() {
-           WindowUtils.CreateWindow("EditProgramName", "HUD");
-        }
-
-        public void ShowEditProgramNameMenu() {
-            if (_progListSH.IsHidden || _editorController.CurrentProgram == null) return;
-            var menu = WindowUtils.CreateWindow("EditProgramName", "HUD");
-            var controller = menu.GetComponent<EditProgramNameMenu>();
-            var listController = _programList.GetComponentInChildren<ProgramListController>();
-            controller.SetEditProgram(_editorController.CurrentProgram);
-            controller.OnOk.Subscribe(listController.RedrawList);
-        }
-
-
-        public void OnSelectProgram() {
-            _editorController.CreateScheme();
         }
 
         public void OnDeleteButton() {
@@ -64,6 +47,38 @@ namespace Assets.MirAI.UI.HUD {
                 var listController = _programList.GetComponentInChildren<ProgramListController>();
                 deleteController.OnOk.Subscribe(listController.DeleteCurrentProgram);
             }
+        }
+
+        public void OnEditButton() {
+            if (_progListSH.IsHidden)
+                ShowEditNodeMenu();
+            else
+                ShowEditProgramNameMenu();
+        }
+
+        private void ShowEditNodeMenu() {
+            var select = _editorController.GetSelectedNodes();
+            if (select.Count == 1) {
+                var node = select[0];
+                if (node.Type == NodeType.Root) 
+                    ShowEditProgramNameMenu();
+                else
+                    EditNode.Edit(node);
+            }
+        }
+
+        private void ShowEditProgramNameMenu() {
+            if (_editorController.CurrentProgram == null) return;
+            var menu = WindowUtils.CreateWindow("EditProgramName", "HUD");
+            var controller = menu.GetComponent<EditProgramNameMenu>();
+            var listController = _programList.GetComponentInChildren<ProgramListController>();
+            controller.SetEditProgram(_editorController.CurrentProgram);
+            controller.OnOk.Subscribe(listController.RedrawList);
+            controller.OnOk.Subscribe(_editorController.CurrentProgram.RootNode.Widget.UpdateView);
+        }
+
+        public void ShowNewProgramMenu() {
+            WindowUtils.CreateWindow("EditProgramName", "HUD");
         }
 
         public void SelectionModeToggle() {

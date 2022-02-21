@@ -12,6 +12,7 @@ namespace Assets.MirAI.UI.HUD {
     public class ProgramListController : MonoBehaviour {
 
         [SerializeField] private GameObject _itemPrefab;
+        [SerializeField] private GameObject _content;
         [SerializeField] private EditorController _editorController;
 
         public readonly CompositeDisposable _trash = new CompositeDisposable();
@@ -37,17 +38,18 @@ namespace Assets.MirAI.UI.HUD {
         }
 
         public void ChangeCurrentProgram() {
+            RedrawList();
             var curProg = _editorController.CurrentProgram;
             var newCurrent = _itemList.Find(x => x.Program == curProg);
             ChangeSelection(newCurrent);
         }
 
         private void ChangeSelection(ProgramItemWidget item) {
+            if (item == null) return;
             if (_currentItem != null)
                 _currentItem.Select(false);
             item.Select(true);
             _currentItem = item;
-            _hudController.OnSelectProgram();
         }
 
         public void RedrawList() {
@@ -58,7 +60,7 @@ namespace Assets.MirAI.UI.HUD {
         private void CreateList() {
             var list = _model.Programs.OrderBy(x => x.Name);
             foreach (var program in list) {
-                var item = GameObjectSpawner.Spawn(_itemPrefab, "ProgramListContent");
+                var item = GameObjectSpawner.Spawn(_itemPrefab, _content.name);
                 var widget = item.GetComponent<ProgramItemWidget>();
                 widget.Set(program);
                 _trash.Retain(widget.ItemClicked.Subscribe(OnItemClick));

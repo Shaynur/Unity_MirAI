@@ -27,6 +27,8 @@ namespace Assets.MirAI.UI {
         [ContextMenu("Hide")]
         public void Hide() {
             if (_isHidden) return;
+            _defRect = _rt.rect;
+            _defScale = _rt.localScale;
             StartCoroutine(SetState(_hiding));
             _isHidden = true;
         }
