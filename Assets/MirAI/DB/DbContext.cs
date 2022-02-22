@@ -11,12 +11,21 @@ namespace Assets.MirAI.DB {
         public DbNode Nodes { get; set; }
         public DbLink Links { get; set; }
 
-        private static readonly string _connectionString = GetDatabaseConnectionString();
-        private readonly SqliteConnection _connection;
+        private static string _connectionString = GetDatabaseConnectionString("MirAI.db");
+        private SqliteConnection _connection;
 
         public bool IsOpen => _connection.State == System.Data.ConnectionState.Open;
 
         public DbContext() {
+            OpenDb();
+        }
+
+        public DbContext(string dbFileName) {
+            _connectionString = GetDatabaseConnectionString(dbFileName);
+            OpenDb();
+        }
+
+        private void OpenDb() {
             _connection = new SqliteConnection(_connectionString);
             _connection.Open();
             ExecuteCommand("PRAGMA foreign_keys = ON;");
@@ -25,9 +34,8 @@ namespace Assets.MirAI.DB {
             Links = new DbLink("Links", _connection);
         }
 
-        private static string GetDatabaseConnectionString() {
+        private static string GetDatabaseConnectionString(string dbFileName) {
             string dbNamePrefix = "URI=file:";
-            string dbFileName = "MirAI.db";
             string dbFullPath = Path.Combine(Application.dataPath, "DB", dbFileName);
             string dbConnectionString = dbNamePrefix + dbFullPath;
             return dbConnectionString;

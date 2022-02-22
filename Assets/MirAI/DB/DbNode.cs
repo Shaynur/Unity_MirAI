@@ -10,32 +10,50 @@ namespace Assets.MirAI.DB {
         public DbNode(string tableName, SqliteConnection connection) : base(tableName, connection) {
         }
 
-        public override string GetCreateTableCommandSuffix() {
-            return "  ( Id INTEGER NOT NULL CONSTRAINT PK_Nodes PRIMARY KEY AUTOINCREMENT, "
-                    + "ProgramId INTEGER NOT NULL, "
-                    + "Type INTEGER NOT NULL, "
-                    + "Command INTEGER NOT NULL, "
-                    + "X INTEGER NOT NULL, "
-                    + "Y INTEGER NOT NULL, "
-                    + "CONSTRAINT FK_Nodes_Programs_ProgramId FOREIGN KEY(ProgramId) REFERENCES Programs(Id) ON DELETE CASCADE)";
+        public override SqliteCommand GetCreateTableCommand() {
+            var command = _connection.CreateCommand();
+            command.CommandText = "CREATE TABLE IF NOT EXISTS " + TableName
+                + "  ( Id INTEGER NOT NULL CONSTRAINT PK_Nodes PRIMARY KEY AUTOINCREMENT, "
+                + "ProgramId INTEGER NOT NULL, "
+                + "Type INTEGER NOT NULL, "
+                + "Command INTEGER NOT NULL, "
+                + "X INTEGER NOT NULL, "
+                + "Y INTEGER NOT NULL, "
+                + "CONSTRAINT FK_Nodes_Programs_ProgramId FOREIGN KEY(ProgramId) REFERENCES Programs(Id) ON DELETE CASCADE)";
+            return command;
         }
 
-        public override string GetDeleteCommandSuffix(Node node) {
-            return " WHERE Id = " + node.Id + ";";
+        public override SqliteCommand GetDeleteCommand(Node node) {
+            var command = _connection.CreateCommand();
+            command.CommandText = "DELETE FROM " + TableName + " WHERE Id = @id;";
+            command.Parameters.AddWithValue("@id", node.Id);
+            command.Prepare();
+            return command;
         }
 
-        public override string GetInsertCommandSuffix(Node node) {
-            return " (ProgramId, Type, Command, X, Y) VALUES ("
-                + node.ProgramId + ", " + (int)node.Type + ", " + node.Command + ", " + (int)node.X + ", " + (int)node.Y + ");";
+        public override SqliteCommand GetInsertCommand(Node node) {
+            var command = _connection.CreateCommand();
+            command.CommandText = "INSERT INTO " + TableName + " (ProgramId, Type, Command, X, Y) VALUES (@p, @t, @c, @x, @y);";
+            command.Parameters.AddWithValue("@p", node.ProgramId);
+            command.Parameters.AddWithValue("@t", (int)node.Type);
+            command.Parameters.AddWithValue("@c", node.Command);
+            command.Parameters.AddWithValue("@x", (int)node.X);
+            command.Parameters.AddWithValue("@y", (int)node.Y);
+            command.Prepare();
+            return command;
         }
 
-        public override string GetUpdateCommandSuffix(Node node) {
-            return " SET ProgramId = " + node.ProgramId
-                + ", Type = " + (int)node.Type
-                + ", Command = " + node.Command
-                + ", X = " + (int)node.X
-                + ", Y = " + (int)node.Y
-                + " WHERE Id = " + node.Id + ";";
+        public override SqliteCommand GetUpdateCommand(Node node) {
+            var command = _connection.CreateCommand();
+            command.CommandText = "UPDATE " + TableName + " SET ProgramId=@p, Type=@t, Command=@c, X=@x, Y=@y WHERE Id=@id;";
+            command.Parameters.AddWithValue("@p", node.ProgramId);
+            command.Parameters.AddWithValue("@t", (int)node.Type);
+            command.Parameters.AddWithValue("@c", node.Command);
+            command.Parameters.AddWithValue("@x", (int)node.X);
+            command.Parameters.AddWithValue("@y", (int)node.Y);
+            command.Parameters.AddWithValue("@id", node.Id);
+            command.Prepare();
+            return command;
         }
 
         public override Node GetFromReader(IDataRecord data) {

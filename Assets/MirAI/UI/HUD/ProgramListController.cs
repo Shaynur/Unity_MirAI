@@ -81,7 +81,7 @@ namespace Assets.MirAI.UI.HUD {
 
         public void DeleteCurrentProgram() {
             if (_currentItem != null) {
-                _model.RemoveProgram(_editorController.CurrentProgram.Id);
+                _model.RemoveProgram(_editorController.CurrentProgram);
             }
         }
 

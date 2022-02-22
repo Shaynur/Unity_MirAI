@@ -8,25 +8,19 @@ namespace Assets.MirAI.DB {
 
     public abstract class DbTable<T> where T : IHaveId {
 
-        public string TableName { get; set; }
+        protected string TableName { get; set; }
         public abstract T GetFromReader(IDataRecord data);
-        public abstract string GetCreateTableCommandSuffix();
-        public abstract string GetInsertCommandSuffix(T t);
-        public abstract string GetDeleteCommandSuffix(T t);
-        public abstract string GetUpdateCommandSuffix(T t);
+        public abstract SqliteCommand GetCreateTableCommand();
+        public abstract SqliteCommand GetDeleteCommand(T t);
+        public abstract SqliteCommand GetInsertCommand(T t);
+        public abstract SqliteCommand GetUpdateCommand(T t);
 
-        private readonly SqliteConnection _connection;
+        protected readonly SqliteConnection _connection;
 
         public DbTable(string tableName, SqliteConnection connection) {
             TableName = tableName;
             _connection = connection;
             CreateTableIfNotExist();
-        }
-
-        public void CreateTableIfNotExist() {
-            var commandPrefix = "CREATE TABLE IF NOT EXISTS " + TableName;
-            var commandValues = GetCreateTableCommandSuffix();
-            ExecuteCommand(commandPrefix + commandValues);
         }
 
         public List<T> ToList() {
@@ -64,30 +58,6 @@ namespace Assets.MirAI.DB {
             }
         }
 
-        public void Add(T entity) {
-            var commandPrefix = "INSERT INTO " + TableName;
-            var commandValues = GetInsertCommandSuffix(entity);
-            ExecuteCommand(commandPrefix + commandValues);
-            entity.Id = GetLastId();
-        }
-
-        public void Update(T entity) {
-            var commandPrefix = "UPDATE " + TableName;
-            var commandValues = GetUpdateCommandSuffix(entity);
-            ExecuteCommand(commandPrefix + commandValues);
-        }
-
-        public void Remove(T entity) {
-            var commandPrefix = "DELETE FROM " + TableName;
-            var commandValues = GetDeleteCommandSuffix(entity);
-            ExecuteCommand(commandPrefix + commandValues);
-        }
-
-        public void Remove(int id) {
-            var commandText = "DELETE FROM " + TableName + " WHERE Id = " + id + ";";
-            ExecuteCommand(commandText);
-        }
-
         public int GetLastId() {
             try {
                 using var command = _connection.CreateCommand();
@@ -104,15 +74,40 @@ namespace Assets.MirAI.DB {
             }
         }
 
-        private void ExecuteCommand(string commandText) {
+        public void CreateTableIfNotExist() {
+            var command = GetCreateTableCommand();
+            ExecuteCommand(command);
+        }
+
+        public int Add(T entity) {
+            var command = GetInsertCommand(entity);
+            var retval = ExecuteCommand(command);
+            entity.Id = GetLastId();
+            return retval;
+        }
+
+        public int Update(T entity) {
+            var command = GetUpdateCommand(entity);
+            return ExecuteCommand(command);
+        }
+
+        public int Remove(T entity) {
+            var command = GetDeleteCommand(entity);
+            return ExecuteCommand(command);
+        }
+
+        private int ExecuteCommand(SqliteCommand command) {
+            int retval;
             try {
-                using var command = _connection.CreateCommand();
-                command.CommandText = commandText;
-                command.ExecuteNonQuery();
+                retval = command.ExecuteNonQuery();
             }
             catch (Exception ex) {
                 throw new DbMirAiException("Error execute some NonQuery command for " + typeof(T).Name + ".", ex);
             }
+            finally {
+                command.Dispose();
+            }
+            return retval;
         }
     }
 }

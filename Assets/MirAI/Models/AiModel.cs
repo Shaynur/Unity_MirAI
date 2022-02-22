@@ -54,9 +54,9 @@ namespace Assets.MirAI.Models {
             db.Programs.Update(program);
         }
 
-        public void RemoveProgram(int id) {
+        public void RemoveProgram(Program program) {
             using var db = new DbContext();
-            db.Programs.Remove(id);
+            db.Programs.Remove(program);
             LoadFromDB();
         }
 
@@ -113,7 +113,7 @@ namespace Assets.MirAI.Models {
         public void RemoveNodes(Node[] nodes) {
             using var db = new DbContext();
             foreach (var node in nodes)
-                db.Nodes.Remove(node.Id);
+                db.Nodes.Remove(node);
             db.Dispose();
             LoadFromDB();
         }

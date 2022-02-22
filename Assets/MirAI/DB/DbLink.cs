@@ -9,24 +9,38 @@ namespace Assets.MirAI.DB {
         public DbLink(string tableName, SqliteConnection connection) : base(tableName, connection) {
         }
 
-        public override string GetCreateTableCommandSuffix() {
-            return "  ( FromId INTEGER NOT NULL, "
-                    + "ToId INTEGER NOT NULL, "
-                    + "CONSTRAINT PK_Links PRIMARY KEY (FromId, ToId), "
-                    + "CONSTRAINT FK_Links_Nodes_FromId FOREIGN KEY(FromId) REFERENCES Nodes(Id) ON DELETE CASCADE, "
-                    + "CONSTRAINT FK_Links_Nodes_ToId FOREIGN KEY(ToId) REFERENCES Nodes(Id) ON DELETE CASCADE);";
+        public override SqliteCommand GetCreateTableCommand() {
+            var command = _connection.CreateCommand();
+            command.CommandText = "CREATE TABLE IF NOT EXISTS " + TableName
+                + "  ( FromId INTEGER NOT NULL, "
+                + "ToId INTEGER NOT NULL, "
+                + "CONSTRAINT PK_Links PRIMARY KEY (FromId, ToId), "
+                + "CONSTRAINT FK_Links_Nodes_FromId FOREIGN KEY(FromId) REFERENCES Nodes(Id) ON DELETE CASCADE, "
+                + "CONSTRAINT FK_Links_Nodes_ToId FOREIGN KEY(ToId) REFERENCES Nodes(Id) ON DELETE CASCADE);";
+            return command;
         }
 
-        public override string GetDeleteCommandSuffix(Link link) {
-            return " WHERE FromId = " + link.FromId + " AND ToId = " + link.ToId + ";";
+        public override SqliteCommand GetDeleteCommand(Link link) {
+            var command = _connection.CreateCommand();
+            command.CommandText = "DELETE FROM " + TableName + " WHERE Id = @id;";
+            command.Parameters.AddWithValue("@id", link.Id);
+            command.Prepare();
+            return command;
         }
 
-        public override string GetInsertCommandSuffix(Link link) {
-            return " (FromId, ToId) VALUES (" + link.FromId + ", " + link.ToId + ");";
+        public override SqliteCommand GetInsertCommand(Link link) {
+            var command = _connection.CreateCommand();
+            command.CommandText = "INSERT INTO " + TableName + " (FromId, ToId) VALUES (@from, @to);";
+            command.Parameters.AddWithValue("@from", (int)link.FromId);
+            command.Parameters.AddWithValue("@to", (int)link.ToId);
+            command.Prepare();
+            return command;
         }
 
-        public override string GetUpdateCommandSuffix(Link link) {
-            return ";";
+        public override SqliteCommand GetUpdateCommand(Link link) {
+            var command = _connection.CreateCommand();
+            command.CommandText = "UPDATE " + TableName + ";";
+            return command;
         }
 
         public override Link GetFromReader(IDataRecord data) {

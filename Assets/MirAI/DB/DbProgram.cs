@@ -9,20 +9,36 @@ namespace Assets.MirAI.DB {
         public DbProgram(string tableName, SqliteConnection connection) : base(tableName, connection) {
         }
 
-        public override string GetCreateTableCommandSuffix() {
-            return " ( Id INTEGER NOT NULL CONSTRAINT PK_Programs PRIMARY KEY AUTOINCREMENT, Name VARCHAR(30));";
+        public override SqliteCommand GetCreateTableCommand() {
+            var command = _connection.CreateCommand();
+            command.CommandText = "CREATE TABLE IF NOT EXISTS " + TableName
+                + " ( Id INTEGER NOT NULL CONSTRAINT PK_Programs PRIMARY KEY AUTOINCREMENT, Name VARCHAR(30));";
+            return command;
         }
 
-        public override string GetDeleteCommandSuffix(Program program) {
-            return " WHERE Id = " + program.Id + ";";
+        public override SqliteCommand GetDeleteCommand(Program program) {
+            var command = _connection.CreateCommand();
+            command.CommandText = "DELETE FROM " + TableName + " WHERE Id = @id;";
+            command.Parameters.AddWithValue("@id", program.Id);
+            command.Prepare();
+            return command;
         }
 
-        public override string GetInsertCommandSuffix(Program program) {
-            return " (Name) VALUES ('" + program.Name + "');";
+        public override SqliteCommand GetInsertCommand(Program program) {
+            var command = _connection.CreateCommand();
+            command.CommandText = "INSERT INTO " + TableName + " (Name) VALUES (@name);";
+            command.Parameters.AddWithValue("@name", program.Name);
+            command.Prepare();
+            return command;
         }
 
-        public override string GetUpdateCommandSuffix(Program program) {
-            return " SET Name = '" + program.Name + "' WHERE Id = " + program.Id + ";";
+        public override SqliteCommand GetUpdateCommand(Program program) {
+            var command = _connection.CreateCommand();
+            command.CommandText = "UPDATE " + TableName + " SET Name=@name WHERE Id=@id;";
+            command.Parameters.AddWithValue("@name", program.Name);
+            command.Parameters.AddWithValue("@id", program.Id);
+            command.Prepare();
+            return command;
         }
 
         public override Program GetFromReader(IDataRecord data) {
