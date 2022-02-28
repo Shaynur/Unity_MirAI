@@ -22,8 +22,9 @@ namespace Assets.MirAI.DB {
 
         public override SqliteCommand GetDeleteCommand(Link link) {
             var command = _connection.CreateCommand();
-            command.CommandText = "DELETE FROM " + TableName + " WHERE Id = @id;";
-            command.Parameters.AddWithValue("@id", link.Id);
+            command.CommandText = "DELETE FROM " + TableName + " WHERE FromId = @from AND ToId = @to;";
+            command.Parameters.AddWithValue("@from", (int)link.FromId);
+            command.Parameters.AddWithValue("@to", (int)link.ToId);
             command.Prepare();
             return command;
         }

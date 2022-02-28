@@ -89,6 +89,13 @@ namespace Assets.MirAI.Models {
             }
         }
 
+        public void AddNodes(Node[] nodes) {
+            using var db = new DbContext();
+            foreach (var node in nodes)
+                AddNode(node, db);
+            //LoadFromDB();
+        }
+
         private Node AddNode(Node node, DbContext db) {
             db.Nodes.Add(node);
             Nodes.Add(node);
@@ -132,6 +139,12 @@ namespace Assets.MirAI.Models {
             using var db = new DbContext();
             AddLink(link, db);
             return true;
+        }
+
+        public void AddLinks(Link[] links) {
+            using var db = new DbContext();
+            foreach(var link in links)
+                AddLink(link, db);
         }
 
         private void AddNewLink(Node parentNode, Node childNode, DbContext db) {

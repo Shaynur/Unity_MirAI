@@ -42,7 +42,7 @@ namespace Assets.MirAI.UI.HUD {
                 _editorController.DeleteNodes();
             else {
                 if (_editorController.CurrentProgram == null) return;
-                var menu = WindowUtils.CreateWindow("DeleteProgramMenu", "HUD");
+                var menu = WindowUtils.CreateWindow("UI/DeleteProgramMenu", "HUD");
                 var deleteController = menu.GetComponent<MenuController>();
                 var listController = _programList.GetComponentInChildren<ProgramListController>();
                 deleteController.OnOk.Subscribe(listController.DeleteCurrentProgram);
@@ -54,6 +54,22 @@ namespace Assets.MirAI.UI.HUD {
                 ShowEditNodeMenu();
             else
                 ShowEditProgramNameMenu();
+        }
+
+        public void OnCopyButton() {
+            if (_progListSH.IsHidden)
+                Clipboard.CopyFrom(_editorController);
+            else {
+                // on press Copy button when Proglist is open
+            }
+        }
+
+        public void OnPasteButton() {
+            if (_progListSH.IsHidden)
+                Clipboard.PasteTo(_editorController);
+            else {
+                // on press Paste button when Proglist is open
+            }
         }
 
         private void ShowEditNodeMenu() {
@@ -69,7 +85,7 @@ namespace Assets.MirAI.UI.HUD {
 
         private void ShowEditProgramNameMenu() {
             if (_editorController.CurrentProgram == null) return;
-            var menu = WindowUtils.CreateWindow("EditProgramName", "HUD");
+            var menu = WindowUtils.CreateWindow("UI/EditProgramName", "HUD");
             var controller = menu.GetComponent<EditProgramNameMenu>();
             var listController = _programList.GetComponentInChildren<ProgramListController>();
             controller.SetEditProgram(_editorController.CurrentProgram);
@@ -78,7 +94,7 @@ namespace Assets.MirAI.UI.HUD {
         }
 
         public void ShowNewProgramMenu() {
-            WindowUtils.CreateWindow("EditProgramName", "HUD");
+            WindowUtils.CreateWindow("UI/EditProgramName", "HUD");
         }
 
         public void SelectionModeToggle() {

@@ -37,7 +37,7 @@ namespace Assets.MirAI.UI.AiEditor {
         }
 
         public static void UpdateNodeDb() {
-            CopyNode(_originalNode,Node);
+            _originalNode = Node.GetCopy();
             AiModel.Instance.UpdateNode(_originalNode);
             _originalNode.Widget.UpdateView();
         }
@@ -64,8 +64,7 @@ namespace Assets.MirAI.UI.AiEditor {
 
         public static void Edit(Node node) {
             _originalNode = node;
-            Node = new Node();
-            CopyNode(Node, _originalNode);
+            Node = _originalNode.GetCopy();
             switch (node.Type) {
                 case NodeType.Action:
                     EditAction();
@@ -81,15 +80,6 @@ namespace Assets.MirAI.UI.AiEditor {
             }
         }
 
-        private static void CopyNode(Node nodeTo, Node nodeFrom) {
-            nodeTo.Id = nodeFrom.Id;
-            nodeTo.ProgramId = nodeFrom.ProgramId;
-            nodeTo.Type = nodeFrom.Type;
-            nodeTo.Command = nodeFrom.Command;
-            nodeTo.X = nodeFrom.X;
-            nodeTo.Y = nodeFrom.Y;
-        }
-
         private static void EditAction() {
             throw new NotImplementedException(); //TODO EditAction()
         }
@@ -99,14 +89,14 @@ namespace Assets.MirAI.UI.AiEditor {
         }
 
         private static void EditSubAi() {
-            var menu = WindowUtils.CreateWindow("SelectSubAi", "HUD");
+            var menu = WindowUtils.CreateWindow("UI/SelectSubAi", "HUD");
             var controller = menu.GetComponent<SelectSubAiMenu>();
             controller.OnCancel.Subscribe(ClearTemplates);
             controller.OnOk.Subscribe(UpdateNodeDb);
         }
 
         public static void CreateSelectNodeWindow() {
-            var menu = WindowUtils.CreateWindow("AddNodeMenu", "HUD");
+            var menu = WindowUtils.CreateWindow("UI/AddNodeMenu", "HUD");
             var addMenuController = menu.GetComponent<AddNodeMenuController>();
             addMenuController.OnCancel.Subscribe(ClearTemplates);
             addMenuController.OnOk.Subscribe(SaveNewLinkAndNodeToDb);

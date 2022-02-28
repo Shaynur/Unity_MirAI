@@ -10,7 +10,6 @@ namespace Assets.MirAI.UI {
     [RequireComponent(typeof(Canvas))]
     public class CanvasCameraController : MonoBehaviour, IBeginDragHandler, IDragHandler, IPointerDownHandler, IPointerUpHandler {
 
-        //[SerializeField] private Camera _camera;
         [SerializeField] private UnityEvent _onClick;
         [Header("Selection tool")]
         [SerializeField] private RectTransform _selection;
@@ -25,9 +24,6 @@ namespace Assets.MirAI.UI {
         private bool _isDragging;
         private bool _selectionMode = false;
         private Camera _camera;
-
-        private void Awake() {
-        }
 
         private void Start() {
             _camera = GetComponent<Canvas>().worldCamera;
@@ -99,7 +95,7 @@ namespace Assets.MirAI.UI {
                 _camera.transform.position = new Vector3(cameraRect.center.x, cameraRect.center.y, _camera.transform.position.z);
         }
 
-        private Rect GetCameraRect() {
+        public Rect GetCameraRect() {
             var height = 2 * _camera.orthographicSize;
             var width = height * _camera.aspect;
             var left = _camera.transform.position.x - width / 2;

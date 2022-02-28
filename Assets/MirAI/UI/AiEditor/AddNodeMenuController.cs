@@ -15,7 +15,7 @@ namespace Assets.MirAI.UI.AiEditor {
                 EditNode.Node.Type = type;
                 switch (type) {
                     case NodeType.SubAI:
-                        var menu = WindowUtils.CreateWindow("SelectSubAi", "HUD");
+                        var menu = WindowUtils.CreateWindow("UI/SelectSubAi", "HUD");
                         var controller = menu.GetComponent<SelectSubAiMenu>();
                         controller.OnCancel.Subscribe(OnCancelPressed);
                         controller.OnOk.Subscribe(OnOkPressed);

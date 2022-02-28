@@ -16,13 +16,24 @@ namespace Assets.MirAI.Models {
         public NodeWidget Widget { get; set; }
         public bool Viewed { get; set; }
 
-        public virtual void AddChild(Link link, Node node) {
+        public void AddChild(Link link, Node node) {
             Childs.Add(new LinkedChild { Link = link, Node = node });
         }
 
-        public virtual void RemoveChild(Node node) {
+        public void RemoveChild(Node node) {
             var lc = Childs.Find(x => x.Node == node);
             Childs.Remove(lc);
+        }
+
+        public Node GetCopy() {
+            Node node = new Node();
+            node.Id = this.Id;
+            node.ProgramId = this.ProgramId;
+            node.Type = this.Type;
+            node.Command = this.Command;
+            node.X = this.X;
+            node.Y = this.Y;
+            return node;
         }
 
         public override string ToString() {

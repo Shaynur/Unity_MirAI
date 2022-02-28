@@ -86,6 +86,7 @@ GameObject:
   - component: {fileID: 1152655085775642317}
   - component: {fileID: 1152655085775642314}
   - component: {fileID: 2303787526114594596}
+  - component: {fileID: 6641398631383485807}
   m_Layer: 5
   m_Name: AddNodeMenu
   m_TagString: Untagged
@@ -154,6 +155,25 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!95 &6641398631383485807
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1152655085775642316}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a03ab3e9b2ffbfa49ad461005fb61e33, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1152655086983274558
 GameObject:
   m_ObjectHideFlags: 0

@@ -364,6 +364,7 @@ GameObject:
   - component: {fileID: 5509555453145135001}
   - component: {fileID: 6661492641377887856}
   - component: {fileID: 8773354408350427428}
+  - component: {fileID: 1545536737083241669}
   m_Layer: 5
   m_Name: DeleteProgramMenu
   m_TagString: Untagged
@@ -432,6 +433,25 @@ MonoBehaviour:
   OnCancel:
     m_PersistentCalls:
       m_Calls: []
+--- !u!95 &1545536737083241669
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5509555453145135000}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a03ab3e9b2ffbfa49ad461005fb61e33, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &6705298727678007798
 GameObject:
   m_ObjectHideFlags: 0

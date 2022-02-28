@@ -11,10 +11,10 @@ namespace Assets.MirAI.UI.Widgets {
         [SerializeField] Text _idText;
         [SerializeField] Text _positionText;
 
-        public EventNodeMove OnMove;// = new EventNodeMove();
-        public EventWithNode OnEndMove;// = new EventWithNode();
-        public EventWithNode OnSelect;// = new EventWithNode();
-        public EventWithNode OnSubAi;// = new EventWithNode();
+        public EventNodeMove OnMove;
+        public EventWithNode OnEndMove;
+        public EventWithNode OnSelect;
+        public EventWithNode OnSubAi;
         public Node Node;
         [HideInInspector]
         public SelectorController selector;
@@ -86,8 +86,8 @@ namespace Assets.MirAI.UI.Widgets {
 
         public void SwitchSelector() {
             selector.Toggle();
-            if (selector.IsActiv)
-                OnSelect?.Invoke(Node);
+            //if (selector.IsActiv)
+            OnSelect?.Invoke(Node);
         }
 
         public void OnPressSubAi() {

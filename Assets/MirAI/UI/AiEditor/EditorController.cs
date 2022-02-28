@@ -17,7 +17,6 @@ namespace Assets.MirAI.UI.AiEditor {
         public readonly CompositeDisposable _trash = new CompositeDisposable();
         private CanvasCameraController _camController;
         private Rect _viewPort = new Rect();
-        //private readonly Stack<Program> _subAiStack = new Stack<Program>();
         private readonly Stack<int> _subAiStack = new Stack<int>();
         private AiModel _model;
 
@@ -39,13 +38,16 @@ namespace Assets.MirAI.UI.AiEditor {
             AiModelLoaded();
         }
 
+        public Vector2 GetScreenCenter() {
+            return _camController.GetCameraRect().center;
+        }
+
         public void AiModelLoaded() {
             if (_model.Programs != null && _model.Programs.Count > 0) {
                 if (_currentProgram != null)
                     _currentProgram = _model.Programs.Find(x => x.Id == _currentProgram.Id);
                 if (_currentProgram == null) {
                     _currentProgram = _model.Programs.OrderBy(x => x.Name).ElementAt(0);
-                    //ClearSubAiStack();
                 }
             }
             else _currentProgram = null;
@@ -163,7 +165,7 @@ namespace Assets.MirAI.UI.AiEditor {
             return selectedNodes;
         }
 
-        public void UpdateSelectors(Node excludingNode) {
+        public void UnselectAll(Node excludingNode) {
             if (_currentProgram == null) return;
             var program = _currentProgram;
             foreach (var node in program.Nodes)
@@ -172,7 +174,7 @@ namespace Assets.MirAI.UI.AiEditor {
         }
 
         public void UnselectAll() {
-            UpdateSelectors(null);
+            UnselectAll(null);
         }
 
         public void ToggleSelectionMode() {
