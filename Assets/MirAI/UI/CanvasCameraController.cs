@@ -54,8 +54,8 @@ namespace Assets.MirAI.UI {
 
         public void ChangeCameraSize(Vector2 wheelVector) {
             if (wheelVector.y == 0) return;
-            var _scaleWhellStep = wheelVector.y > 0 ? 0.5f : 2f;
-            var newSize = _camera.orthographicSize * _scaleWhellStep;
+            var _scaleFactor = wheelVector.y > 0 ? 0.75f : 1.33f;
+            var newSize = _camera.orthographicSize * _scaleFactor;
             newSize = Mathf.Clamp(newSize, 100, _canvasRectTransform.rect.height / 2);
             _newCameraSize = newSize;
         }

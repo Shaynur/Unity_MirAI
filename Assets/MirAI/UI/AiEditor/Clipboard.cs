@@ -14,7 +14,7 @@ namespace Assets.MirAI.UI.AiEditor {
         }
 
         public static void PasteTo(EditorController editor) {
-            if (Nodes == null) return;
+            if (Nodes == null || Nodes.Count == 0) return;
             PasteNodes(editor);
             PasteLinks();
             AiModel.Instance.LoadFromDB(); // ???
