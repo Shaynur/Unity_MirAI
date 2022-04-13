@@ -24,9 +24,8 @@ namespace Assets.MirAI.Models {
         private object GetExistSession() {
             var sessions = FindObjectsOfType<GameSession>();
             foreach (var gameSession in sessions) {
-                if (gameSession != this) {
+                if (gameSession != this)
                     return gameSession;
-                }
             }
             return null;
         }

@@ -11,5 +11,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/AiEditor.unity
     guid: 71b6805aabbb80f4a836c99e9edc354f
+  - enabled: 1
+    path: Assets/Scenes/Simulation.unity
+    guid: 6866f067c48b0984591011c8c0b33f79
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 5ff57b916b7261b4fae0b8aef97c9f25, type: 2}
