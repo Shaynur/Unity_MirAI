@@ -45,6 +45,12 @@ TagManager:
   - name: Editor
     uniqueID: 320406897
     locked: 0
+  - name: TileMap
+    uniqueID: 3213002727
+    locked: 0
+  - name: Units
+    uniqueID: 3748319569
+    locked: 0
   - name: UI
     uniqueID: 3589010729
     locked: 0

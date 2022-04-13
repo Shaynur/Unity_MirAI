@@ -5,7 +5,6 @@ namespace Assets.MirAI.Models {
     public class GameSession : MonoBehaviour {
 
         public static GameSession Instance { get; private set; }
-        //public AiModel AiModel { get; private set; }
 
         private void Awake() {
             var existSession = GetExistSession();
@@ -20,7 +19,6 @@ namespace Assets.MirAI.Models {
         }
 
         private void InitModels() {
-            //AiModel = new AiModel();
         }
 
         private object GetExistSession() {

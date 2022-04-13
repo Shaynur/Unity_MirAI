@@ -1252,7 +1252,7 @@ GameObject:
   m_Component:
   - component: {fileID: 520713209}
   m_Layer: 6
-  m_Name: EditorCanvas_Links
+  m_Name: Links_Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2024,7 +2024,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1525032176}
   m_Layer: 6
-  m_Name: EditorCanvas_Nodes
+  m_Name: Nodes_Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -14,8 +14,8 @@ namespace Assets.MirAI.UI.AiEditor {
 
         public static EditorPartsFactory I => _instance == null ? Load() : _instance;
         private static EditorPartsFactory _instance;
-        private const string schemeNodesContainer = "EditorCanvas_Nodes";
-        private const string schemeLinksContainer = "EditorCanvas_Links";
+        private const string schemeNodesContainer = "Nodes_Container";
+        private const string schemeLinksContainer = "Links_Container";
 
         private static EditorPartsFactory Load() {
             return _instance = Resources.Load<EditorPartsFactory>("EditorPartsFactory");
