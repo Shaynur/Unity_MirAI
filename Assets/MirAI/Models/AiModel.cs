@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Assets.MirAI.DB;
+using Assets.MirAI.Simulation;
 using UnityEngine.Events;
 
 namespace Assets.MirAI.Models {
@@ -10,6 +11,7 @@ namespace Assets.MirAI.Models {
         public List<Program> Programs { get; set; }
         public List<Node> Nodes { get; set; }
         public List<Link> Links { get; set; }
+        public List<Unit> Units { get; set; }
 
         public UnityEvent OnLoaded = new UnityEvent();
 
@@ -29,6 +31,7 @@ namespace Assets.MirAI.Models {
             Programs = db.Programs.ToList();
             Nodes = db.Nodes.ToList();
             Links = db.Links.ToList();
+            Units = db.Units.ToList();
             BuildModelFromDbData();
         }
 
@@ -96,10 +99,9 @@ namespace Assets.MirAI.Models {
             //LoadFromDB();
         }
 
-        private Node AddNode(Node node, DbContext db) {
+        private void AddNode(Node node, DbContext db) {
             db.Nodes.Add(node);
             Nodes.Add(node);
-            return node;
         }
 
         public void UpdateNode(Node node) {
@@ -143,7 +145,7 @@ namespace Assets.MirAI.Models {
 
         public void AddLinks(Link[] links) {
             using var db = new DbContext();
-            foreach(var link in links)
+            foreach (var link in links)
                 AddLink(link, db);
         }
 
@@ -166,6 +168,14 @@ namespace Assets.MirAI.Models {
         private void BuildModelFromDbData() {
             CreateNodesLinks();
             CreateProgramsNodeLists();
+            SortProgramNodesByAngle();
+            //TO DO Debug only?
+            //ProgramManager.CheckAllProgramsLenght();
+        }
+
+        private void SortProgramNodesByAngle() {
+            foreach (var program in Programs)
+                program.SortNodesByAngle();
         }
 
         private void CreateProgramsNodeLists() {

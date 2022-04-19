@@ -1,4 +1,7 @@
 ﻿using System.Collections;
+using Assets.MirAI.Models;
+using Assets.MirAI.Utils;
+using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
 
 namespace Assets.MirAI.Simulation {
@@ -6,13 +9,33 @@ namespace Assets.MirAI.Simulation {
     public class SimManager : MonoBehaviour {
 
         [SerializeField][Range(0.1f, 1f)] private float _delay = 1f;
-        [SerializeField] private UnitController _controller;
+        [SerializeField][Range(1f, 20f)] private float _stepLenght = 20f;
+        [SerializeField] private GameObject _unitPrefab;
 
+        private readonly CompositeDisposable _trash = new CompositeDisposable();
+        private AiModel _model;
         private bool _isActive = false;
 
+        private void Start() {
+            _model = AiModel.Instance;
+            _trash.Retain(_model.OnLoaded.Subscribe(RedrawUnits));
+        }
+
+        private void RedrawUnits() {
+            foreach (var unit in _model.Units) {
+                var position = new Vector3(unit.X, unit.Y, 0);
+                var item = GameObjectSpawner.Spawn(_unitPrefab, position, "Units_Container");
+                var unitController = item.GetComponent<UnitController>();
+                unit.Controller = unitController;
+            }
+        }
+
         public void Switch() {
-            if (_isActive == false)
+            if (_isActive == false) {
+                ProgramManager.CheckAllProgramsLenght();
+                RedrawUnits();
                 StartTimer();
+            }
             else
                 StopTimer();
         }
@@ -31,12 +54,19 @@ namespace Assets.MirAI.Simulation {
             while (_isActive) {
                 yield return new WaitForSeconds(_delay);
                 // do some work here
-                DoSomeWork();
+                Tick();
             }
         }
 
-        private void DoSomeWork() {
-            _controller.RandomMoveUnit();
+        private void Tick() {
+            foreach (var unit in _model.Units) {
+                CommandHandler.Handle(unit);
+                unit.Controller.RandomMoveUnit(_stepLenght);
+            }
+        }
+
+        private void OnDestroy() {
+            _trash.Dispose();
         }
     }
 }

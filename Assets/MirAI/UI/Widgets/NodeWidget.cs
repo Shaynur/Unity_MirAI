@@ -48,8 +48,8 @@ namespace Assets.MirAI.UI.Widgets {
                     UpdateSubAiView();
                     return;
             }
-            _idText.text = "Id = " + Node.Id;
-            _positionText.text = "(x,y) = " + Node.X + ", " + Node.Y;
+            //_idText.text = "Id = " + Node.Id;
+            //_positionText.text = "(x,y) = " + Node.X + ", " + Node.Y;
         }
 
         public void UpdateRootView() {
@@ -72,7 +72,7 @@ namespace Assets.MirAI.UI.Widgets {
         private void WriteNewPosition() {
             Node.X = _transform.position.x;
             Node.Y = _transform.position.y;
-            UpdateView();
+            //UpdateView();
         }
 
         public void ChangePosition(Vector3 offset) {

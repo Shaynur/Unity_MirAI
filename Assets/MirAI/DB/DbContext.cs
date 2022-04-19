@@ -10,6 +10,7 @@ namespace Assets.MirAI.DB {
         public DbProgram Programs { get; set; }
         public DbNode Nodes { get; set; }
         public DbLink Links { get; set; }
+        public DbUnit Units { get; set; }
 
         private static string _connectionString = GetDatabaseConnectionString("MirAI.db");
         private SqliteConnection _connection;
@@ -32,6 +33,7 @@ namespace Assets.MirAI.DB {
             Programs = new DbProgram("Programs", _connection);
             Nodes = new DbNode("Nodes", _connection);
             Links = new DbLink("Links", _connection);
+            Units = new DbUnit("Units", _connection);
         }
 
         private static string GetDatabaseConnectionString(string dbFileName) {
