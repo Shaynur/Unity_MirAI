@@ -32,9 +32,12 @@ namespace Assets.MirAI.Simulation {
 
         public void Switch() {
             if (_isActive == false) {
-                ProgramManager.CheckAllProgramsLenght();
                 RedrawUnits();
-                StartTimer();
+                if (ProgramManager.CheckAllProgramsLenght())
+                    StartTimer();
+                else
+                    //TODO если не пройдена проверка на длинну програм
+                    Debug.Log("Program Lenght is to much");
             }
             else
                 StopTimer();

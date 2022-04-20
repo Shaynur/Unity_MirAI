@@ -29,7 +29,7 @@ namespace Assets.MirAI.UI.AiEditor {
             }
         }
         private Program _currentProgram;
-        public UnityEvent OnCurrentChanged = new UnityEvent();
+        public UnityEvent OnCurrentChanged { get; set; } = new UnityEvent();
 
         private void Start() {
             _model = AiModel.Instance;

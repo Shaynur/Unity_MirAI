@@ -13,7 +13,7 @@ namespace Assets.MirAI.Models {
         public List<Link> Links { get; set; }
         public List<Unit> Units { get; set; }
 
-        public UnityEvent OnLoaded = new UnityEvent();
+        public UnityEvent OnLoaded { get; set; } = new UnityEvent();
 
         private static readonly AiModel _instance = new AiModel();
         public static AiModel Instance => _instance;
@@ -96,7 +96,7 @@ namespace Assets.MirAI.Models {
             using var db = new DbContext();
             foreach (var node in nodes)
                 AddNode(node, db);
-            //LoadFromDB();
+            LoadFromDB();
         }
 
         private void AddNode(Node node, DbContext db) {
@@ -107,6 +107,7 @@ namespace Assets.MirAI.Models {
         public void UpdateNode(Node node) {
             using var db = new DbContext();
             UpdateNode(node, db);
+            LoadFromDB();
         }
 
         public void UpdateNodes(Node[] nodes) {
@@ -169,8 +170,6 @@ namespace Assets.MirAI.Models {
             CreateNodesLinks();
             CreateProgramsNodeLists();
             SortProgramNodesByAngle();
-            //TO DO Debug only?
-            //ProgramManager.CheckAllProgramsLenght();
         }
 
         private void SortProgramNodesByAngle() {

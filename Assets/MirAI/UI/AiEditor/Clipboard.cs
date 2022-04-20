@@ -17,7 +17,6 @@ namespace Assets.MirAI.UI.AiEditor {
             if (Nodes == null || Nodes.Count == 0) return;
             PasteNodes(editor);
             PasteLinks();
-            AiModel.Instance.LoadFromDB(); // ???
         }
 
         private static void PasteLinks() {

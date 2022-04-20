@@ -81,7 +81,10 @@ namespace Assets.MirAI.UI.AiEditor {
         }
 
         private static void EditAction() {
-            throw new NotImplementedException(); //TODO EditAction()
+            var menu = WindowUtils.CreateWindow("UI/SelectAction", "HUD");
+            var controller = menu.GetComponent<SelectActionMenu>();
+            controller.OnCancel.Subscribe(ClearTemplates);
+            controller.OnOk.Subscribe(UpdateNodeDb);
         }
 
         private static void EditCondition() {

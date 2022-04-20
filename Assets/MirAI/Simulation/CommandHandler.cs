@@ -18,6 +18,11 @@ namespace Assets.MirAI.Simulation {
             //TODO do what the command want
         }
 
+        public static bool CheckCondition(int command) {
+            //TODO check condition-node for valid
+            return true;
+        }
+
         private static Node FindCurrentUnitNode(Unit unit) {
             var prog = _model.Programs.Find(x => x.Id == unit.ProgramId);
             return ProgramManager.Run(prog);
@@ -25,7 +30,7 @@ namespace Assets.MirAI.Simulation {
     }
 }
 
-// Command list:
+// Action Command list:
 //
 //  byte0:
 //      0: None

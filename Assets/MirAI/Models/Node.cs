@@ -33,6 +33,7 @@ namespace Assets.MirAI.Models {
             node.Command = this.Command;
             node.X = this.X;
             node.Y = this.Y;
+            node.Widget = this.Widget;
             return node;
         }
 

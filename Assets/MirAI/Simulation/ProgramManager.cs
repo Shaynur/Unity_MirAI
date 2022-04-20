@@ -24,24 +24,14 @@ namespace Assets.MirAI.Simulation {
 
         public static Node Run(Program program) {
             foreach (var node in GlobalDFC(program)) {
-                if (node.Type == NodeType.Condition)
-                    node.Viewed = CheckCondition(node);
-                else if (node.Type == NodeType.Action) {
-                    if (CheckNode(node))
-                        return node;
+                if (node.Type == NodeType.Action) {
+                    return node;
+                }
+                else if (node.Type == NodeType.Condition) {
+                    node.Viewed = !CommandHandler.CheckCondition(node.Command);
                 }
             }
             return null;
-        }
-
-        private static bool CheckCondition(Node node) {
-            // TODO проверка ноды-условия на валидность
-            return true;
-        }
-
-        private static bool CheckNode(Node node) {
-            // TODO проверка ноды на валидность
-            return true;
         }
 
         private static int GetProgramLenght(Program program) {
