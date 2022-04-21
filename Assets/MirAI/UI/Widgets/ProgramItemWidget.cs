@@ -15,7 +15,7 @@ namespace Assets.MirAI.UI.Widgets {
         [SerializeField] private Color _selectColor = Color.yellow;
 
         public Program Program;
-        public ItemClickEvent ItemClicked = new ItemClickEvent();
+        public ItemClickEvent ItemClicked { get; set; } = new ItemClickEvent();
         private Button _button;
 
         private void Start() {

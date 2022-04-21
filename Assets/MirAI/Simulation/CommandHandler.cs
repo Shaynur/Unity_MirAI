@@ -13,8 +13,8 @@ namespace Assets.MirAI.Simulation {
         }
 
         private static void ExecuteCommand(int command) {
-            var p1 = command & 0xFF;
-            var p2 = (command >> 8) & 0xFF;
+            var p1 = command & 0x_00_00_00_0F;
+            var p2 = (command >> 4) & 0x_00_00_00_0F;
             //TODO do what the command want
         }
 
@@ -32,12 +32,12 @@ namespace Assets.MirAI.Simulation {
 
 // Action Command list:
 //
-//  byte0:
+//  digit 0:
 //      0: None
 //      1: Go to...
 //      2: Go from...
 //
-//  byte1:
+//  digit 1:
 //      0: None
 //      1: Enemy
 //      2: Ally

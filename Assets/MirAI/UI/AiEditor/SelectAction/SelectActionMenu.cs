@@ -1,7 +1,6 @@
-﻿using Assets.MirAI.Models;
-using Assets.MirAI.Utils.Disposables;
+﻿using Assets.MirAI.Utils.Disposables;
 
-namespace Assets.MirAI.UI.AiEditor {
+namespace Assets.MirAI.UI.AiEditor.SelectAction {
 
     public class SelectActionMenu : MenuController {
 
