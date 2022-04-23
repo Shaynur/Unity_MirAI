@@ -9,7 +9,6 @@ namespace Assets.MirAI.Simulation {
     public class SimManager : MonoBehaviour {
 
         [SerializeField][Range(0.1f, 1f)] private float _delay = 1f;
-        [SerializeField][Range(1f, 20f)] private float _stepLenght = 20f;
         [SerializeField] private GameObject _unitPrefab;
 
         private readonly CompositeDisposable _trash = new CompositeDisposable();
@@ -27,6 +26,7 @@ namespace Assets.MirAI.Simulation {
                 var item = GameObjectSpawner.Spawn(_unitPrefab, position, "Units_Container");
                 var unitController = item.GetComponent<UnitController>();
                 unit.Controller = unitController;
+                unitController.Unit = unit;
             }
         }
 
@@ -55,17 +55,15 @@ namespace Assets.MirAI.Simulation {
 
         private IEnumerator SimTimer() {
             while (_isActive) {
-                yield return new WaitForSeconds(_delay);
-                // do some work here
-                Tick();
+                foreach (var unit in _model.Units) {
+                    yield return new WaitForSeconds(_delay);
+                    Tick(unit);
+                }
             }
         }
 
-        private void Tick() {
-            foreach (var unit in _model.Units) {
-                CommandHandler.Handle(unit);
-                unit.Controller.RandomMoveUnit(_stepLenght);
-            }
+        private void Tick(Unit unit) {
+            CommandHandler.Handle(unit);
         }
 
         private void OnDestroy() {

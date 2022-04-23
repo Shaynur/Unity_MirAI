@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using Assets.MirAI.Models;
 using Mono.Data.Sqlite;
-using static UnityEditorInternal.ReorderableList;
-using static UnityEngine.UI.GridLayoutGroup;
-using UnityEngine.InputSystem;
 
 namespace Assets.MirAI.DB {
 
@@ -21,6 +17,7 @@ namespace Assets.MirAI.DB {
                 + "ProgramId INTEGER DEFAULT(0) NOT NULL, "
                 + "X INTEGER NOT NULL, "
                 + "Y INTEGER NOT NULL, "
+                + "Team INTEGER NOT NULL, "
                 + "CONSTRAINT FK_Units_Programs_ProgramId FOREIGN KEY(ProgramId) REFERENCES Programs(Id) ON DELETE SET DEFAULT)";
             return command;
         }
@@ -35,20 +32,22 @@ namespace Assets.MirAI.DB {
 
         public override SqliteCommand GetInsertCommand(Unit unit) {
             var command = _connection.CreateCommand();
-            command.CommandText = "INSERT INTO " + TableName + " (ProgramId, X, Y) VALUES (@p, @x, @y);";
+            command.CommandText = "INSERT INTO " + TableName + " (ProgramId, X, Y) VALUES (@p, @x, @y, @t);";
             command.Parameters.AddWithValue("@p", unit.ProgramId);
             command.Parameters.AddWithValue("@x", (int)unit.X);
             command.Parameters.AddWithValue("@y", (int)unit.Y);
+            command.Parameters.AddWithValue("@t", unit.Team);
             command.Prepare();
             return command;
         }
 
         public override SqliteCommand GetUpdateCommand(Unit unit) {
             var command = _connection.CreateCommand();
-            command.CommandText = "UPDATE " + TableName + " SET ProgramId=@p, X=@x, Y=@y WHERE Id=@id;";
+            command.CommandText = "UPDATE " + TableName + " SET ProgramId=@p, X=@x, Y=@y, Team=@t WHERE Id=@id;";
             command.Parameters.AddWithValue("@p", unit.ProgramId);
             command.Parameters.AddWithValue("@x", (int)unit.X);
             command.Parameters.AddWithValue("@y", (int)unit.Y);
+            command.Parameters.AddWithValue("@t", unit.Team);
             command.Parameters.AddWithValue("@id", unit.Id);
             command.Prepare();
             return command;
@@ -60,7 +59,8 @@ namespace Assets.MirAI.DB {
                     Id = data.GetInt32(0),
                     ProgramId = data.GetInt32(1),
                     X = data.GetInt32(2),
-                    Y = data.GetInt32(3)
+                    Y = data.GetInt32(3),
+                    Team = data.GetInt32(4)
                 };
                 return unit;
             }

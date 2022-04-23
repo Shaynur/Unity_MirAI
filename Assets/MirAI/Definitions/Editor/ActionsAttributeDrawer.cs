@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using Assets.MirAI.UI.AiEditor.SelectAction;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.MirAI.Definitions.Editor {
 
@@ -17,6 +19,14 @@ namespace Assets.MirAI.Definitions.Editor {
 
             index = EditorGUI.Popup(position, property.displayName, index, ids.ToArray());
             property.stringValue = ids[index];
+            
+            SelectCommandButton temp = property.serializedObject.targetObject as SelectCommandButton;
+            //temp.ActionIcon.sprite = actions[index].Icon;
+
+            var go = temp.gameObject;
+            var img = go.GetComponent<Image>();
+            img.sprite = actions[index].Icon;
+            Debug.Log(img.sprite.name);
         }
     }
 }

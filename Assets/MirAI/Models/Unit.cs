@@ -7,6 +7,7 @@ namespace Assets.MirAI.Models {
         public int ProgramId { get; set; }
         public float X { get; set; }
         public float Y { get; set; }
+        public int Team { get; set; }
         public UnitController Controller { get; set; }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Assets.MirAI.DB;
-using Assets.MirAI.Simulation;
 using UnityEngine.Events;
 
 namespace Assets.MirAI.Models {
@@ -12,7 +11,6 @@ namespace Assets.MirAI.Models {
         public List<Node> Nodes { get; set; }
         public List<Link> Links { get; set; }
         public List<Unit> Units { get; set; }
-
         public UnityEvent OnLoaded { get; set; } = new UnityEvent();
 
         private static readonly AiModel _instance = new AiModel();

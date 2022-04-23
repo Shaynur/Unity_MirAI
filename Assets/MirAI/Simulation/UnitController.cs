@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.MirAI.Models;
+using UnityEngine;
 
 namespace Assets.MirAI.Simulation {
 
@@ -7,6 +8,7 @@ namespace Assets.MirAI.Simulation {
         [SerializeField] private Sprite _enemyImg;
         [SerializeField] private Sprite _allyImg;
 
+        public Unit Unit { get; set; }
         private Rigidbody2D _rigidbody;
 
         private void Awake() {
@@ -14,22 +16,23 @@ namespace Assets.MirAI.Simulation {
         }
 
         private void Start() {
-            SetRandomTeam();
+            SetTeamSprite();
         }
 
-        public void RandomMoveUnit(float stepLenght) {
-            float dx = Random.Range(-stepLenght, stepLenght);
-            float dy = Random.Range(-stepLenght, stepLenght);
-            var newVelocity = new Vector2(dx, dy);
-            _rigidbody.velocity = newVelocity;
+        private void LateUpdate() {
+            Unit.X = _rigidbody.transform.position.x;
+            Unit.Y = _rigidbody.transform.position.y;
         }
 
-        private void SetRandomTeam() {
+        public void SetUnitVelocity(Vector2 velocity) {
+            _rigidbody.velocity = velocity;
+        }
+
+        private void SetTeamSprite() {
             var renderer = gameObject.GetComponent<SpriteRenderer>();
-            var team = Random.Range(0, 100);
-            if (team < 50)
+            if (Unit.Team == 1)
                 renderer.sprite = _enemyImg;
-            else
+            else if (Unit.Team == 2)
                 renderer.sprite = _allyImg;
         }
     }
