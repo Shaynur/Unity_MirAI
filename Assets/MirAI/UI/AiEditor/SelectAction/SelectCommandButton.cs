@@ -1,4 +1,5 @@
-﻿using Assets.MirAI.Utils;
+﻿using Assets.MirAI.Definitions;
+using Assets.MirAI.Utils;
 using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,22 +9,26 @@ namespace Assets.MirAI.UI.AiEditor.SelectAction {
     [RequireComponent(typeof(Button))]
     public class SelectCommandButton : MonoBehaviour {
 
-        [HexInt(digits = 8)][SerializeField] private int _commandMask;
-        [HexInt(digits = 8)][SerializeField] private int _command;
+        [Actions][SerializeField] private string _actionString;
+        [SerializeField] private Image _actionIcon;
 
-        public int CommandMask => _commandMask;
-        public int Command => _command;
+        public ActionsDef Action => ActionsRepository.I.Get(_actionString);
+
         public CommandBtnClickEvent CommandBtnClicked { get; set; } = new CommandBtnClickEvent();
         private Image _image;
         private Button _button;
 
-        private void Start() {
+        private void Awake() {
             _button = GetComponent<Button>();
             _image = GetComponent<Image>();
             _button.onClick.Subscribe(OnClick);
-            int c = EditNode.Node.Command & _commandMask;
-            Select(c == _command);
+
+            var action = Action;
+            int c = EditNode.Node.Command & action.CommandMask;
+            Select(c == action.Command);
+            _actionIcon.sprite = action.Icon;
         }
+
         public void OnClick() {
             CommandBtnClicked?.Invoke(this);
         }

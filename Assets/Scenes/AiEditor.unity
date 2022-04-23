@@ -538,9 +538,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _subAiUpButton: {fileID: 1966923423}
-  OnCurrentChanged:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &382314925
 GameObject:
   m_ObjectHideFlags: 0

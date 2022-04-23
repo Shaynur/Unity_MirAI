@@ -1,4 +1,5 @@
-﻿using Assets.MirAI.Utils.Disposables;
+﻿using System;
+using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
 
 namespace Assets.MirAI.UI.AiEditor.SelectAction {
@@ -19,8 +20,9 @@ namespace Assets.MirAI.UI.AiEditor.SelectAction {
             foreach (var button in _actionButtons) {
                 button.Select(clickedButton == button);
             }
-            EditNode.Node.Command &= ~clickedButton.CommandMask;
-            EditNode.Node.Command |= clickedButton.Command;
+            var action = clickedButton.Action;
+            EditNode.Node.Command &= ~action.CommandMask;
+            EditNode.Node.Command |= action.Command;
         }
 
 

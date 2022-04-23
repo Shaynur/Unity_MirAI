@@ -196,12 +196,12 @@ namespace Assets.MirAI.UI.AiEditor {
             _trash.Dispose();
         }
 
-        //TODO Debug Only
+        //TODO Debug Only (Визуализатор прохода по дереву нод программы)
         public void RunProgram() {
             if (_currentProgram == null) return;
             StartCoroutine(LighthNodes(_currentProgram));
         }
-        //TODO Debug Only
+        //TODO Debug Only (Визуализатор прохода по дереву нод программы)
         private IEnumerator LighthNodes(Program program) {
             program.SortNodesByAngle();
             foreach (var node in program.DFC()) {

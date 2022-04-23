@@ -1,4 +1,5 @@
-﻿using Assets.MirAI.Models;
+﻿using Assets.MirAI.Definitions;
+using Assets.MirAI.Models;
 using Assets.MirAI.UI.AiEditor;
 using Assets.MirAI.Utils;
 using UnityEngine;
@@ -9,6 +10,8 @@ namespace Assets.MirAI.UI.Widgets {
     public class NodeWidget : MonoBehaviour {
 
         [SerializeField] Text _idText;
+        [SerializeField] Image _icon1;
+        [SerializeField] Image _icon2;
 
         public EventNodeMove OnMove;
         public EventWithNode OnEndMove;
@@ -27,7 +30,6 @@ namespace Assets.MirAI.UI.Widgets {
 
         public void SetData(Node node) {
             Node = node;
-            UpdateView();
         }
 
         public void UpdateView() {
@@ -38,6 +40,7 @@ namespace Assets.MirAI.UI.Widgets {
                     UpdateRootView();
                     return;
                 case NodeType.Action:
+                    UpdateActionView();
                     break;
                 case NodeType.Condition:
                     break;
@@ -48,6 +51,16 @@ namespace Assets.MirAI.UI.Widgets {
                     return;
             }
             _idText.text = "Id = " + Node.Id;
+        }
+
+        private void UpdateActionView() {
+            var icons = ActionsRepository.I.GetIcons(Node.Command);
+            if (icons.Length > 0) {
+                _icon1.sprite = icons[0];
+                if (icons.Length > 1) {
+                    _icon2.sprite = icons[1];
+                }
+            }
         }
 
         public void UpdateRootView() {
@@ -70,7 +83,6 @@ namespace Assets.MirAI.UI.Widgets {
         private void WriteNewPosition() {
             Node.X = _transform.position.x;
             Node.Y = _transform.position.y;
-            UpdateView();
         }
 
         public void ChangePosition(Vector3 offset) {
@@ -84,7 +96,6 @@ namespace Assets.MirAI.UI.Widgets {
 
         public void SwitchSelector() {
             selector.Toggle();
-            //if (selector.IsActiv)
             OnSelect?.Invoke(Node);
         }
 
