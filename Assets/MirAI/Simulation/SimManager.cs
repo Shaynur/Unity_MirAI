@@ -17,10 +17,11 @@ namespace Assets.MirAI.Simulation {
 
         private void Start() {
             _model = AiModel.Instance;
-            _trash.Retain(_model.OnLoaded.Subscribe(RedrawUnits));
+            _trash.Retain(_model.OnLoaded.Subscribe(CreateUnits));
+            CreateUnits();
         }
 
-        private void RedrawUnits() {
+        private void CreateUnits() {
             foreach (var unit in _model.Units) {
                 var position = new Vector3(unit.X, unit.Y, 0);
                 var item = GameObjectSpawner.Spawn(_unitPrefab, position, "Units_Container");
@@ -32,7 +33,6 @@ namespace Assets.MirAI.Simulation {
 
         public void Switch() {
             if (_isActive == false) {
-                RedrawUnits();
                 if (ProgramManager.CheckAllProgramsLenght())
                     StartTimer();
                 else

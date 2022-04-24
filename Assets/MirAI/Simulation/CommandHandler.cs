@@ -27,7 +27,7 @@ namespace Assets.MirAI.Simulation {
                     var divider = p1 == 1 ? 1 : -1;
                     var dx = (nearest.X - currentUnit.X) * divider;
                     var dy = (nearest.Y - currentUnit.Y) * divider;
-                    var velocity = new Vector2(dx, dy).normalized * 2;
+                    var velocity = new Vector2(dx, dy).normalized;
                     currentUnit.Controller.SetUnitVelocity(velocity);
                 }
             }

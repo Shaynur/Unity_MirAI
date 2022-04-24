@@ -9,6 +9,10 @@ namespace Assets.MirAI.UI {
             SceneManager.LoadScene("AiEditor");
         }
 
+        public void OnContinue() {
+            SceneManager.LoadScene("Simulation");
+        }
+
         public void OnExit() {
 
             Application.Quit();
