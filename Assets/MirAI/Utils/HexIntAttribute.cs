@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Assets.MirAI {
+namespace Assets.MirAI.Utils {
     // Create the "HexInt" Attribute that can be applied to a property.
     // Optionally, you can specify the number of digits to "zero pad" it.
     public sealed class HexIntAttribute : PropertyAttribute {

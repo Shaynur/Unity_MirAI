@@ -1,8 +1,9 @@
 ﻿using Assets.MirAI.Models;
+using Assets.MirAI.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.MirAI.UI.AiEditor {
+namespace Assets.MirAI.AiEditor {
 
     public class EditProgramNameMenu : MenuController {
 

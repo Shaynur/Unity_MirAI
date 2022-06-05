@@ -4,7 +4,7 @@ using Assets.MirAI.Utils;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Assets.MirAI.UI.AiEditor {
+namespace Assets.MirAI.AiEditor {
 
     public class LowerConnector : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler {
 

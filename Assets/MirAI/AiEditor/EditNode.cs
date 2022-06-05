@@ -1,11 +1,9 @@
 ﻿using System;
 using Assets.MirAI.Models;
-using Assets.MirAI.UI.AiEditor.SelectAction;
 using Assets.MirAI.Utils;
-using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
 
-namespace Assets.MirAI.UI.AiEditor {
+namespace Assets.MirAI.AiEditor {
     public static class EditNode {
 
         public static Link Link { get; set; }
@@ -82,10 +80,7 @@ namespace Assets.MirAI.UI.AiEditor {
         }
 
         private static void EditAction() {
-            var menu = WindowUtils.CreateWindow("UI/SelectAction", "HUD");
-            var controller = menu.GetComponent<SelectActionMenu>();
-            controller.OnCancel.Subscribe(ClearTemplates);
-            controller.OnOk.Subscribe(UpdateNodeDb);
+            WindowUtils.CreateMenuWindow("UI/SelectAction", "HUD",UpdateNodeDb,ClearTemplates);
         }
 
         private static void EditCondition() {
@@ -93,17 +88,11 @@ namespace Assets.MirAI.UI.AiEditor {
         }
 
         private static void EditSubAi() {
-            var menu = WindowUtils.CreateWindow("UI/SelectSubAi", "HUD");
-            var controller = menu.GetComponent<SelectSubAiMenu>();
-            controller.OnCancel.Subscribe(ClearTemplates);
-            controller.OnOk.Subscribe(UpdateNodeDb);
+            WindowUtils.CreateMenuWindow("UI/SelectSubAi", "HUD",UpdateNodeDb,ClearTemplates);
         }
 
         public static void CreateSelectNodeWindow() {
-            var menu = WindowUtils.CreateWindow("UI/AddNodeMenu", "HUD");
-            var addMenuController = menu.GetComponent<AddNodeMenuController>();
-            addMenuController.OnCancel.Subscribe(ClearTemplates);
-            addMenuController.OnOk.Subscribe(SaveNewLinkAndNodeToDb);
+            WindowUtils.CreateMenuWindow("UI/AddNodeMenu", "HUD",SaveNewLinkAndNodeToDb,ClearTemplates);
         }
     }
 }

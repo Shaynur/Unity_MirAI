@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEditor;
-using Assets.MirAI;
+using Assets.MirAI.Utils;
 
 namespace Assets.Editor {
     // The following class should be placed in a script file at the path "Assets/Editor"

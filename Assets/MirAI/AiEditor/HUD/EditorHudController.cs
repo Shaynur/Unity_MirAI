@@ -1,22 +1,26 @@
 ﻿using Assets.MirAI.Models;
-using Assets.MirAI.UI.AiEditor;
+using Assets.MirAI.UI;
 using Assets.MirAI.Utils;
-using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-namespace Assets.MirAI.UI.HUD {
+namespace Assets.MirAI.AiEditor.HUD {
 
-    public class HudController : MonoBehaviour {
+    public class EditorHudController : MonoBehaviour {
 
         [SerializeField] private GameObject _clickBlocker;
         [SerializeField] private GameObject _buttonsPanel;
         [SerializeField] private GameObject _programList;
         [SerializeField] private EditorController _editorController;
 
-        private ShowHide _progListSH;
+        private ShowHideSideMunu _progListSH;
 
         private void Start() {
-            _progListSH = _programList.GetComponent<ShowHide>();
+            _progListSH = _programList.GetComponent<ShowHideSideMunu>();
+        }
+
+        public void OnBackButton() {
+            SceneManager.LoadScene("MainMenu");
         }
 
         public void ShowProgramList() {
@@ -42,10 +46,12 @@ namespace Assets.MirAI.UI.HUD {
                 _editorController.DeleteNodes();
             else {
                 if (_editorController.CurrentProgram == null) return;
-                var menu = WindowUtils.CreateWindow("UI/DeleteProgramMenu", "HUD");
-                var deleteController = menu.GetComponent<MenuController>();
                 var listController = _programList.GetComponentInChildren<ProgramListController>();
-                deleteController.OnOk.Subscribe(listController.DeleteCurrentProgram);
+                WindowUtils.CreateMenuWindow(
+                    "UI/DeleteProgramMenu",
+                    "HUD",
+                    listController.DeleteCurrentProgram,
+                    null);
             }
         }
 
@@ -60,7 +66,7 @@ namespace Assets.MirAI.UI.HUD {
             if (_progListSH.IsHidden)
                 Clipboard.CopyFrom(_editorController);
             else {
-                // on press Copy button when Proglist is open
+                // TODO on press Copy button when Proglist is open
             }
         }
 
@@ -68,7 +74,7 @@ namespace Assets.MirAI.UI.HUD {
             if (_progListSH.IsHidden)
                 Clipboard.PasteTo(_editorController);
             else {
-                // on press Paste button when Proglist is open
+                // TODO on press Paste button when Proglist is open
             }
         }
 
@@ -76,7 +82,7 @@ namespace Assets.MirAI.UI.HUD {
             var select = _editorController.GetSelectedNodes();
             if (select.Count == 1) {
                 var node = select[0];
-                if (node.Type == NodeType.Root) 
+                if (node.Type == NodeType.Root)
                     ShowEditProgramNameMenu();
                 else
                     EditNode.Edit(node);
@@ -85,16 +91,17 @@ namespace Assets.MirAI.UI.HUD {
 
         private void ShowEditProgramNameMenu() {
             if (_editorController.CurrentProgram == null) return;
-            var menu = WindowUtils.CreateWindow("UI/EditProgramName", "HUD");
-            var controller = menu.GetComponent<EditProgramNameMenu>();
             var listController = _programList.GetComponentInChildren<ProgramListController>();
+            var controller = (EditProgramNameMenu)WindowUtils.CreateMenuWindow(
+                "UI/EditProgramName",
+                "HUD",
+                listController.RedrawList,
+                _editorController.CurrentProgram.RootNode.Widget.UpdateView);
             controller.SetEditProgram(_editorController.CurrentProgram);
-            controller.OnOk.Subscribe(listController.RedrawList);
-            controller.OnOk.Subscribe(_editorController.CurrentProgram.RootNode.Widget.UpdateView);
         }
 
         public void ShowNewProgramMenu() {
-            WindowUtils.CreateWindow("UI/EditProgramName", "HUD");
+            WindowUtils.CreateMenuWindow("UI/EditProgramName", "HUD", null, null);
         }
 
         public void SelectionModeToggle() {

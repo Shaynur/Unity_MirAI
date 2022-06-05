@@ -238,7 +238,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 235791198}
   m_OnClick:
     m_PersistentCalls:
@@ -320,7 +320,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 382314928}
   m_OnClick:
     m_PersistentCalls:
@@ -478,7 +478,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 403962595}
   m_OnClick:
     m_PersistentCalls:
@@ -791,7 +791,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 458541308}
   m_OnClick:
     m_PersistentCalls:
@@ -979,7 +979,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 849710570}
   m_OnClick:
     m_PersistentCalls:
@@ -1289,7 +1289,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1347942220}
   m_OnClick:
     m_PersistentCalls:
@@ -4790,7 +4790,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1657692911}
   m_OnClick:
     m_PersistentCalls:
@@ -5884,7 +5884,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1773467283}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1832119408}
+        m_TargetAssemblyTypeName: Assets.MirAI.Simulation.HUD.SimHudController, Assembly-CSharp
+        m_MethodName: OnBackButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1773467283
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5936,6 +5948,7 @@ GameObject:
   - component: {fileID: 1832119405}
   - component: {fileID: 1832119404}
   - component: {fileID: 1832119403}
+  - component: {fileID: 1832119408}
   m_Layer: 5
   m_Name: HUD
   m_TagString: Untagged
@@ -6053,6 +6066,18 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1832119408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1832119402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb681fb7fb7154e4d82fd2927f554348, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1896166077
 GameObject:
   m_ObjectHideFlags: 0

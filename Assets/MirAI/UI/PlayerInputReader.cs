@@ -1,8 +1,7 @@
-﻿using Assets.MirAI.UI;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Assets.MirAI {
+namespace Assets.MirAI.UI {
 
     public class PlayerInputReader : MonoBehaviour {
 

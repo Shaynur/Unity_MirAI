@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Assets.MirAI.UI.AiEditor.SelectAction;
+using Assets.MirAI.AiEditor.SelectAction;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;

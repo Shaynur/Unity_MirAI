@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.MirAI.UI {
 
-    public class ShowHide : MonoBehaviour {
+    public class ShowHideSideMunu : MonoBehaviour {
 
         [SerializeField] private bool _scaleByX;
         [SerializeField] private bool _scaleByY;

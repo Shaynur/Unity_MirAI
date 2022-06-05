@@ -7,8 +7,9 @@ using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using Assets.MirAI.UI;
 
-namespace Assets.MirAI.UI.AiEditor {
+namespace Assets.MirAI.AiEditor {
 
     public class EditorController : MonoBehaviour {
 

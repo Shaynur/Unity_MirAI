@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 namespace Assets.MirAI.UI {
 
-    public class MainMenuWindow : MonoBehaviour {
+    public class MainMenuController : MonoBehaviour {
 
         public void OnAiEditor() {
             SceneManager.LoadScene("AiEditor");

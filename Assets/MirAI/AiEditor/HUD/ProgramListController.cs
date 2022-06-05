@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Assets.MirAI.Models;
-using Assets.MirAI.UI.AiEditor;
 using Assets.MirAI.UI.Widgets;
 using Assets.MirAI.Utils;
 using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
 
-namespace Assets.MirAI.UI.HUD {
+namespace Assets.MirAI.AiEditor.HUD {
 
     public class ProgramListController : MonoBehaviour {
 
@@ -17,13 +16,13 @@ namespace Assets.MirAI.UI.HUD {
 
         public readonly CompositeDisposable _trash = new CompositeDisposable();
         private AiModel _model;
-        private HudController _hudController;
+        private EditorHudController _hudController;
         private ProgramItemWidget _currentItem;
         private readonly List<ProgramItemWidget> _itemList = new List<ProgramItemWidget>();
 
         private void Start() {
             _model = AiModel.Instance;
-            _hudController = GetComponentInParent<HudController>();
+            _hudController = GetComponentInParent<EditorHudController>();
             _trash.Retain(_model.OnLoaded.Subscribe(RedrawList));
             _trash.Retain(_editorController.OnCurrentChanged.Subscribe(ChangeCurrentProgram));
             RedrawList();

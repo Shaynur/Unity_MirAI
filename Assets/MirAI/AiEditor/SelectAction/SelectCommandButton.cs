@@ -4,7 +4,7 @@ using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.MirAI.UI.AiEditor.SelectAction {
+namespace Assets.MirAI.AiEditor.SelectAction {
 
     [RequireComponent(typeof(Button))]
     public class SelectCommandButton : MonoBehaviour {

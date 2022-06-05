@@ -1,4 +1,4 @@
-﻿using Assets.MirAI.UI.AiEditor;
+﻿using Assets.MirAI.AiEditor;
 using Assets.MirAI.Utils;
 using UnityEngine;
 using UnityEngine.Events;
@@ -125,7 +125,10 @@ namespace Assets.MirAI.UI {
 
         public void OnPointerUp(PointerEventData eventData) {
             if (_selectionMode) {
-                gameObject.GetComponent<EditorController>().OnSelection(_selection.GetWorldRect());
+                var editor = gameObject.GetComponent<EditorController>();
+                if(editor != null) 
+                    editor.OnSelection(_selection.GetWorldRect());
+
                 _selection.gameObject.SetActive(false);
                 SelectionMode(false);
             }

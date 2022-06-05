@@ -4,7 +4,7 @@ using Assets.MirAI.Utils;
 using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
 
-namespace Assets.MirAI.UI.AiEditor {
+namespace Assets.MirAI.AiEditor {
 
     [CreateAssetMenu(menuName = "MirAi/EditorPartsFactory", fileName = "EditorPartsFactory")]
     public class EditorPartsFactory : ScriptableObject {

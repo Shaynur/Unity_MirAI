@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.MirAI.UI.AiEditor {
+namespace Assets.MirAI.AiEditor {
 
     public class SelectorController : MonoBehaviour {
 

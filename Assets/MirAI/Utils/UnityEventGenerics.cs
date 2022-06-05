@@ -1,6 +1,6 @@
 ﻿using System;
 using Assets.MirAI.Models;
-using Assets.MirAI.UI.AiEditor.SelectAction;
+using Assets.MirAI.AiEditor.SelectAction;
 using Assets.MirAI.UI.Widgets;
 using UnityEngine;
 using UnityEngine.Events;

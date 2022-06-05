@@ -1,11 +1,10 @@
 ﻿using System;
 using Assets.MirAI.Models;
-using Assets.MirAI.UI.AiEditor.SelectAction;
 using Assets.MirAI.Utils;
-using Assets.MirAI.Utils.Disposables;
 using UnityEngine.EventSystems;
+using Assets.MirAI.UI;
 
-namespace Assets.MirAI.UI.AiEditor {
+namespace Assets.MirAI.AiEditor {
 
     public class AddNodeMenuController : MenuController, IPointerDownHandler {
 
@@ -16,17 +15,19 @@ namespace Assets.MirAI.UI.AiEditor {
                 EditNode.Node.Type = type;
                 switch (type) {
                     case NodeType.SubAI: {
-                            var menu = WindowUtils.CreateWindow("UI/SelectSubAi", "HUD");
-                            var controller = menu.GetComponent<SelectSubAiMenu>();
-                            controller.OnCancel.Subscribe(OnCancelPressed);
-                            controller.OnOk.Subscribe(OnOkPressed);
+                            WindowUtils.CreateMenuWindow(
+                                "UI/SelectSubAi",
+                                "HUD",
+                                OnOkPressed,
+                                OnCancelPressed);
                             return;
                         }
                     case NodeType.Action: {
-                            var menu = WindowUtils.CreateWindow("UI/SelectAction", "HUD");
-                            var controller = menu.GetComponent<SelectActionMenu>();
-                            controller.OnCancel.Subscribe(OnCancelPressed);
-                            controller.OnOk.Subscribe(OnOkPressed);
+                            WindowUtils.CreateMenuWindow(
+                                "UI/SelectAction",
+                                "HUD",
+                                OnOkPressed,
+                                OnCancelPressed);
                             return;
                         }
                     default:

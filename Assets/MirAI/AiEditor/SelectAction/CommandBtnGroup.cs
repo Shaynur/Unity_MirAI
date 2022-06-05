@@ -1,8 +1,7 @@
-﻿using System;
-using Assets.MirAI.Utils.Disposables;
+﻿using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
 
-namespace Assets.MirAI.UI.AiEditor.SelectAction {
+namespace Assets.MirAI.AiEditor.SelectAction {
 
     public class CommandBtnGroup : MonoBehaviour {
 

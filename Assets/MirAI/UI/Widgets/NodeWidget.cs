@@ -1,6 +1,6 @@
 ﻿using Assets.MirAI.Definitions;
 using Assets.MirAI.Models;
-using Assets.MirAI.UI.AiEditor;
+using Assets.MirAI.AiEditor;
 using Assets.MirAI.Utils;
 using UnityEngine;
 using UnityEngine.UI;

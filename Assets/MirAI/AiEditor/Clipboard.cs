@@ -2,7 +2,7 @@
 using Assets.MirAI.Models;
 using UnityEngine;
 
-namespace Assets.MirAI.UI.AiEditor {
+namespace Assets.MirAI.AiEditor {
 
     public static class Clipboard {
 

@@ -1,11 +1,12 @@
 ﻿using System.Linq;
 using Assets.MirAI.Models;
+using Assets.MirAI.UI;
 using Assets.MirAI.UI.Widgets;
 using Assets.MirAI.Utils;
 using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
 
-namespace Assets.MirAI.UI.AiEditor {
+namespace Assets.MirAI.AiEditor {
 
     public class SelectSubAiMenu : MenuController {
 
