@@ -16,8 +16,8 @@ namespace Assets.MirAI.Simulation {
         }
 
         private static void ExecuteCommand(int command) {
-            var p1 = command & 0x_00_00_00_0F;
-            var p2 = (command >> 4) & 0x_00_00_00_0F;
+            var p1 = command & 0x0F;
+            var p2 = (command >> 4) & 0x0F;
 
             if (p1 == 1 || p1 == 2) {
                 bool any = p2 == 0;
@@ -50,7 +50,9 @@ namespace Assets.MirAI.Simulation {
         }
 
         private static float Distance(float x1, float y1, float x2, float y2) {
-            return Mathf.Sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+            var dx = x1 - x2;
+            var dy = y1 - y2;
+            return Mathf.Sqrt(dx * dx + dy * dy);
         }
 
         public static bool CheckCondition(int command) {

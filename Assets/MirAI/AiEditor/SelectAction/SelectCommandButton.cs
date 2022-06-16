@@ -21,13 +21,20 @@ namespace Assets.MirAI.AiEditor.SelectAction {
             _button = GetComponent<Button>();
             _button.onClick.Subscribe(OnClick);
 
+            SelectIfExistInAction();
+            SetButtonImage();
+        }
+
+        void SelectIfExistInAction() {
             var action = Action;
             int c = EditNode.Node.Command & action.CommandMask;
             Select(c == action.Command);
+        }
 
+        void SetButtonImage() {
             var actionIcon = GetComponent<Image>();
             if (actionIcon != null)
-                actionIcon.sprite = action.Icon;
+                actionIcon.sprite = Action.Icon;
         }
 
         public void OnClick() {

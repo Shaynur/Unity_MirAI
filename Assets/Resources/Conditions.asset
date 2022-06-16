@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95583f7f283f4c94fb01b520f33771af, type: 3}
+  m_Name: Conditions
+  m_EditorClassIdentifier: 
+  _collection:
+  - _id: AnyTeam
+    _commandMask: 3
+    _command: 0
+    _icon: {fileID: 21300000, guid: 6a5a7bc828f036b43a1e2bfa5118f174, type: 3}
+  - _id: Ally
+    _commandMask: 3
+    _command: 1
+    _icon: {fileID: 21300000, guid: 77c65dc9caa58634696d054f10d91b6f, type: 3}
+  - _id: Enemy
+    _commandMask: 3
+    _command: 2
+    _icon: {fileID: 21300000, guid: 250a071e4c98e1640bd88b1835030288, type: 3}
+  - _id: Me
+    _commandMask: 3
+    _command: 3
+    _icon: {fileID: 21300000, guid: 8bcc9366e34893f4f86e5b7317ecb4e7, type: 3}
+  - _id: Unit
+    _commandMask: 28
+    _command: 4
+    _icon: {fileID: 21300000, guid: a3e60fdb1f216c941b8cb03ef638dce8, type: 3}
+  - _id: Mine
+    _commandMask: 28
+    _command: 8
+    _icon: {fileID: 21300000, guid: 416e0af8aae613943a176c5b28ca187b, type: 3}
