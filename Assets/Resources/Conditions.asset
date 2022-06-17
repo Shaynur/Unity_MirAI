@@ -26,8 +26,8 @@ MonoBehaviour:
     _command: 2
     _icon: {fileID: 21300000, guid: 250a071e4c98e1640bd88b1835030288, type: 3}
   - _id: Me
-    _commandMask: 3
-    _command: 3
+    _commandMask: 28
+    _command: 0
     _icon: {fileID: 21300000, guid: 8bcc9366e34893f4f86e5b7317ecb4e7, type: 3}
   - _id: Unit
     _commandMask: 28
@@ -37,3 +37,87 @@ MonoBehaviour:
     _commandMask: 28
     _command: 8
     _icon: {fileID: 21300000, guid: 416e0af8aae613943a176c5b28ca187b, type: 3}
+  - _id: Resource
+    _commandMask: 28
+    _command: 12
+    _icon: {fileID: 21300000, guid: f0a42fd9191b85a48aac390b1bc4fc33, type: 3}
+  - _id: Type
+    _commandMask: 224
+    _command: 0
+    _icon: {fileID: 21300000, guid: 128998b4f7d442e48b456831b9fa263d, type: 3}
+  - _id: TypeSoldier
+    _commandMask: 458976
+    _command: 65536
+    _icon: {fileID: 21300000, guid: e34e8e26629e88a479cb5af2b7fc5bdd, type: 3}
+  - _id: TypeSupport
+    _commandMask: 458976
+    _command: 131072
+    _icon: {fileID: 21300000, guid: 90cc54a883be0d9488691ba03ab548d5, type: 3}
+  - _id: TypeWorker
+    _commandMask: 458976
+    _command: 262144
+    _icon: {fileID: 21300000, guid: 6428a76bfe518884ea20f90d8d0d2be0, type: 3}
+  - _id: HP
+    _commandMask: 224
+    _command: 32
+    _icon: {fileID: 21300000, guid: 1ce77f784bdb82448a2f1800470a054c, type: 3}
+  - _id: Distance
+    _commandMask: 224
+    _command: 64
+    _icon: {fileID: 21300000, guid: c308187ed790e1843bc09e18fbadefb2, type: 3}
+  - _id: Carry
+    _commandMask: 224
+    _command: 96
+    _icon: {fileID: 21300000, guid: 88adb7f5273aed5489a916c86118ee7c, type: 3}
+  - _id: Equal
+    _commandMask: 768
+    _command: 0
+    _icon: {fileID: 21300000, guid: 909682bafbc3f3843a585e23fc6a7025, type: 3}
+  - _id: MoreEqual
+    _commandMask: 768
+    _command: 256
+    _icon: {fileID: 21300000, guid: c532c3811169c184b8bbbab452ca3476, type: 3}
+  - _id: LessEqual
+    _commandMask: 768
+    _command: 512
+    _icon: {fileID: 21300000, guid: 209bb66435829b041867ff49f92cf7e3, type: 3}
+  - _id: NotEqual
+    _commandMask: 768
+    _command: 768
+    _icon: {fileID: 21300000, guid: 543d51332181437479ce37a3279dcaba, type: 3}
+  - _id: AnyRange
+    _commandMask: 3072
+    _command: 0
+    _icon: {fileID: 21300000, guid: e4a21458d9f644a4ea9e890913bd602e, type: 3}
+  - _id: InRange
+    _commandMask: 3072
+    _command: 1024
+    _icon: {fileID: 21300000, guid: 29578dd8b3bc2d145a39d08a3f88a121, type: 3}
+  - _id: OutRange
+    _commandMask: 3072
+    _command: 2048
+    _icon: {fileID: 21300000, guid: d4e6affd53c8a0841b8fdaee1165ce48, type: 3}
+  - _id: DoNothing
+    _commandMask: -16777216
+    _command: 0
+    _icon: {fileID: 21300000, guid: 91c3e529b0a59fa4488d34a39c84023a, type: 3}
+  - _id: GoTo
+    _commandMask: -16777216
+    _command: 16777216
+    _icon: {fileID: 21300000, guid: 730f27d750f85cd478e636d6f546937e, type: 3}
+  - _id: GoFrom
+    _commandMask: -16777216
+    _command: 33554432
+    _icon: {fileID: 21300000, guid: 0b1350aa10e2b0346893830ee7f760c2, type: 3}
+  - _id: Attack
+    _commandMask: -16777216
+    _command: 50331648
+    _icon: {fileID: 21300000, guid: 83f44e873843c5b4aaffd2709cae28b1, type: 3}
+  - _id: Get
+    _commandMask: -16777216
+    _command: 67108864
+    _icon: {fileID: 21300000, guid: 1106888c204f12545b37fddac1c4bf86, type: 3}
+  - _id: Put
+    _commandMask: -16777216
+    _command: 83886080
+    _icon: {fileID: 21300000, guid: 711d97b52204911458a537475549e0e0, type: 3}

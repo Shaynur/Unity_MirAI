@@ -80,7 +80,7 @@ namespace Assets.MirAI.AiEditor {
         }
 
         private static void EditAction() {
-            WindowUtils.CreateMenuWindow("UI/SelectAction", "HUD",UpdateNodeDb,ClearTemplates);
+            WindowUtils.CreateMenuWindow("UI/SelectAction2", "HUD",UpdateNodeDb,ClearTemplates);
         }
 
         private static void EditCondition() {

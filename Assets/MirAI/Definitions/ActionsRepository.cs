@@ -13,7 +13,7 @@ namespace Assets.MirAI.Definitions {
         private static ActionsRepository _instance;
         public static ActionsRepository I => _instance == null ? Load() : _instance;
         private static ActionsRepository Load() {
-            return _instance = Resources.Load<ActionsRepository>("Actions");
+            return _instance = Resources.Load<ActionsRepository>("Conditions");
         }
 
         public ActionsDef Get(string id) {
