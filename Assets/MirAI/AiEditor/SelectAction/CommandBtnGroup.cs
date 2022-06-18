@@ -5,6 +5,7 @@ namespace Assets.MirAI.AiEditor.SelectAction {
 
     public class CommandBtnGroup : MonoBehaviour {
 
+        [SerializeField] private SelectActionMenu _menuController;
         [SerializeField] private SelectCommandButton[] _actionButtons;
 
         public readonly CompositeDisposable _trash = new CompositeDisposable();
@@ -12,6 +13,7 @@ namespace Assets.MirAI.AiEditor.SelectAction {
         private void Start() {
             foreach (var button in _actionButtons) {
                 _trash.Retain(button.CommandBtnClicked.Subscribe(OnBtnClick));
+                _trash.Retain(button.CommandBtnClicked.Subscribe(_menuController.OnBtnClick));
             }
         }
 

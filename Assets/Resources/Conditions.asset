@@ -33,14 +33,6 @@ MonoBehaviour:
     _commandMask: 28
     _command: 4
     _icon: {fileID: 21300000, guid: a3e60fdb1f216c941b8cb03ef638dce8, type: 3}
-  - _id: Mine
-    _commandMask: 28
-    _command: 8
-    _icon: {fileID: 21300000, guid: 416e0af8aae613943a176c5b28ca187b, type: 3}
-  - _id: Resource
-    _commandMask: 28
-    _command: 12
-    _icon: {fileID: 21300000, guid: f0a42fd9191b85a48aac390b1bc4fc33, type: 3}
   - _id: Type
     _commandMask: 224
     _command: 0
@@ -53,10 +45,10 @@ MonoBehaviour:
     _commandMask: 458976
     _command: 131072
     _icon: {fileID: 21300000, guid: 90cc54a883be0d9488691ba03ab548d5, type: 3}
-  - _id: TypeWorker
+  - _id: TypeWizard
     _commandMask: 458976
     _command: 262144
-    _icon: {fileID: 21300000, guid: 6428a76bfe518884ea20f90d8d0d2be0, type: 3}
+    _icon: {fileID: 21300000, guid: 4159fb82ec44f104984b1505fa1767e4, type: 3}
   - _id: HP
     _commandMask: 224
     _command: 32
@@ -65,10 +57,6 @@ MonoBehaviour:
     _commandMask: 224
     _command: 64
     _icon: {fileID: 21300000, guid: c308187ed790e1843bc09e18fbadefb2, type: 3}
-  - _id: Carry
-    _commandMask: 224
-    _command: 96
-    _icon: {fileID: 21300000, guid: 88adb7f5273aed5489a916c86118ee7c, type: 3}
   - _id: Equal
     _commandMask: 768
     _command: 0
