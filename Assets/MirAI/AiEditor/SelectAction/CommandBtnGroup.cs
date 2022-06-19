@@ -17,6 +17,12 @@ namespace Assets.MirAI.AiEditor.SelectAction {
             }
         }
 
+        public void Redraw() {
+            foreach (var button in _actionButtons) {
+                button.SelectByActionCommand();
+            }
+        }
+
         public void OnBtnClick(SelectCommandButton clickedButton) {
             foreach (var button in _actionButtons) {
                 button.Select(clickedButton == button);

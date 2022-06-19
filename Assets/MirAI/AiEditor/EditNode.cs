@@ -84,7 +84,7 @@ namespace Assets.MirAI.AiEditor {
         }
 
         private static void EditCondition() {
-            throw new NotImplementedException(); //TODO EditCondition()
+            WindowUtils.CreateMenuWindow("UI/SelectAction2", "HUD", UpdateNodeDb, ClearTemplates);
         }
 
         private static void EditSubAi() {

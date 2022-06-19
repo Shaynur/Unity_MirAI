@@ -24,7 +24,15 @@ namespace Assets.MirAI.AiEditor {
                         }
                     case NodeType.Action: {
                             WindowUtils.CreateMenuWindow(
-                                "UI/SelectAction",
+                                "UI/SelectAction2",
+                                "HUD",
+                                OnOkPressed,
+                                OnCancelPressed);
+                            return;
+                        }
+                    case NodeType.Condition: {
+                            WindowUtils.CreateMenuWindow(
+                                "UI/SelectAction2",
                                 "HUD",
                                 OnOkPressed,
                                 OnCancelPressed);

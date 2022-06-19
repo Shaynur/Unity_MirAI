@@ -43,6 +43,7 @@ namespace Assets.MirAI.UI.Widgets {
                     UpdateActionView();
                     break;
                 case NodeType.Condition:
+                    UpdateActionView();
                     break;
                 case NodeType.Connector:
                     break;

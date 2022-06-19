@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Assets.MirAI.AiEditor;
 using Assets.MirAI.Utils;
 using UnityEngine;
 
@@ -29,11 +30,27 @@ namespace Assets.MirAI.Definitions {
 
         public Sprite[] GetIcons(int command) {
             var result = new List<Sprite>();
+            Debug.Log("=================================");
+            Debug.Log("Command = " + command.ToString("X8") + "\n");
             foreach (var action in _collection) {
-                if ((command & action.Command) == action.Command)
+                if (action.Command == (command & action.CommandMask)) {
                     result.Add(action.Icon);
+                    Debug.Log(action.Id);
+                }
             }
+            Debug.Log(result.Count);
             return result.ToArray();
+        }
+
+        public int SetAction(int command, string id) {
+            var action = Get(id);
+            command &= ~action.CommandMask;
+            return command |= action.Command;
+        }
+
+        public bool Contain(int command, string id) {
+            var action = Get(id);
+            return (command & action.CommandMask) == action.Command;
         }
 
 #if UNITY_EDITOR
