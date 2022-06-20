@@ -10,8 +10,8 @@ namespace Assets.MirAI.UI.Widgets {
     public class NodeWidget : MonoBehaviour {
 
         [SerializeField] Text _idText;
-        [SerializeField] Image _icon1;
-        [SerializeField] Image _icon2;
+        [SerializeField] Text _paramText;
+        [SerializeField] Image[] _icons = new Image[4];
 
         public EventNodeMove OnMove;
         public EventWithNode OnEndMove;
@@ -43,7 +43,7 @@ namespace Assets.MirAI.UI.Widgets {
                     UpdateActionView();
                     break;
                 case NodeType.Condition:
-                    UpdateActionView();
+                    UpdateConditionView();
                     break;
                 case NodeType.Connector:
                     break;
@@ -55,11 +55,25 @@ namespace Assets.MirAI.UI.Widgets {
         }
 
         private void UpdateActionView() {
-            var icons = ActionsRepository.I.GetIcons(Node.Command);
-            if (icons.Length > 0) {
-                _icon1.sprite = icons[0];
-                if (icons.Length > 1) {
-                    _icon2.sprite = icons[1];
+            var conditions = ActionsRepository.I.GetConditions2(Node.Command);
+            if (conditions.Length > 0) {
+                _icons[3].sprite = conditions[0].Icon;
+                if (conditions.Length > 2) {
+                    for (int i = 1; i < conditions.Length - 1; i++) {
+                        _icons[i - 1].sprite = conditions[i].Icon;
+                    }
+                }
+            }
+        }
+
+        private void UpdateConditionView() {
+            var conditions = ActionsRepository.I.GetConditions2(Node.Command);
+            if (conditions.Length > 0) {
+                _icons[3].sprite = conditions[conditions.Length - 1].Icon;
+                if (conditions.Length > 2) {
+                    for (int i = 1; i < conditions.Length - 1; i++) {
+                        _icons[i - 1].sprite = conditions[i].Icon;
+                    }
                 }
             }
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using Assets.MirAI.Definitions;
+﻿using Assets.MirAI.Definitions;
 using Assets.MirAI.UI;
 using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
@@ -14,7 +13,6 @@ namespace Assets.MirAI.AiEditor.SelectAction {
         [SerializeField] CommandBtnGroup _paramGroup;
         [SerializeField] CommandBtnGroup _typeGroup;
         [SerializeField] CommandBtnGroup _comparsionGroup;
-        [SerializeField] CommandBtnGroup _comparsion2Group;
         [SerializeField] CommandBtnGroup _distanceGroup;
         [SerializeField] CommandBtnGroup _countGroup;
         [SerializeField] CommandBtnGroup _count2Group;
@@ -119,7 +117,6 @@ namespace Assets.MirAI.AiEditor.SelectAction {
             SetGoStatus(_paramGroup.gameObject, param);
             SetGoStatus(_typeGroup.gameObject, type);
             SetGoStatus(_comparsionGroup.gameObject, comp);
-            SetGoStatus(_comparsion2Group.gameObject, comp);
             SetGoStatus(_distanceGroup.gameObject, dist);
             SetGoStatus(_countGroup.gameObject, count);
             SetGoStatus(_count2Group.gameObject, count);
