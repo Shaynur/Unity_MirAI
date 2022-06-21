@@ -30,46 +30,6 @@ namespace Assets.MirAI.Definitions {
 
         public ActionsDef[] GetConditions(int command) {
             var result = new List<ActionsDef>();
-            Debug.Log("=============BEGIN===============");
-            Debug.Log("Command = " + command.ToString("X8") + "\n");
-            foreach (var action in _collection) {
-                if (action.Command == (command & action.CommandMask)) {
-                    result.Add(action);
-                    Debug.Log(action.Id);
-                }
-            }
-            Debug.Log("Totaly " + result.Count + " actions before processing.");
-            Debug.Log("Processing...");
-            bool paramIsHealth = true;
-            for (int i = 0; i < result.Count; i++) {
-                if (result[i].Id == "Unit")
-                    result.RemoveAt(i--);
-                else if (result[i].Id == "Me")
-                    result.RemoveAt(i + 1);
-                else if (result[i].Id == "Type") {
-                    result.RemoveAt(i--);
-                    paramIsHealth = false;
-                }
-                else if (result[i].Id == "HP") {
-                    result.RemoveAt(i--);
-                }
-                else if (result[i].Id.Contains("HP") && !paramIsHealth)
-                    result.RemoveAt(i--);
-                else if (result[i].Id.Contains("Type") && paramIsHealth)
-                    result.RemoveAt(i--);
-            }
-            foreach (var action in result)
-                Debug.Log(action.Id);
-            Debug.Log("Totaly " + result.Count);
-            Debug.Log("==============END================");
-            return result.ToArray();
-        }
-
-
-        public ActionsDef[] GetConditions2(int command) {
-            var result = new List<ActionsDef>();
-            Debug.Log("=============BEGIN===============");
-            Debug.Log("Command = " + command.ToString("X8") + "\n");
             bool paramIsHealth = true;
             bool removeNext = false;
             foreach (var action in _collection) {
@@ -84,20 +44,14 @@ namespace Assets.MirAI.Definitions {
                        || action.Id == "AnyRange"
                        || (action.Id.Contains("HP") && !paramIsHealth)
                        || (action.Id.Contains("Type") && paramIsHealth)) {
-                        Debug.Log(action.Id + "  - didn`t added");
                         removeNext = false;
                         continue;
                     }
                     if (action.Id == "Me")
                         removeNext = true;
-                    Debug.Log(action.Id);
                     result.Add(action);
                 }
             }
-            //foreach (var action in result)
-            //    Debug.Log(action.Id);
-            Debug.Log("Totaly " + result.Count + " actions in list.");
-            Debug.Log("==============END================");
             return result.ToArray();
         }
 

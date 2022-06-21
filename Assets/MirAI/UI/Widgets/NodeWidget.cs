@@ -55,7 +55,7 @@ namespace Assets.MirAI.UI.Widgets {
         }
 
         private void UpdateActionView() {
-            var conditions = ActionsRepository.I.GetConditions2(Node.Command);
+            var conditions = ActionsRepository.I.GetConditions(Node.Command);
             if (conditions.Length > 0) {
                 _icons[3].sprite = conditions[0].Icon;
                 if (conditions.Length > 2) {
@@ -67,7 +67,7 @@ namespace Assets.MirAI.UI.Widgets {
         }
 
         private void UpdateConditionView() {
-            var conditions = ActionsRepository.I.GetConditions2(Node.Command);
+            var conditions = ActionsRepository.I.GetConditions(Node.Command);
             if (conditions.Length > 0) {
                 _icons[3].sprite = conditions[conditions.Length - 1].Icon;
                 if (conditions.Length > 2) {
@@ -76,6 +76,7 @@ namespace Assets.MirAI.UI.Widgets {
                     }
                 }
             }
+            _paramText.text = ((Node.Command >> 16) & 0xFF).ToString();
         }
 
         public void UpdateRootView() {

@@ -2,6 +2,7 @@
 using Assets.MirAI.UI;
 using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.MirAI.AiEditor.SelectAction {
 
@@ -16,6 +17,7 @@ namespace Assets.MirAI.AiEditor.SelectAction {
         [SerializeField] CommandBtnGroup _distanceGroup;
         [SerializeField] CommandBtnGroup _countGroup;
         [SerializeField] CommandBtnGroup _count2Group;
+        [SerializeField] Slider _countSlider;
 
         public readonly CompositeDisposable _trash = new CompositeDisposable();
         Selector ON = Selector.On;
@@ -38,6 +40,7 @@ namespace Assets.MirAI.AiEditor.SelectAction {
                     SwitchPanelsVisible("Me");
                 else
                     SwitchPanelsVisible("AnyTeam");
+                _countSlider.value = (EditNode.Node.Command >> 16) & 0xFF;
             }
         }
 

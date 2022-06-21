@@ -245,7 +245,7 @@ GameObject:
   - component: {fileID: 5120437480259514746}
   - component: {fileID: 5861464041413042829}
   m_Layer: 5
-  m_Name: Param1Panel
+  m_Name: TeamPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -443,7 +443,7 @@ GameObject:
   - component: {fileID: 8086297390374240192}
   - component: {fileID: 6737449619041895127}
   m_Layer: 5
-  m_Name: Param4Panel (1)
+  m_Name: SliderPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -637,7 +637,7 @@ GameObject:
   - component: {fileID: 9062492306409780680}
   - component: {fileID: 4989826338051144581}
   m_Layer: 5
-  m_Name: Param3Panel
+  m_Name: RangePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -760,7 +760,7 @@ GameObject:
   - component: {fileID: 6532794054909421802}
   - component: {fileID: 7958244871300956758}
   m_Layer: 5
-  m_Name: Param2Panel (2)
+  m_Name: HealthPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -885,7 +885,7 @@ GameObject:
   - component: {fileID: 5590240133935492687}
   - component: {fileID: 2999555049128487113}
   m_Layer: 5
-  m_Name: Param4Panel
+  m_Name: ComparsionPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1121,6 +1121,7 @@ MonoBehaviour:
   _distanceGroup: {fileID: 4989826338051144581}
   _countGroup: {fileID: 2999555049128487113}
   _count2Group: {fileID: 6737449619041895127}
+  _countSlider: {fileID: 3362665700309671630}
 --- !u!95 &1150609707577770041
 Animator:
   serializedVersion: 3
@@ -1312,7 +1313,7 @@ GameObject:
   - component: {fileID: 1864811925082417435}
   - component: {fileID: 896580619381672852}
   m_Layer: 5
-  m_Name: Param2Panel
+  m_Name: ParamPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1433,7 +1434,7 @@ GameObject:
   - component: {fileID: 8363998289742755063}
   - component: {fileID: 2066498633733831177}
   m_Layer: 5
-  m_Name: Param0Panel
+  m_Name: ObjectPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2038,7 +2039,7 @@ GameObject:
   - component: {fileID: 570224905689753595}
   - component: {fileID: 7931038946620910180}
   m_Layer: 5
-  m_Name: Param2Panel (1)
+  m_Name: TypePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
