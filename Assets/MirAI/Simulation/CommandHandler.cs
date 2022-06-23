@@ -57,6 +57,7 @@ namespace Assets.MirAI.Simulation {
                 if (ContainCmd("Type")) {
                     if (!ContainCmd("AnyType")) {
                         var type = (currentCommand >> 10) & 0x03;
+                        result = result.Where(x => ((int)x.Type == type)).ToList();
                     }
                 }
                 else { // if (ContainCmd( "HP"))
@@ -99,7 +100,7 @@ namespace Assets.MirAI.Simulation {
         }
 
         private static void ExecuteCommand() {
-            var cmd = (currentCommand & 0x7F000000) >> 24;
+            var cmd = (currentCommand >> 24) & 0xFF;
             if (cmd == 0) return;                   // "DoNothing"
             if (cmd == 1 || cmd == 2) {             // "GoTo" or "GoFrom"
                 var units = GetUnitsByCondition();
@@ -111,6 +112,9 @@ namespace Assets.MirAI.Simulation {
                     var velocity = new Vector2(dx, dy).normalized;
                     currentUnit.Controller.SetUnitVelocity(velocity);
                 }
+            }
+            if (cmd == 3) {                          // "Attack"
+                // TODO Attack command
             }
         }
 
