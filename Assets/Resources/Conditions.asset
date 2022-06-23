@@ -77,11 +77,11 @@ MonoBehaviour:
     _commandMask: 3072
     _command: 0
     _icon: {fileID: 21300000, guid: 32aa8f25226529d46b73a43f52453a41, type: 3}
-  - _id: TypeSoldier
+  - _id: TypeWarrior
     _commandMask: 3072
     _command: 1024
     _icon: {fileID: 21300000, guid: e34e8e26629e88a479cb5af2b7fc5bdd, type: 3}
-  - _id: TypeSupport
+  - _id: TypeHealer
     _commandMask: 3072
     _command: 2048
     _icon: {fileID: 21300000, guid: 90cc54a883be0d9488691ba03ab548d5, type: 3}

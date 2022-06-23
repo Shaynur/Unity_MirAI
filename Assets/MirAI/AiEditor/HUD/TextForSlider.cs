@@ -9,10 +9,12 @@ namespace Assets.MirAI.AiEditor.HUD {
 
         public void Change(float value) {
             _text.text = value.ToString();
-            unchecked {
-                EditNode.Node.Command &= (int)0x7F00FFFF;
+            if (EditNode.Node != null) {
+                unchecked {
+                    EditNode.Node.Command &= (int)0x7F00FFFF;
+                }
+                EditNode.Node.Command |= (int)value << 16;
             }
-            EditNode.Node.Command |= (int)value << 16;
         }
     }
 }

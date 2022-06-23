@@ -4088,7 +4088,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3173699509137883767, guid: fbc7a55095dfdf9489f312f714896696, type: 3}
       propertyPath: _actionString
-      value: TypeSoldier
+      value: TypeWarrior
       objectReference: {fileID: 0}
     - target: {fileID: 4349219183181451667, guid: fbc7a55095dfdf9489f312f714896696, type: 3}
       propertyPath: m_Sprite
@@ -4935,7 +4935,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3173699509137883767, guid: fbc7a55095dfdf9489f312f714896696, type: 3}
       propertyPath: _actionString
-      value: TypeSupport
+      value: TypeHealer
       objectReference: {fileID: 0}
     - target: {fileID: 4349219183181451667, guid: fbc7a55095dfdf9489f312f714896696, type: 3}
       propertyPath: m_Sprite
