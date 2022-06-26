@@ -50,7 +50,7 @@ namespace Assets.MirAI.Simulation {
 
         private void SetUnitSprites() {
             var renderer = gameObject.GetComponent<SpriteRenderer>();
-            renderer.sprite = _teamImgs[Unit.Team - 1];
+            renderer.sprite = _teamImgs[(int)Unit.Team - 1];
             _typeSpriteRenderer.sprite = _typeImgs[(int)Unit.Type - 1];
         }
     }

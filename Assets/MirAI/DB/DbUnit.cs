@@ -37,7 +37,7 @@ namespace Assets.MirAI.DB {
             command.Parameters.AddWithValue("@p", unit.ProgramId);
             command.Parameters.AddWithValue("@x", (int)unit.X);
             command.Parameters.AddWithValue("@y", (int)unit.Y);
-            command.Parameters.AddWithValue("@t", unit.Team);
+            command.Parameters.AddWithValue("@t", (int)unit.Team);
             command.Parameters.AddWithValue("@w", (int)unit.Type);
             command.Prepare();
             return command;
@@ -49,7 +49,7 @@ namespace Assets.MirAI.DB {
             command.Parameters.AddWithValue("@p", unit.ProgramId);
             command.Parameters.AddWithValue("@x", (int)unit.X);
             command.Parameters.AddWithValue("@y", (int)unit.Y);
-            command.Parameters.AddWithValue("@t", unit.Team);
+            command.Parameters.AddWithValue("@t", (int)unit.Team);
             command.Parameters.AddWithValue("@w", (int)unit.Type);
             command.Parameters.AddWithValue("@id", unit.Id);
             command.Prepare();
@@ -63,7 +63,7 @@ namespace Assets.MirAI.DB {
                     ProgramId = data.GetInt32(1),
                     X = data.GetInt32(2),
                     Y = data.GetInt32(3),
-                    Team = data.GetInt32(4),
+                    Team = (UnitTeam)data.GetInt32(4),
                     Type = (UnitType)data.GetInt32(5)
                 };
                 return unit;

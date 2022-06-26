@@ -199,8 +199,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _typeSpriteRenderer: {fileID: 170344856936980590}
   _teamImgs:
-  - {fileID: 21300000, guid: 678fe5b7c2bf1654183177909a725b21, type: 3}
   - {fileID: 21300000, guid: 9af700f48d8677b43b8e528a7198fe48, type: 3}
+  - {fileID: 21300000, guid: 678fe5b7c2bf1654183177909a725b21, type: 3}
   _typeImgs:
   - {fileID: 21300000, guid: e34e8e26629e88a479cb5af2b7fc5bdd, type: 3}
   - {fileID: 21300000, guid: 90cc54a883be0d9488691ba03ab548d5, type: 3}

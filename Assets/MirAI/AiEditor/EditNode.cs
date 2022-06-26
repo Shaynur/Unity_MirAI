@@ -1,5 +1,4 @@
-﻿using System;
-using Assets.MirAI.Models;
+﻿using Assets.MirAI.Models;
 using Assets.MirAI.Utils;
 using UnityEngine;
 

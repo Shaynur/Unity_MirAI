@@ -45,13 +45,13 @@ namespace Assets.MirAI.Simulation {
             else { // if (ContainCmd( "Unit"))
                 var team = 0;
                 if (ContainCmd("Ally"))
-                    team = currentUnit.Team;
+                    team = (int)currentUnit.Team;
                 else if (ContainCmd("Enemy"))
-                    team = currentUnit.Team == 1 ? 2 : 1;
+                    team = currentUnit.Team == UnitTeam.Team_1 ? 2 : 1;
                 if (team == 0)
                     result = _model.Units.Where(x => x.Id != currentUnit.Id).ToList();
                 else
-                    result = _model.Units.Where(x => (x.Id != currentUnit.Id) && (x.Team == team)).ToList();
+                    result = _model.Units.Where(x => (x.Id != currentUnit.Id) && ((int)x.Team == team)).ToList();
 
                 if (result.Count == 0) return result;
                 if (ContainCmd("Type")) {

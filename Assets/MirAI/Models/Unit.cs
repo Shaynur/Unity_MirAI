@@ -7,7 +7,7 @@ namespace Assets.MirAI.Models {
         public int ProgramId { get; set; }
         public float X { get; set; }
         public float Y { get; set; }
-        public int Team { get; set; }
+        public UnitTeam Team { get; set; }
         public UnitType Type { get; set; }
         public int Hp { get; set; }
 
@@ -21,5 +21,10 @@ namespace Assets.MirAI.Models {
         Warrior = 1,
         Healer = 2,
         Wizard = 3
+    }
+    public enum UnitTeam {
+        Nope = 0,
+        Team_1 = 1,
+        Team_2 = 2,
     }
 }

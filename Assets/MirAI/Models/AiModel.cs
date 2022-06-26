@@ -126,13 +126,17 @@ namespace Assets.MirAI.Models {
             LoadFromDB();
         }
 
-        public bool AddNewLink(Node parentNode, Node childNode) {
-            if (!IsCanBeLinked(parentNode, childNode))
-                return false;
-            using var db = new DbContext();
-            AddNewLink(parentNode, childNode, db);
-            return true;
-        }
+        //public bool AddNewLink(Node parentNode, Node childNode) {
+        //    if (!IsCanBeLinked(parentNode, childNode))
+        //        return false;
+        //    using var db = new DbContext();
+        //    AddNewLink(parentNode, childNode, db);
+        //    return true;
+        //}
+        //private void AddNewLink(Node parentNode, Node childNode, DbContext db) {
+        //    var link = new Link(parentNode, childNode);
+        //    AddLink(link, db);
+        //}
 
         public bool AddLink(Link link) {
             if (!IsCanBeLinked(link.NodeFrom, link.NodeTo))
@@ -148,10 +152,6 @@ namespace Assets.MirAI.Models {
                 AddLink(link, db);
         }
 
-        private void AddNewLink(Node parentNode, Node childNode, DbContext db) {
-            var link = new Link(parentNode, childNode);
-            AddLink(link, db);
-        }
 
         private void AddLink(Link link, DbContext db) {
             db.Links.Add(link);
@@ -162,6 +162,12 @@ namespace Assets.MirAI.Models {
             using var db = new DbContext();
             db.Links.Remove(link);
             Links.Remove(link);
+        }
+
+        // Unit routines
+        public void UpdateUnit(Unit unit) {
+            using var db = new DbContext();
+            db.Units.Update(unit);
         }
 
         private void BuildModelFromDbData() {
