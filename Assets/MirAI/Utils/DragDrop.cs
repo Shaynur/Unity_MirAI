@@ -12,7 +12,7 @@ namespace Assets.MirAI.Utils {
 
         private CanvasGroup _canvasGroup;
         private Vector3 _lokalPressPosition;
-        public bool IsDragging;
+        [HideInInspector] public bool IsDragging;
 
 
         private void Awake() {

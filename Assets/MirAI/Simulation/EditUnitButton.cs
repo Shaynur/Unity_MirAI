@@ -1,5 +1,4 @@
 ﻿using Assets.MirAI.AiEditor;
-using System;
 using Assets.MirAI.Models;
 using Assets.MirAI.Utils.Disposables;
 using UnityEngine;
@@ -14,10 +13,12 @@ namespace Assets.MirAI.Simulation {
         [SerializeField] private UnitTeam _team;
         [SerializeField] private Image _borderImage;
         private Button _button;
+        private EditUnitMenu _menu;
 
         private void Awake() {
             _button = GetComponent<Button>();
             _button.onClick.Subscribe(OnClick);
+            _menu = GetComponentInParent<EditUnitMenu>();
             SelectByUnitData();
         }
 
@@ -26,11 +27,11 @@ namespace Assets.MirAI.Simulation {
                 EditUnit.Unit.Type = _type;
             if (_team != 0)
                 EditUnit.Unit.Team = _team;
+            _menu.RedrawButtonsSelectors();
         }
 
         public void SelectByUnitData() {
-            if (EditUnit.Unit.Type == _type || EditUnit.Unit.Team == _team)
-                Select(true);
+            Select(EditUnit.Unit.Type == _type || EditUnit.Unit.Team == _team);
         }
 
         public void Select(bool selected) {

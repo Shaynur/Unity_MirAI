@@ -17,6 +17,9 @@ namespace Assets.MirAI.Utils {
     public class EventWithNode : UnityEvent<Node> { }
 
     [Serializable]
+    public class EventWithUnit : UnityEvent<Unit> { }
+
+    [Serializable]
     public class EventWithProgram : UnityEvent<Program> { }
 
     [Serializable]

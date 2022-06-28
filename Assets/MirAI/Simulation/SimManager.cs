@@ -21,6 +21,13 @@ namespace Assets.MirAI.Simulation {
             CreateUnits();
         }
 
+        private void OnClickUnit(Unit unit) {
+            foreach (var u in _model.Units) {
+                if (u != unit)
+                    u.Controller.Select(false);
+            }
+        }
+
         private void CreateUnits() {
             foreach (var unit in _model.Units) {
                 var position = new Vector3(unit.X, unit.Y, 0);
@@ -28,6 +35,7 @@ namespace Assets.MirAI.Simulation {
                 var unitController = item.GetComponent<UnitController>();
                 unit.Controller = unitController;
                 unitController.Unit = unit;
+                _trash.Retain(unitController.OnClick.Subscribe(OnClickUnit));
             }
         }
 

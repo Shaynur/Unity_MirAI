@@ -18,9 +18,7 @@ namespace Assets.MirAI.Simulation {
 
         private static void UpdateUnitDb() {
             AiModel.Instance.UpdateUnit(Unit);
-        }
-
-        public static void OnBtnClick(SelectCommandButton clickedButton) {
+            Unit.Controller.SetUnitSprites();
         }
 
         private static void ClearTemplates() {

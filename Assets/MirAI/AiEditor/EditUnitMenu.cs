@@ -11,7 +11,6 @@ namespace Assets.MirAI.AiEditor {
 
     public class EditUnitMenu : MenuController {
 
-        //[SerializeField] private EventWithProgram _SelectProgramEvent;
         [SerializeField] private GameObject _itemPrefab;
 
         public readonly CompositeDisposable _trash = new CompositeDisposable();
@@ -31,6 +30,13 @@ namespace Assets.MirAI.AiEditor {
             widget.Select(true);
             _okButton.interactable = true;
             EditUnit.Unit.ProgramId = widget.Program.Id;
+        }
+
+        public void RedrawButtonsSelectors() {
+            var buttons = GetComponentsInChildren<EditUnitButton>();
+            foreach (var button in buttons) {
+                button.SelectByUnitData();
+            }
         }
 
         private void CreateList() {

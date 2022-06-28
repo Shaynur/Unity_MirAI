@@ -1,33 +1,43 @@
 ﻿using Assets.MirAI.Models;
+using Assets.MirAI.Utils;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Assets.MirAI.Simulation {
 
-    public class UnitController : MonoBehaviour {
+    public class UnitController : MonoBehaviour, IPointerDownHandler {
 
-        [SerializeField] private SpriteRenderer _typeSpriteRenderer;
+        [SerializeField] private Image _unitBodyImage;
+        [SerializeField] private Image _unitTypeImage;
+        [SerializeField] private GameObject _selector;
         [SerializeField] private Sprite[] _teamImgs = new Sprite[2];
         [SerializeField] private Sprite[] _typeImgs = new Sprite[3];
+        public EventWithUnit OnClick;
 
         public Unit Unit { get; set; }
         private Rigidbody2D _rigidbody;
         private LineRenderer _circleRenderer;
 
         private void Awake() {
-            _rigidbody = gameObject.GetComponent<Rigidbody2D>();
+            _rigidbody = gameObject.GetComponentInChildren<Rigidbody2D>();
         }
 
         private void Start() {
             _circleRenderer = GetComponent<LineRenderer>();
             _circleRenderer.widthMultiplier = 0.1f;
-            SetUnitSprites();
-            Unit.Hp = (int)Unit.MaxHp;
             DrawCircle(100, Unit.Range);
+            if (Unit != null) {
+                SetUnitSprites();
+                Unit.Hp = (int)Unit.MaxHp;
+            }
         }
 
         private void LateUpdate() {
-            Unit.X = _rigidbody.transform.position.x;
-            Unit.Y = _rigidbody.transform.position.y;
+            if (Unit != null) {
+                Unit.X = _rigidbody.transform.position.x;
+                Unit.Y = _rigidbody.transform.position.y;
+            }
         }
 
         private void DrawCircle(int steps, float radius) {
@@ -48,10 +58,22 @@ namespace Assets.MirAI.Simulation {
             _rigidbody.velocity = velocity;
         }
 
-        private void SetUnitSprites() {
-            var renderer = gameObject.GetComponent<SpriteRenderer>();
-            renderer.sprite = _teamImgs[(int)Unit.Team - 1];
-            _typeSpriteRenderer.sprite = _typeImgs[(int)Unit.Type - 1];
+        public void SetUnitSprites() {
+            _unitBodyImage.sprite = _teamImgs[(int)Unit.Team - 1];
+            _unitTypeImage.sprite = _typeImgs[(int)Unit.Type - 1];
+        }
+
+        public void OnPointerDown(PointerEventData eventData) {
+            Select(!_selector.activeSelf);
+            OnClick?.Invoke(Unit);
+        }
+
+        public void Select(bool value) {
+            _selector.SetActive(value);
+        }
+
+        public bool isSelected() {
+            return _selector.activeSelf;
         }
     }
 }
