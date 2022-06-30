@@ -46,6 +46,7 @@ namespace Assets.MirAI.Simulation {
         private void CreateUnitGO(Unit unit) {
             var position = new Vector3(unit.X, unit.Y, 0);
             var item = GameObjectSpawner.Spawn(_unitPrefab, position, "Units_Container");
+            item.transform.position = new Vector3(item.transform.position.x,item.transform.position.y,0);
             var unitController = item.GetComponent<UnitController>();
             unit.Controller = unitController;
             unitController.Unit = unit;

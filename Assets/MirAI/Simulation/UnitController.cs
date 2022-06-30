@@ -1,14 +1,13 @@
 ﻿using Assets.MirAI.Models;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace Assets.MirAI.Simulation {
 
     public class UnitController : MonoBehaviour, IPointerDownHandler {
 
-        [SerializeField] private Image _unitBodyImage;
-        [SerializeField] private Image _unitTypeImage;
+        [SerializeField] private SpriteRenderer _unitBodySprite;
+        [SerializeField] private SpriteRenderer _unitTypeSprite;
         [SerializeField] private GameObject _selector;
         [SerializeField] private Sprite[] _teamImgs = new Sprite[2];
         [SerializeField] private Sprite[] _typeImgs = new Sprite[3];
@@ -57,8 +56,8 @@ namespace Assets.MirAI.Simulation {
         }
 
         public void SetUnitSprites() {
-            _unitBodyImage.sprite = _teamImgs[(int)Unit.Team - 1];
-            _unitTypeImage.sprite = _typeImgs[(int)Unit.Type - 1];
+            _unitBodySprite.sprite = _teamImgs[(int)Unit.Team - 1];
+            _unitTypeSprite.sprite = _typeImgs[(int)Unit.Type - 1];
         }
 
         public void OnPointerDown(PointerEventData eventData) {
