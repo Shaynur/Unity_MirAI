@@ -164,11 +164,24 @@ namespace Assets.MirAI.Models {
             Links.Remove(link);
         }
 
-        // Unit routines
+        public void AddUnit(Unit unit) {
+            using var db = new DbContext();
+            int id = db.Units.Add(unit);
+            unit.Id = id;
+            Units.Add(unit);
+        }
+
         public void UpdateUnit(Unit unit) {
             using var db = new DbContext();
             db.Units.Update(unit);
         }
+
+        public void RemoveUnit(Unit unit) {
+            using var db = new DbContext();
+            db.Units.Remove(unit);
+            Units.Remove(unit);
+        }
+
 
         private void BuildModelFromDbData() {
             CreateNodesLinks();

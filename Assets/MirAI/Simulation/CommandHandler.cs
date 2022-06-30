@@ -110,7 +110,9 @@ namespace Assets.MirAI.Simulation {
                     var dx = (nearest.X - currentUnit.X) * divider;
                     var dy = (nearest.Y - currentUnit.Y) * divider;
                     var velocity = new Vector2(dx, dy).normalized;
-                    currentUnit.Controller.SetUnitVelocity(velocity);
+                    var controller = currentUnit?.Controller;
+                    if (controller != null)
+                        controller.SetUnitVelocity(velocity);
                 }
             }
             if (cmd == 3) {                          // "Attack"

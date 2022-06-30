@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using Assets.MirAI.Models;
 using Assets.MirAI.Utils;
 using Assets.MirAI.Utils.Disposables;
@@ -17,26 +18,61 @@ namespace Assets.MirAI.Simulation {
 
         private void Start() {
             _model = AiModel.Instance;
-            _trash.Retain(_model.OnLoaded.Subscribe(CreateUnits));
-            CreateUnits();
+            _trash.Retain(_model.OnLoaded.Subscribe(CreateUnitsGOs));
+            DestroyUnitsGOs();
+            CreateUnitsGOs();
         }
 
-        private void OnClickUnit(Unit unit) {
-            foreach (var u in _model.Units) {
-                if (u != unit)
-                    u.Controller.Select(false);
+        private void DestroyUnitsGOs() {
+            foreach (var unit in _model.Units)
+                DestroyUnitGO(unit);
+        }
+
+        private void CreateUnitsGOs() {
+            foreach (var unit in _model.Units)
+                CreateUnitGO(unit);
+        }
+
+        public void DestroyUnitGO(Unit unit) {
+            var controller = unit.Controller;
+            if (controller != null) {
+                var go = controller.gameObject;
+                if (go != null) {
+                    Destroy(go);
+                }
             }
         }
 
-        private void CreateUnits() {
-            foreach (var unit in _model.Units) {
-                var position = new Vector3(unit.X, unit.Y, 0);
-                var item = GameObjectSpawner.Spawn(_unitPrefab, position, "Units_Container");
-                var unitController = item.GetComponent<UnitController>();
-                unit.Controller = unitController;
-                unitController.Unit = unit;
-                _trash.Retain(unitController.OnClick.Subscribe(OnClickUnit));
-            }
+        private void CreateUnitGO(Unit unit) {
+            var position = new Vector3(unit.X, unit.Y, 0);
+            var item = GameObjectSpawner.Spawn(_unitPrefab, position, "Units_Container");
+            var unitController = item.GetComponent<UnitController>();
+            unit.Controller = unitController;
+            unitController.Unit = unit;
+        }
+
+        public void ShowAddUnitMenu() {
+            EditUnit.Unit = new Unit {
+                Team = UnitTeam.Team_1,
+                Type = UnitType.Warrior
+            };
+            WindowUtils.CreateMenuWindow("UI/EditUnit", "HUD", AddUnitOk, AddUnitCancel);
+        }
+
+        private void AddUnitOk() {
+            StopTimer();
+            AiModel.Instance.AddUnit(EditUnit.Unit);
+            CreateUnitGO(EditUnit.Unit);
+        }
+
+        private void AddUnitCancel() {
+            EditUnit.Unit = null;
+        }
+
+        public void DeleteUnit(Unit unit) {
+            StopTimer();
+            DestroyUnitGO(unit);
+            AiModel.Instance.RemoveUnit(unit);
         }
 
         public void Switch() {
@@ -63,7 +99,7 @@ namespace Assets.MirAI.Simulation {
 
         private IEnumerator SimTimer() {
             while (_isActive) {
-                foreach (var unit in _model.Units) {
+                foreach (var unit in _model.Units.ToList()) {
                     yield return new WaitForSeconds(_delay);
                     Tick(unit);
                 }

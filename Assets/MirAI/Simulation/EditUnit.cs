@@ -1,5 +1,4 @@
-﻿using Assets.MirAI.AiEditor.SelectAction;
-using Assets.MirAI.Models;
+﻿using Assets.MirAI.Models;
 using Assets.MirAI.Utils;
 
 namespace Assets.MirAI.Simulation {

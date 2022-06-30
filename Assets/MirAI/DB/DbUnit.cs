@@ -33,7 +33,7 @@ namespace Assets.MirAI.DB {
 
         public override SqliteCommand GetInsertCommand(Unit unit) {
             var command = _connection.CreateCommand();
-            command.CommandText = "INSERT INTO " + TableName + " (ProgramId, X, Y) VALUES (@p, @x, @y, @t, @w);";
+            command.CommandText = "INSERT INTO " + TableName + " (ProgramId, X, Y, Team, Type) VALUES (@p, @x, @y, @t, @w);";
             command.Parameters.AddWithValue("@p", unit.ProgramId);
             command.Parameters.AddWithValue("@x", (int)unit.X);
             command.Parameters.AddWithValue("@y", (int)unit.Y);

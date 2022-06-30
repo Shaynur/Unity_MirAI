@@ -1,5 +1,4 @@
 ﻿using Assets.MirAI.Models;
-using Assets.MirAI.Utils;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -13,7 +12,6 @@ namespace Assets.MirAI.Simulation {
         [SerializeField] private GameObject _selector;
         [SerializeField] private Sprite[] _teamImgs = new Sprite[2];
         [SerializeField] private Sprite[] _typeImgs = new Sprite[3];
-        public EventWithUnit OnClick;
 
         public Unit Unit { get; set; }
         private Rigidbody2D _rigidbody;
@@ -65,8 +63,16 @@ namespace Assets.MirAI.Simulation {
 
         public void OnPointerDown(PointerEventData eventData) {
             Select(!_selector.activeSelf);
-            OnClick?.Invoke(Unit);
+            UnselectOtherUnits();
         }
+
+        private void UnselectOtherUnits() {
+            foreach (var unit in AiModel.Instance.Units) {
+                if (unit != Unit)
+                    unit.Controller.Select(false);
+            }
+        }
+
 
         public void Select(bool value) {
             _selector.SetActive(value);
